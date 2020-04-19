@@ -5,12 +5,17 @@ import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import styled from "styled-components";
 
-const Header = ({handleOpenMenu, openMenu}: {handleOpenMenu: ()=> void, openMenu: boolean}) => {
+interface HeaderProps {
+    openedMenu: boolean;
+    handleOpenMenu: ()=> void; 
+}
+
+const Header = ({handleOpenMenu, openedMenu}: HeaderProps) => {
 
     return (
         <CustomAppBar
-            position="absolute"
-            openedMenu={openMenu}
+            position="relative"
+            openedmenu={openedMenu ? 1 : 0}
 
         >
             <Toolbar>
@@ -27,9 +32,10 @@ const Header = ({handleOpenMenu, openMenu}: {handleOpenMenu: ()=> void, openMenu
     );
 };
 
-const CustomAppBar = styled(AppBar)<{openedMenu: boolean}>`
-    width: ${props => props.openedMenu ? "calc(100% - 240px) !important" : 0};
-    margin-left: ${props => props.openedMenu ? "240px" : 0};
+const CustomAppBar = styled(AppBar)<{openedmenu: number}>`
+    top: 0;
+    width: ${props => props.openedmenu ? "calc(100% - 240px) !important" : 0};
+    margin-left: ${props => props.openedmenu ? "240px" : 0};
 `;
 
 export default Header;

@@ -2,23 +2,37 @@ import React from "react";
 import {Button} from "@material-ui/core";
 import Header from "./Header";
 import MenuSidebar from "./MenuSidebar";
-
+import styled from "styled-components";
+import GlobalStyle from "./common/GlobalStyle";
 const App = () => {
 
-    const [openMenu, setOpenMenu] = React.useState<boolean>(false);
+    const [openedMenu, setOpenedMenu] = React.useState<boolean>(true);
     
     const handleOpenMenu = () => {
-        setOpenMenu(!openMenu);
+        setOpenedMenu(!openedMenu);
     };
 
      
-    return <>
-        <Header handleOpenMenu={handleOpenMenu} openMenu={openMenu}/>
-        <MenuSidebar openMenu={openMenu}/>
-        <Button>Push me</Button>
-        <h1>hello</h1>
-        <Footer>
-    </>;
+    return <AppWrapper>
+        <GlobalStyle />
+        <Header handleOpenMenu={handleOpenMenu} openedMenu={openedMenu}/>
+        <Main>        
+            <MenuSidebar openedMenu={openedMenu}/>
+            <Button>Push me</Button>
+            <h1>hello</h1>
+        </Main>
+    </AppWrapper>;
 };
+
+
+const Main = styled.div`
+    flex-grow: 1
+`;
+
+const AppWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+`;
 
 export default App;

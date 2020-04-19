@@ -1,15 +1,20 @@
 import Drawer from "@material-ui/core/Drawer";
 import React from "react";
 import styled from "styled-components";
+import Avatar from "@material-ui/core/Avatar";
 
-const MenuSidebar = ({openMenu}: {openMenu: boolean}) => {
+interface MenuSidebarProps {
+    openedMenu: boolean
+}
+
+const MenuSidebar = ({openedMenu}: MenuSidebarProps) => {
     return <CustomDrawer
         variant="persistent"
         anchor="left"
-        open={openMenu}
+        open={openedMenu}
         PaperProps={{style: {width: "240px"}}}
     >
-h1
+        <Avatar alt='Ava' src='' />
     </CustomDrawer>;
 };
 
