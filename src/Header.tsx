@@ -34,8 +34,8 @@ const Header = ({handleOpenMenu, openedMenu}: HeaderProps) => {
 
 const CustomAppBar = styled(AppBar)<{openedmenu: number}>`
     top: 0;
-    width: ${props => props.openedmenu ? "calc(100% - 240px) !important" : 0};
-    margin-left: ${props => props.openedmenu ? "240px" : 0};
+    width: ${props => props.openedmenu ? "calc(100% - 300px) !important" : 0};
+    margin-left: ${props => props.openedmenu ? "300px" : 0};
 `;
 
 export default Header;
