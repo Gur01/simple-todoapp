@@ -1,6 +1,9 @@
 import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
 import Drawer from "@material-ui/core/Drawer";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 import Dashboard from "@material-ui/icons/Dashboard";
 import InsertEmoticon from "@material-ui/icons/InsertEmoticon";
 import InsertInvitation from "@material-ui/icons/InsertInvitation";
@@ -15,16 +18,15 @@ interface MenuSidebarProps {
 }
 
 const menuItems = [
-    {text: "Board", icon: InsertEmoticon, link: "/" }, 
+    {text: "Dashboard", icon: InsertEmoticon, link: "/" }, 
     {text: "Profile", icon: InsertEmoticon, link: "/profile" }, 
-    {text: "Calendar", icon: InsertInvitation, link: "/profile"}, 
-    {text:"Boards", icon: Dashboard, link: "/profile"}, 
-    {text: "Lists", icon: ViewList, link: "/profile"}
+    {text: "Calendar", icon: InsertInvitation, link: "/calendar"}, 
+    {text:"Boards", icon: Dashboard, link: "/boards"}, 
+    {text: "Lists", icon: ViewList, link: "/lists"}
 ];
 
 const MenuSidebar = ({openedMenu, handleOpenMenu}: MenuSidebarProps) => {
     const history = useHistory();
-    console.log(history);
     
     const openLink = (link: string) => {
         history.push(link);
@@ -42,9 +44,19 @@ const MenuSidebar = ({openedMenu, handleOpenMenu}: MenuSidebarProps) => {
             <UserName>John Smith</UserName>
 
 
-            {menuItems.map(item =><Button fullWidth key={item.text}  startIcon={<item.icon />} onClick={()=> {
-                openLink(item.link);
-            }}>{item.text}</Button>)}
+            {menuItems.map(item => {
+                const Icon = item.icon;
+                return (
+                    <List style={{width: "100%"}} component="nav" key={item.text}>
+                        <ListItem button onClick={()=> openLink(item.link)}>
+                            <ListItemIcon>
+                                <Icon />
+                            </ListItemIcon>
+                            <ListItemText primary={item.text} />
+                        </ListItem>
+                    </List>);
+            }          
+            )}
         </UserInfo>
         
     </CustomDrawer>;
