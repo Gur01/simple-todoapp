@@ -5,7 +5,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Dashboard from "@material-ui/icons/Dashboard";
-import InsertEmoticon from "@material-ui/icons/InsertEmoticon";
+import DesktopWindows from "@material-ui/icons/DesktopWindows";
+import Person from "@material-ui/icons/Person";
 import InsertInvitation from "@material-ui/icons/InsertInvitation";
 import ViewList from "@material-ui/icons/ViewList";
 import React from "react";
@@ -18,8 +19,8 @@ interface MenuSidebarProps {
 }
 
 const menuItems = [
-    {text: "Dashboard", icon: InsertEmoticon, link: "/" }, 
-    {text: "Profile", icon: InsertEmoticon, link: "/profile" }, 
+    {text: "Dashboard", icon: DesktopWindows, link: "/" }, 
+    {text: "Profile", icon: Person, link: "/profile" }, 
     {text: "Calendar", icon: InsertInvitation, link: "/calendar"}, 
     {text:"Boards", icon: Dashboard, link: "/boards"}, 
     {text: "Lists", icon: ViewList, link: "/lists"}

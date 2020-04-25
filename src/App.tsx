@@ -1,8 +1,8 @@
-import { Button } from "@material-ui/core";
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 import GlobalStyle from "./common/GlobalStyle";
+import Footer from "./Footer";
 import Header from "./Header";
 import MenuSidebar from "./MenuSidebar";
 import Boards from "./screens/Boards";
@@ -36,10 +36,10 @@ const App = () => {
                 </Switch>
                 <MenuSidebar openedMenu={openedMenu} handleOpenMenu={handleOpenMenu}/>
             </BrowserRouter> 
-            <Button>Push me</Button>
-            <h1>hello</h1>
         </Main>
-        
+        <Footer />
+
+
     </AppWrapper>;
 };
 
@@ -53,5 +53,6 @@ const AppWrapper = styled.div`
     flex-direction: column;
     height: 100vh;
 `;
+
 
 export default App;

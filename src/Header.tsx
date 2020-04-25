@@ -4,14 +4,23 @@ import Toolbar from "@material-ui/core/Toolbar";
 import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import styled from "styled-components";
+import {Spacer, Authorization} from "./components";
+import Button from "@material-ui/core/Button";
+import Add from "@material-ui/icons/Add";
+import Avatar from "@material-ui/core/Avatar";
 
 interface HeaderProps {
     openedMenu: boolean;
     handleOpenMenu: ()=> void; 
 }
 
-const Header = ({handleOpenMenu, openedMenu}: HeaderProps) => {
+const AppHeader = ({handleOpenMenu, openedMenu}: HeaderProps) => {
 
+    const [isAuthorized, setAuthorization] = React.useState(true);
+
+    const handleLogin = ()=> {
+        setAuthorization(!isAuthorized);
+    };
     return (
         <CustomAppBar
             position="relative"
@@ -27,15 +36,28 @@ const Header = ({handleOpenMenu, openedMenu}: HeaderProps) => {
                 >
                     <MenuIcon />
                 </IconButton>
+                <Spacer/>
+                <Button endIcon={<Add />}>Add new</Button>
+                <CustomAvatar alt='Name' src="../public/1.jpg" /> 
+                {/* John Smith */}
+                <Authorization type={isAuthorized ? "logout" : "login"} onClick={handleLogin}/>
+
+
             </Toolbar>
         </CustomAppBar>
     );
 };
 
 const CustomAppBar = styled(AppBar)<{openedmenu: number}>`
-    top: 0;
-    width: ${props => props.openedmenu ? "calc(100% - 300px) !important" : 0};
     margin-left: ${props => props.openedmenu ? "300px" : 0};
+    top: 0;
+    transition: margin .2s ease;
+    width: ${props => props.openedmenu ? "calc(100% - 300px) !important" : 0};
 `;
 
-export default Header;
+const CustomAvatar = styled(Avatar)`
+    margin: 0 30px;
+`;
+
+
+export default AppHeader;
