@@ -35,10 +35,14 @@
   "dependencies": {
     "@material-ui/core": "^4.9.10",
     "@material-ui/icons": "^4.9.1",
+    "@types/react-redux": "^7.1.7",
     "@types/react-router-dom": "^5.1.4",
+    "@types/redux": "^3.6.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
+    "redux": "^4.0.5",
     "styled-components": "^5.1.0"
   }
 }

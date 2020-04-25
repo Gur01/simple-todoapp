@@ -8,7 +8,8 @@ import Add from "@material-ui/icons/Add";
 import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
 import styled from "styled-components";
-import { Authorization, Spacer, Menu } from "./components";
+import { Authorization, Menu, Spacer } from "./components";
+import { useTypedSelector } from "./store";
 
 interface HeaderProps {
     openedMenu: boolean;
@@ -16,7 +17,14 @@ interface HeaderProps {
 }
 
 const AppHeader = ({handleOpenMenu, openedMenu}: HeaderProps) => {
+    const user = useTypedSelector(store => store.user);
 
+    React.useEffect(()=> {
+        
+    }, []);
+
+    console.log(user);
+    
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [isAuthorized, setAuthorization] = React.useState(true);
 
