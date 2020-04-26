@@ -1,3 +1,4 @@
+import CssBaseline from "@material-ui/core/CssBaseline";
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
@@ -10,6 +11,8 @@ import Calendar from "./screens/Calendar";
 import Dashboard from "./screens/Dashboard";
 import Lists from "./screens/Lists";
 import Profile from "./screens/Profile";
+import SignIn from "./screens/SignIn";
+import SignUp from "./screens/SignUp";
 
 const App = () => {
 
@@ -21,22 +24,26 @@ const App = () => {
 
      
     return <AppWrapper>
+        <CssBaseline />
+
         <GlobalStyle />
-        <Header handleOpenMenu={handleOpenMenu} openedMenu={openedMenu}/>
-        <Main>
-            <BrowserRouter>
+        <BrowserRouter>
+            <Header handleOpenMenu={handleOpenMenu} openedMenu={openedMenu}/>
+            <Main>
                 <Switch>
                     <Route path="/" exact component={Dashboard}></Route>
                     <Route path="/profile" exact component={Profile}></Route>
                     <Route path="/calendar" exact component={Calendar}></Route>
                     <Route path="/boards" exact component={Boards}></Route>
                     <Route path="/lists" exact component={Lists}></Route>
+                    <Route path="/signin" exact component={SignIn}></Route>
+                    <Route path="/signup" exact component={SignUp}></Route>
                     
                     <Route path="/" render={() => <div>Not found</div>} />
                 </Switch>
                 <MenuSidebar openedMenu={openedMenu} handleOpenMenu={handleOpenMenu}/>
-            </BrowserRouter> 
-        </Main>
+            </Main>
+        </BrowserRouter> 
         <Footer />
 
 

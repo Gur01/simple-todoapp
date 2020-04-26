@@ -6,27 +6,31 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Toolbar from "@material-ui/core/Toolbar";
 import Add from "@material-ui/icons/Add";
 import MenuIcon from "@material-ui/icons/Menu";
+import PersonAdd from "@material-ui/icons/PersonAdd";
 import React from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { Authorization, Menu, Spacer } from "./components";
+import { Login, Menu, Spacer } from "./components";
 import { useTypedSelector } from "./store";
+import useActions from "./store/useActions";
+import { login } from "./store/user/actions";
 
 interface HeaderProps {
-    openedMenu: boolean;
-    handleOpenMenu: ()=> void; 
+  openedMenu: boolean;
+  handleOpenMenu: () => void;
 }
 
-const AppHeader = ({handleOpenMenu, openedMenu}: HeaderProps) => {
-    const user = useTypedSelector(store => store.user);
+const AppHeader = ({ handleOpenMenu, openedMenu }: HeaderProps) => {   
+    const [loginDispatch] = useActions([login]);
+    const history = useHistory();
 
-    React.useEffect(()=> {
-        
+    React.useEffect(() => {
+        loginDispatch({name: "Ivan", surname: "Petrov", id: 123});
     }, []);
 
-    console.log(user);
-    
+    const isAuthorized = useTypedSelector(store => store.user.isAuthorized);
+
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const [isAuthorized, setAuthorization] = React.useState(true);
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -36,15 +40,8 @@ const AppHeader = ({handleOpenMenu, openedMenu}: HeaderProps) => {
         setAnchorEl(null);
     };
 
-    const handleLogin = ()=> {
-        setAuthorization(!isAuthorized);
-    };
     return (
-        <CustomAppBar
-            position="relative"
-            openedmenu={openedMenu ? 1 : 0}
-
-        >
+        <CustomAppBar position="relative" openedmenu={openedMenu ? 1 : 0}>
             <Toolbar>
                 <IconButton
                     color="inherit"
@@ -54,8 +51,10 @@ const AppHeader = ({handleOpenMenu, openedMenu}: HeaderProps) => {
                 >
                     <MenuIcon />
                 </IconButton>
-                <Spacer/>
-                <Button endIcon={<Add />} onClick={handleClick}>Add new</Button>
+                <Spacer />
+                <Button endIcon={<Add />} onClick={handleClick}>
+          Add new
+                </Button>
 
                 <Menu
                     anchorEl={anchorEl}
@@ -67,27 +66,28 @@ const AppHeader = ({handleOpenMenu, openedMenu}: HeaderProps) => {
                     <MenuItem onClick={handleClose}>NEW LIST</MenuItem>
                 </Menu>
 
-
-                <CustomAvatar alt='Name' src="../public/1.jpg" /> 
+                <CustomAvatar alt="Name" src="../public/1.jpg" />
                 {/* John Smith */}
-                <Authorization type={isAuthorized ? "logout" : "login"} onClick={handleLogin}/>
-
+                <Login
+                    type={isAuthorized ? "logout" : "login"}
+                />
+                {/* Registration button */}
+                <Button endIcon={<PersonAdd />} onClick={()=> history.push("./signup")}>sign up</Button>
 
             </Toolbar>
         </CustomAppBar>
     );
 };
 
-const CustomAppBar = styled(AppBar)<{openedmenu: number}>`
-    margin-left: ${props => props.openedmenu ? "300px" : 0};
-    top: 0;
-    transition: margin .2s ease;
-    width: ${props => props.openedmenu ? "calc(100% - 300px) !important" : 0};
+const CustomAppBar = styled(AppBar)<{ openedmenu: number }>`
+  margin-left: ${(props) => (props.openedmenu ? "300px" : 0)};
+  top: 0;
+  transition: margin 0.2s ease;
+  width: ${(props) => (props.openedmenu ? "calc(100% - 300px) !important" : 0)};
 `;
 
 const CustomAvatar = styled(Avatar)`
-    margin: 0 30px;
+  margin: 0 30px;
 `;
-
 
 export default AppHeader;

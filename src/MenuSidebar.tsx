@@ -12,10 +12,11 @@ import ViewList from "@material-ui/icons/ViewList";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { useTypedSelector } from "./store";
 
 interface MenuSidebarProps {
     openedMenu: boolean;
-    handleOpenMenu: ()=> void;
+    handleOpenMenu: () => void;
 }
 
 const menuItems = [
@@ -28,6 +29,7 @@ const menuItems = [
 
 const MenuSidebar = ({openedMenu, handleOpenMenu}: MenuSidebarProps) => {
     const history = useHistory();
+    const userData = useTypedSelector((store) => store.user.userData);
     
     const openLink = (link: string) => {
         history.push(link);
@@ -42,7 +44,7 @@ const MenuSidebar = ({openedMenu, handleOpenMenu}: MenuSidebarProps) => {
     >
         <UserInfo>
             <CustomAvatar alt='Name' src="../public/1.jpg" />
-            <UserName>John Smith</UserName>
+            {userData && <UserName>{userData.name} {userData.surname}</UserName>}
 
 
             {menuItems.map(item => {

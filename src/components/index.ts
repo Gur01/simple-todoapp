@@ -1,3 +1,3 @@
-export { default as Authorization } from "./Authorization";
+export { default as Login } from "./Login";
 export { default as Menu } from "./Menu";
 export { default as Spacer } from "./Spacer";

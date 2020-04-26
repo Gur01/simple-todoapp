@@ -6,7 +6,9 @@ module.exports = {
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:@typescript-eslint/eslint-recommended"
+        "plugin:@typescript-eslint/recommended",
+        // "plugin:@typescript-eslint/eslint-recommended",
+        // "prettier/react"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -18,11 +20,11 @@ module.exports = {
             "jsx": true
         },
         "ecmaVersion": 2018,
-        "sourceType": "module"
+        "sourceType": "module",
     },
     "plugins": [
         "react",
-        "@typescript-eslint"
+        "@typescript-eslint",
     ],
     "rules": {
         "indent": [
@@ -40,6 +42,17 @@ module.exports = {
         "semi": [
             "error",
             "always"
-        ]
-    }
+        ],
+        "@typescript-eslint/explicit-function-return-type": "off",
+    },
+    "overrides": [
+        {
+          // enable the rule specifically for TypeScript files
+          "files": ["*.ts"],
+          "rules": {
+            "@typescript-eslint/explicit-function-return-type": ["warn"]
+          }
+        }
+    ]
+
 };

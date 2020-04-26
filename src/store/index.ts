@@ -1,7 +1,6 @@
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 import { combineReducers, createStore } from "redux";
-import {user} from "./user";
-
+import { user } from "./user";
 
 const rootReducer = combineReducers({ user });
 

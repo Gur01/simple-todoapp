@@ -1,22 +1,23 @@
-import {UserState} from "./types";
+import {UserState, UserActions} from "./types";
 
 const initialState: UserState = {
-    user: null,
+    userData: null,
     isAuthorized: false
 };
 
-export default (state = initialState, action: any) => {
-    switch(action.type){
-    case "SET_USER":{
-        const { id, name, surname } = action.payload;
+export default (state = initialState, action: UserActions): UserState => {
+    switch(action.type) {
+    case "LOGIN":
         return {
-            ...state,
-            user: {
-                id, name, surname
-            }
+            ...action.payload
             
         };
-    }
+
+    case "LOGOUT":
+        return {
+            ...action.payload
+        };
+
     default:
         return state;
     }
