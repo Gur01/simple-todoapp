@@ -9,7 +9,8 @@ import MenuSidebar from "./MenuSidebar";
 import Boards from "./screens/Boards";
 import Calendar from "./screens/Calendar";
 import Dashboard from "./screens/Dashboard";
-import Lists from "./screens/Lists";
+import Lists from "./screens/Lists/Lists";
+import List from "./screens/Lists/List";
 import Profile from "./screens/Profile";
 import SignIn from "./screens/SignIn";
 import SignUp from "./screens/SignUp";
@@ -36,6 +37,7 @@ const App = () => {
                     <Route path="/calendar" exact component={Calendar}></Route>
                     <Route path="/boards" exact component={Boards}></Route>
                     <Route path="/lists" exact component={Lists}></Route>
+                    <Route path="/list" exact component={List}></Route>
                     <Route path="/signin" exact component={SignIn}></Route>
                     <Route path="/signup" exact component={SignUp}></Route>
                     
