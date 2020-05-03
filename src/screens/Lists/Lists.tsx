@@ -3,6 +3,7 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 import cloneDeep from "clone-deep";
 import produce from "immer";
 import React from "react";
@@ -111,15 +112,15 @@ const Lists = () => {
             <PageSubHeader maxWidth="xl">
                 <Grid item xs={12}>
                     <Box>
-                        <TextField label="Title" variant="outlined" fullWidth value={title} onKeyPress={handleEnter} onChange={handleInput}/>
+                        <Title suppressContentEditableWarning={true} contentEditable="true" size="large">Title</Title>
                     </Box> 
-                    <Box mt={2}>
-                        <TextField label="Add to list" variant="outlined" fullWidth value={value} onKeyPress={handleEnter} onChange={handleInput}/>
-                    </Box>
                 </Grid>
             </PageSubHeader>
             
             <PageContent maxWidth="xl">
+                <Box mt={2}>
+                    <TextField label="Add to list" variant="outlined" fullWidth value={value} onKeyPress={handleEnter} onChange={handleInput}/>
+                </Box>
                 {todos.map((todo) => 
                     <Grid item xs={12} key={todo.id} >
                         <CustomCard  todo={todo} className="card" handleMouseDown={handleMouseDown}/>
@@ -146,6 +147,20 @@ const CustomCard = (props: CustomCardProps) => {
         </Card>);
 };
 
+const Title = styled(Button)`
+    display: inline-block;
+    width: auto;
+    padding: 5px 10px;
+    text-transform: none !important;
+    font-size: 1.25rem !important;
+    white-space: none;
+
+    .MuiTouchRipple-root {
+        display: none;
+    }
+
+`;
+
 const ListsWrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -154,8 +169,6 @@ const ListsWrapper = styled.div`
 
 const PageSubHeader = styled(Container)`
     background-color: #eee;
-    padding-bottom: 20px;
-    padding-top: 20px;
     z-index: 100;
 `;
 
