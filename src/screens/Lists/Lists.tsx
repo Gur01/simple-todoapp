@@ -54,7 +54,8 @@ const Lists = () => {
         draggingCard.style.top = positionY + "px";
         draggingCard.style.position = "absolute";
         draggingCard.style.zIndex = "1";
-        
+        draggingCard.style.width = card.offsetWidth + "px";
+        draggingCard.style.transform = "scale(1.015)";
         
         document.body.append(draggingCard);
 
@@ -122,9 +123,8 @@ const Lists = () => {
                     <TextField label="Add to list" variant="outlined" fullWidth value={value} onKeyPress={handleEnter} onChange={handleInput}/>
                 </Box>
                 {todos.map((todo) => 
-                    <Grid item xs={12} key={todo.id} >
-                        <CustomCard  todo={todo} className="card" handleMouseDown={handleMouseDown}/>
-                    </Grid>)}
+                    <CustomCard  key={todo.id} todo={todo} className="card" handleMouseDown={handleMouseDown}/>
+                )}
             
             </PageContent>
         </ListsWrapper>
