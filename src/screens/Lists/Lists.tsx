@@ -10,6 +10,9 @@ import React from "react";
 import styled from "styled-components";
 import TestCard from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import MoreVert from "@material-ui/icons/MoreVert";
+
+
 interface Todo {id: number; value: string}
 
 const Lists = () => {
@@ -58,6 +61,7 @@ const Lists = () => {
         draggingCard.style.zIndex = "1";
         draggingCard.style.width = card.offsetWidth + "px";
         draggingCard.style.transform = "scale(1.015)";
+        draggingCard.style.cursor = "grabbing";
         
         document.body.append(draggingCard);
 
@@ -149,11 +153,11 @@ const CustomTestCard = styled(TestCard)`
 const CustomCard = (props: CustomCardProps) => {
     return (
         <Card data-ref={props.todo.id} onMouseDown={(event: React.MouseEvent) => props.handleMouseDown(event, props.todo.id)} className={props.className}>   
-            <Container maxWidth="xl">
-                <Grid item> {props.todo.value}</Grid>
-            </Container>
+            {props.todo.value}
+            <MenuIcon />
         </Card>);
 };
+
 
 const Title = styled(Button)`
     display: inline-block;
@@ -191,6 +195,19 @@ const Card = styled(Paper)`
         min-height: 50px;
         margin: 15px 0;
         width: 100%;
+        height: auto;
+        padding: 8px 24px;
+        padding-right: 50px;
+        position: relative;
+    `;
+    
+
+const MenuIcon = styled(MoreVert)`
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
 `;
 
 export default Lists;
