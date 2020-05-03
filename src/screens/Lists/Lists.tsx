@@ -8,7 +8,8 @@ import cloneDeep from "clone-deep";
 import produce from "immer";
 import React from "react";
 import styled from "styled-components";
-
+import TestCard from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 interface Todo {id: number; value: string}
 
 const Lists = () => {
@@ -28,7 +29,8 @@ const Lists = () => {
     
     const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if(event.key === "Enter"){
-            setTodos(todos => [...todos, {id: todos.length, value}]);
+
+            setTodos(todos => [{id: todos.length, value}, ...todos, ]);
             setValue("");
         }
     };
@@ -119,13 +121,16 @@ const Lists = () => {
             </PageSubHeader>
             
             <PageContent maxWidth="xl">
-                <Box mt={2}>
-                    <TextField label="Add to list" variant="outlined" fullWidth value={value} onKeyPress={handleEnter} onChange={handleInput}/>
-                </Box>
-                {todos.map((todo) => 
-                    <CustomCard  key={todo.id} todo={todo} className="card" handleMouseDown={handleMouseDown}/>
-                )}
-            
+                <CustomTestCard>
+                    <CardContent>
+                        <Box mt={2}>
+                            <TextField label="Add to list" variant="outlined" fullWidth value={value} onKeyPress={handleEnter} onChange={handleInput}/>
+                        </Box>
+                        {todos.map((todo) => 
+                            <CustomCard  key={todo.id} todo={todo} className="card" handleMouseDown={handleMouseDown}/>
+                        )}
+                    </CardContent>
+                </CustomTestCard>
             </PageContent>
         </ListsWrapper>
 
@@ -138,6 +143,9 @@ interface CustomCardProps {
     className: string;
 }
 
+const CustomTestCard = styled(TestCard)`
+    margin-top: 20px;
+`;
 const CustomCard = (props: CustomCardProps) => {
     return (
         <Card data-ref={props.todo.id} onMouseDown={(event: React.MouseEvent) => props.handleMouseDown(event, props.todo.id)} className={props.className}>   
