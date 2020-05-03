@@ -24,37 +24,41 @@ const App = () => {
     };
 
      
-    return <AppWrapper>
-        <CssBaseline />
+    return (
+        <AppWrapper>
+            <CssBaseline />
 
-        <GlobalStyle />
-        <BrowserRouter>
-            <Header handleOpenMenu={handleOpenMenu} openedMenu={openedMenu}/>
-            <Main>
-                <Switch>
-                    <Route path="/" exact component={Dashboard}></Route>
-                    <Route path="/profile" exact component={Profile}></Route>
-                    <Route path="/calendar" exact component={Calendar}></Route>
-                    <Route path="/boards" exact component={Boards}></Route>
-                    <Route path="/lists" exact component={Lists}></Route>
-                    <Route path="/list" exact component={List}></Route>
-                    <Route path="/signin" exact component={SignIn}></Route>
-                    <Route path="/signup" exact component={SignUp}></Route>
+            <GlobalStyle />
+            <BrowserRouter>
+                <Header handleOpenMenu={handleOpenMenu} openedMenu={openedMenu}/>
+                <Main>
+                    {/* <MainScrollingInner> */}
+                    <Switch>
+                        <Route path="/" exact component={Dashboard}></Route>
+                        <Route path="/profile" exact component={Profile}></Route>
+                        <Route path="/calendar" exact component={Calendar}></Route>
+                        <Route path="/boards" exact component={Boards}></Route>
+                        <Route path="/lists" exact component={Lists}></Route>
+                        <Route path="/list" exact component={List}></Route>
+                        <Route path="/signin" exact component={SignIn}></Route>
+                        <Route path="/signup" exact component={SignUp}></Route>
                     
-                    <Route path="/" render={() => <div>Not found</div>} />
-                </Switch>
-                <MenuSidebar openedMenu={openedMenu} handleOpenMenu={handleOpenMenu}/>
-            </Main>
-        </BrowserRouter> 
-        <Footer />
+                        <Route path="/" render={() => <div>Not found</div>} />
+                    </Switch>
+                    <MenuSidebar openedMenu={openedMenu} handleOpenMenu={handleOpenMenu}/>
+                    {/* </MainScrollingInner> */}
+                </Main>
+            </BrowserRouter> 
+            <Footer />
 
 
-    </AppWrapper>;
+        </AppWrapper>);
 };
 
-
 const Main = styled.div`
-    flex-grow: 1
+    flex-grow: 1;
+    overflow-x: hidden;
+    overflow-x: auto;
 `;
 
 const AppWrapper = styled.div`
