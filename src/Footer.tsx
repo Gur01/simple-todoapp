@@ -12,6 +12,7 @@ const AppFooter = () =>
 
 const Footer  = styled.footer`
     background-color: #eee;
+    z-index: 100
 `;
 
 export default AppFooter;

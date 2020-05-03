@@ -14,11 +14,11 @@ const Lists = () => {
     const [title, setTitle] = React.useState("Title");
     const [value, setValue] = React.useState<string>("");
     const [todos, setTodos] = React.useState<Todo[]>(
-        [{id: 0, value: "0"}, {id: 1, value: "1"}, {id: 2, value: "2"},
-            {id: 3, value: "3"}, {id: 4, value: "4"}, {id:5, value: "5"},
-            {id: 6, value: "6"}, {id: 7, value: "7"}, {id:8, value: "8"},
-            {id: 9, value: "9"}, {id: 10, value: "10"}, {id:11, value: "11"},
-            {id: 12, value: "12"}, {id: 13, value: "13"}, {id:14, value: "14"},
+        [{id: 0, value: "помыться"}, {id: 1, value: "побриться"}, {id: 2, value: "почесать зв ухом"},
+            {id: 3, value: "сесть на стул"}, {id: 4, value: "хохохо"}, {id:5, value: "весело"},
+            {id: 6, value: "ничего не скажешь"}, {id: 7, value: "купить пива"}, {id:8, value: "купить 2 пива"},
+            {id: 9, value: "купить 3 пива"}, {id: 10, value: "купить 4 пива"}, {id:11, value: "купить 5 пива"},
+            {id: 12, value: "купить 6 пива"}, {id: 13, value: "купить 7 пива"}, {id:14, value: "купить 8 пива"},
         ]); 
     
     const handleInput = (event: React.ChangeEvent  <HTMLInputElement | HTMLTextAreaElement>)=> {
@@ -36,7 +36,7 @@ const Lists = () => {
         if(event.button === 2) return;
 
         const card = document.querySelector(`[data-ref="${currentCardId}"]`) as HTMLDivElement;
-        
+
         if(!card) return;     
         
         // creating dragging card - copy
@@ -52,6 +52,7 @@ const Lists = () => {
         draggingCard.style.left = positionX + "px";
         draggingCard.style.top = positionY + "px";
         draggingCard.style.position = "absolute";
+        draggingCard.style.zIndex = "1";
         
         
         document.body.append(draggingCard);
@@ -60,7 +61,7 @@ const Lists = () => {
         let tempTodos = cloneDeep(todos);
         let cardBelow: HTMLDivElement | null | undefined = undefined;
 
-        const onMouseMove = (event: MouseEvent) =>  { 
+        const onMouseMove = (event: MouseEvent) =>  {
             // mooving dragging card            
             draggingCard.style.left = event.clientX - shiftX + "px";
             draggingCard.style.top = event.clientY - shiftY + "px";
@@ -103,34 +104,38 @@ const Lists = () => {
             card.onmouseup = null;
         };
 
-
     };
 
     return( 
-        <Container maxWidth="xl">
-            <Grid item xs={12}>
-                <Box mt={2}>
-                    <TextField label="Title" variant="outlined" fullWidth value={title} onKeyPress={handleEnter} onChange={handleInput}/>
-                </Box> 
-                <Box mt={2}>
-                    <TextField label="Add..." variant="outlined" fullWidth value={value} onKeyPress={handleEnter} onChange={handleInput}/>
-                </Box>
-            </Grid>
+        <ListsWrapper>
+            <PageSubHeader maxWidth="xl">
+                <Grid item xs={12}>
+                    <Box>
+                        <TextField label="Title" variant="outlined" fullWidth value={title} onKeyPress={handleEnter} onChange={handleInput}/>
+                    </Box> 
+                    <Box mt={2}>
+                        <TextField label="Add to list" variant="outlined" fullWidth value={value} onKeyPress={handleEnter} onChange={handleInput}/>
+                    </Box>
+                </Grid>
+            </PageSubHeader>
             
-            {todos.map((todo) => 
-                <Grid item xs={12} key={todo.id} >
-                    <CustomCard  todo={todo} className="card" handleMouseDown={handleMouseDown}/>
-                </Grid>)}
+            <PageContent maxWidth="xl">
+                {todos.map((todo) => 
+                    <Grid item xs={12} key={todo.id} >
+                        <CustomCard  todo={todo} className="card" handleMouseDown={handleMouseDown}/>
+                    </Grid>)}
             
-        </Container>
+            </PageContent>
+        </ListsWrapper>
 
-    );};
+    );
+};
 
-    interface CustomCardProps {
-        todo: Todo; 
-        handleMouseDown: (event: React.MouseEvent, currentCardId: number) => void; 
-        className: string;
-    }
+interface CustomCardProps {
+    todo: Todo; 
+    handleMouseDown: (event: React.MouseEvent, currentCardId: number) => void; 
+    className: string;
+}
 
 const CustomCard = (props: CustomCardProps) => {
     return (
@@ -141,11 +146,30 @@ const CustomCard = (props: CustomCardProps) => {
         </Card>);
 };
 
+const ListsWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+`;
+
+const PageSubHeader = styled(Container)`
+    background-color: #eee;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    z-index: 100;
+`;
+
+const PageContent = styled(Container)`
+    position: relative;
+    flex-grow: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+`;
+
 const Card = styled(Paper)`
         min-height: 50px;
         margin: 15px 0;
         width: 100%;
-        transition: all 1s ease;
 `;
 
 export default Lists;

@@ -16,6 +16,7 @@ body {
 	font-family: Roboto;
 	margin: 0;
 	padding: 0;
+	overflow: hidden;
 }
 `;
 

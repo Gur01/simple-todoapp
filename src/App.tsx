@@ -57,14 +57,14 @@ const App = () => {
 
 const Main = styled.div`
     flex-grow: 1;
-    overflow-x: hidden;
-    overflow-x: auto;
-`;
-
+    overflow: hidden;
+    `;
+    
 const AppWrapper = styled.div`
     display: flex;
     flex-direction: column;
     height: 100vh;
+    overflow: hidden;
 `;
 
 
