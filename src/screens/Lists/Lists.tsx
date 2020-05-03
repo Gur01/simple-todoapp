@@ -1,19 +1,17 @@
 import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import TestCard from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
 import cloneDeep from "clone-deep";
 import produce from "immer";
 import React from "react";
 import styled from "styled-components";
-import TestCard from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import MoreVert from "@material-ui/icons/MoreVert";
+import { Card as CustomCard } from "../../components";
 
-
-interface Todo {id: number; value: string}
+export interface Todo {id: number; value: string}
 
 const Lists = () => {
     const [title, setTitle] = React.useState("Title");
@@ -141,23 +139,9 @@ const Lists = () => {
     );
 };
 
-interface CustomCardProps {
-    todo: Todo; 
-    handleMouseDown: (event: React.MouseEvent, currentCardId: number) => void; 
-    className: string;
-}
-
 const CustomTestCard = styled(TestCard)`
     margin-top: 20px;
 `;
-const CustomCard = (props: CustomCardProps) => {
-    return (
-        <Card data-ref={props.todo.id} onMouseDown={(event: React.MouseEvent) => props.handleMouseDown(event, props.todo.id)} className={props.className}>   
-            {props.todo.value}
-            <MenuIcon />
-        </Card>);
-};
-
 
 const Title = styled(Button)`
     display: inline-block;
@@ -189,25 +173,6 @@ const PageContent = styled(Container)`
     flex-grow: 1;
     overflow-y: auto;
     overflow-x: hidden;
-`;
-
-const Card = styled(Paper)`
-        min-height: 50px;
-        margin: 15px 0;
-        width: 100%;
-        height: auto;
-        padding: 8px 24px;
-        padding-right: 50px;
-        position: relative;
-    `;
-    
-
-const MenuIcon = styled(MoreVert)`
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
 `;
 
 export default Lists;
