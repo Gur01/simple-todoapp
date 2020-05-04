@@ -1,6 +1,6 @@
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import TestCard from "@material-ui/core/Card";
+import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -131,24 +131,41 @@ const Lists = () => {
             </PageSubHeader>
             
             <PageContent maxWidth="xl">
-                <CustomTestCard>
-                    <CardContent>
-                        <Box mt={2}>
+                <CustomCard>
+                    <CustomCardContent>
+                        <Box mb={2}>
                             <TextField label="Add to list" variant="outlined" fullWidth value={value} onKeyPress={handleEnter} onChange={handleInput}/>
                         </Box>
-                        {todos.map((todo) => 
-                            <ListPaper  setDragAbility={setDragAbility} key={todo.id} todo={todo} className="card" handleMouseDown={handleMouseDown}/>
-                        )}
-                    </CardContent>
-                </CustomTestCard>
+                        <ScrollingCardContent>
+                            {todos.map((todo) => 
+                                <ListPaper  setDragAbility={setDragAbility} key={todo.id} todo={todo} className="card" handleMouseDown={handleMouseDown}/>
+                            )}
+                        </ScrollingCardContent>
+                    </CustomCardContent>
+                </CustomCard>
             </PageContent>
         </ListsWrapper>
 
     );
 };
 
-const CustomTestCard = styled(TestCard)`
-    margin-top: 20px;
+
+const ScrollingCardContent = styled(CardContent)`
+    flex-grow: 1;
+    overflow-y: auto;
+`;
+
+const CustomCardContent = styled(CardContent)`
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+`;
+
+const CustomCard = styled(Card)`
+    margin-top: 8px;
+    overflow: hidden;
+    height: 100%;
 `;
 
 const Title = styled(Button)`
@@ -179,8 +196,8 @@ const PageSubHeader = styled(Container)`
 const PageContent = styled(Container)`
     position: relative;
     flex-grow: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
+    margin-bottom: 8px;
 `;
 
 export default Lists;
