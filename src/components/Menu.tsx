@@ -6,11 +6,11 @@ const CustomMenu = (props: MenuProps) => (<Menu
     getContentAnchorEl={null}
     anchorOrigin={{
         vertical: "bottom",
-        horizontal: "center",
+        horizontal: "right",
     }}
     transformOrigin={{
         vertical: "top",
-        horizontal: "center",
+        horizontal: "right",
     }}
     {...props}
 />);

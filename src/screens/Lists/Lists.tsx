@@ -9,7 +9,7 @@ import cloneDeep from "clone-deep";
 import produce from "immer";
 import React from "react";
 import styled from "styled-components";
-import { Card as CustomCard } from "../../components";
+import {ListPaper } from "../../components";
 
 export interface Todo {id: number; value: string}
 
@@ -23,6 +23,7 @@ const Lists = () => {
             {id: 9, value: "купить 3 пива"}, {id: 10, value: "купить 4 пива"}, {id:11, value: "купить 5 пива"},
             {id: 12, value: "купить 6 пива"}, {id: 13, value: "купить 7 пива"}, {id:14, value: "купить 8 пива"},
         ]); 
+    const [dragAbility, setDragAbility] = React.useState(true);
     
     const handleInput = (event: React.ChangeEvent  <HTMLInputElement | HTMLTextAreaElement>)=> {
         setValue(event.target.value);
@@ -37,9 +38,10 @@ const Lists = () => {
     };
 
     const handleMouseDown = (event: React.MouseEvent, currentCardId: number)=> {
-        if(event.button === 2) return;
+        if(event.button === 2 || !dragAbility) return;
 
         const card = document.querySelector(`[data-ref="${currentCardId}"]`) as HTMLDivElement;
+        const cards = document.querySelectorAll("[data-ref]") as NodeListOf<Element>;
 
         if(!card) return;     
         
@@ -56,7 +58,7 @@ const Lists = () => {
         draggingCard.style.left = positionX + "px";
         draggingCard.style.top = positionY + "px";
         draggingCard.style.position = "absolute";
-        draggingCard.style.zIndex = "1";
+        draggingCard.style.zIndex = "1000";
         draggingCard.style.width = card.offsetWidth + "px";
         draggingCard.style.transform = "scale(1.015)";
         draggingCard.style.cursor = "grabbing";
@@ -97,19 +99,25 @@ const Lists = () => {
     
         draggingCard.onmouseup = () =>  {
             document.removeEventListener("mousemove", onMouseMove);
+
             
             draggingCard.style.left = positionX + "px";
             draggingCard.style.top = positionY + "px";
-
+            
             draggingCard.remove();
             
             if(!cardBelow) {
                 card.style.visibility = "";
             }
-
+            
+            for(const card of cards) {
+                (card as HTMLDivElement).style.visibility = "";
+            }
+            
             card.onmouseup = null;
         };
 
+        return false;
     };
 
     return( 
@@ -129,7 +137,7 @@ const Lists = () => {
                             <TextField label="Add to list" variant="outlined" fullWidth value={value} onKeyPress={handleEnter} onChange={handleInput}/>
                         </Box>
                         {todos.map((todo) => 
-                            <CustomCard  key={todo.id} todo={todo} className="card" handleMouseDown={handleMouseDown}/>
+                            <ListPaper  setDragAbility={setDragAbility} key={todo.id} todo={todo} className="card" handleMouseDown={handleMouseDown}/>
                         )}
                     </CardContent>
                 </CustomTestCard>
