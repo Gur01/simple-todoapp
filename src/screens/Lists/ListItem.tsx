@@ -9,27 +9,30 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import MoreVert from "@material-ui/icons/MoreVert";
 import React from "react";
 import styled from "styled-components";
-import { Popover } from ".";
-import { Todo } from "../screens/Lists/List";
-import { stopPropagation } from "../utils";
+import { Popover } from "../../components";
+import { Todo } from "./List";
+import { stopPropagation } from "../../utils";
+import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 
 interface CustomCardProps {
     todo: Todo; 
     handleMouseDown: (event: React.MouseEvent, currentCardId: number) => void; 
     className: string;
     setDragAbility: React.Dispatch<React.SetStateAction<boolean>>;
+    handleListItemChange: (value: string, id: number) => void;
 }
 
 const ListPaper = (props: CustomCardProps) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [value, setValue] = React.useState("no");
+    const [canDrag, setCanDrag] = React.useState(true);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSelectPriority = (event: React.ChangeEvent<HTMLInputElement>) => {
+
         setValue((event.target as HTMLInputElement).value);
     };
 
     const handleMenuClick = (event: React.MouseEvent<any>) => {
-        event.stopPropagation();
         event.stopPropagation();
         setAnchorEl(event.currentTarget);
         props.setDragAbility(false);
@@ -40,41 +43,24 @@ const ListPaper = (props: CustomCardProps) => {
         props.setDragAbility(true);
     };
 
-    const setEndOfContenteditable = (contentEditableElement: Element) =>
-    {
-        let range = undefined;
-        let selection = undefined;
-        if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
-        {
-            range = document.createRange();//Create a range (a range is a like the selection but invisible)
-            range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
-            range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
-            selection = window.getSelection();//get the selection object (allows you to change selection)
-            selection?.removeAllRanges();//remove any selections already made
-            selection?.addRange(range);//make the range you have just created the visible selection
-        }
+    const handleValueChange = (event: any) => {
+        props.handleListItemChange(event.target.value, props.todo.id);
     };
 
-    const editListItem = (event: any, id: number) => {
-        event.persist();
-        console.log("click");
+    const handleDragging = (event: React.MouseEvent) => {
+        if(!canDrag) return;
         
-        const currentItem = event.currentTarget;
-        currentItem.setAttribute("contentEditable", "true");
-        setEndOfContenteditable(currentItem);
-    };
-    
-    const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
-        const currentItem = event.currentTarget;
-        currentItem.removeAttribute("contentEditable");
-        props.setDragAbility(true);
+        props.handleMouseDown(event, props.todo.id);
     };
 
+    const handleEsc = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        console.log(event.key);
+    };
 
     return (
         <>
-            <ListItemCard onBlur={handleBlur} data-ref={props.todo.id} onClick={(event) => editListItem(event, props.todo.id)} onMouseDown={(event: React.MouseEvent) => props.handleMouseDown(event, props.todo.id)} className={props.className}>   
-                <div style={{display: "inline-block"}} >{props.todo.value}</div>
+            <ListItemCard data-ref={props.todo.id} onMouseDown={(event: React.MouseEvent) => handleDragging(event)} className={props.className}>   
+                <ContentEditable style={{padding: "10px"}} html={props.todo.value} onKeyPress={handleEsc} onBlur={()=> setCanDrag(true)} onClick={()=> setCanDrag(false)} onChange={(event: ContentEditableEvent) => {setCanDrag(false); handleValueChange(event);}} />
                 <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation}/>
             </ListItemCard>
             <Popover
@@ -93,7 +79,7 @@ const ListPaper = (props: CustomCardProps) => {
                     <CustomFormControl component="fieldset">
                         {/* <FormLabel>Priority</FormLabel> */}
 
-                        <RadioGroup value={value} onChange={handleChange}>
+                        <RadioGroup value={value} onChange={handleSelectPriority}>
                             <FormControlLabel value="no" control={<Radio />} label="No" />
                             <FormControlLabel value="important" control={<Radio />} label="Important" />
                             <FormControlLabel value="urgent" control={<Radio />} label="Urgent" />
@@ -120,8 +106,7 @@ const ListItemCard = styled(Paper)`
     margin: 15px 0;
     width: 100%;
     height: auto;
-    padding: 8px 24px;
-    padding-right: 50px;
+    padding: 8px 50px 8px 24px;
     position: relative;
     user-select: none;
 `;

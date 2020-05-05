@@ -9,14 +9,14 @@ import cloneDeep from "clone-deep";
 import produce from "immer";
 import throttle from "lodash.throttle";
 import React from "react";
+import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import styled from "styled-components";
-import { ListPaper } from "../../components";
-import ContentEditable, {ContentEditableEvent} from "react-contenteditable";
+import ListItem from "./ListItem";
 
 export interface Todo {id: number; value: string}
 
 const Lists = () => {
-    const [title, setTitle] = React.useState("Title");
+    const [title, setTitle] = React.useState("New list");
     const [value, setValue] = React.useState<string>("");
     const [todos, setTodos] = React.useState<Todo[]>(
         [{id: 0, value: "помыться"}, {id: 1, value: "побриться"}, {id: 2, value: "почесать зв ухом"},
@@ -125,8 +125,19 @@ const Lists = () => {
         };
     };
 
-    const handleTitleSave = (event: ContentEditableEvent) => {
+    const handleTitleChange = (event: ContentEditableEvent) => {
         setTitle(event.target.value);        
+    };
+
+    const handleListItemChange = (value: string, id: number) => {
+        console.log(value);
+        const nextTodos = produce(todos, draft => {
+            const index = draft.findIndex(todo => todo.id === id);
+            if(typeof index !== undefined) {
+                draft[index].value = value;
+            }
+        });
+        setTodos(nextTodos);
     };
 
     return( 
@@ -135,7 +146,7 @@ const Lists = () => {
                 <Grid item xs={12}>
                     <Box>
                         <Title>
-                            <ContentEditable html={title} onChange={handleTitleSave} />
+                            <ContentEditable html={title} onChange={handleTitleChange} />
                         </Title>
                     </Box> 
                 </Grid>
@@ -149,7 +160,7 @@ const Lists = () => {
                         </Box>
                         <ScrollingCardContent>
                             {todos.map((todo) => 
-                                <ListPaper setDragAbility={setDragAbility} key={todo.id} todo={todo} className="card" handleMouseDown={handleMouseDown}/>
+                                <ListItem setDragAbility={setDragAbility} key={todo.id} todo={todo} className="card" handleMouseDown={handleMouseDown} handleListItemChange={handleListItemChange}/>
                             )}
                         </ScrollingCardContent>
                     </CustomCardContent>
