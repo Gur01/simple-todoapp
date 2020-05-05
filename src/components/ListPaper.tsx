@@ -1,18 +1,17 @@
+import Divider from "@material-ui/core/Divider";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
 import Paper from "@material-ui/core/Paper";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
 import MoreVert from "@material-ui/icons/MoreVert";
 import React from "react";
 import styled from "styled-components";
+import { Popover } from ".";
 import { Todo } from "../screens/Lists/Lists";
 import { stopPropagation } from "../utils";
-import { Popover } from ".";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import Divider from "@material-ui/core/Divider";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormLabel from "@material-ui/core/FormLabel";
-import FormControl from "@material-ui/core/FormControl";
 
 interface CustomCardProps {
     todo: Todo; 
@@ -39,11 +38,38 @@ const ListPaper = (props: CustomCardProps) => {
         props.setDragAbility(true);
     };
 
+    const setEndOfContenteditable = (contentEditableElement: Element) =>
+    {
+        let range = undefined;
+        let selection = undefined;
+        if(document.createRange)//Firefox, Chrome, Opera, Safari, IE 9+
+        {
+            range = document.createRange();//Create a range (a range is a like the selection but invisible)
+            range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
+            range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+            selection = window.getSelection();//get the selection object (allows you to change selection)
+            selection?.removeAllRanges();//remove any selections already made
+            selection?.addRange(range);//make the range you have just created the visible selection
+        }
+    };
+
+    const editListItem = (event: any, id: number) => {
+        event.persist();
+        const currentItem = event.currentTarget;
+        currentItem.setAttribute("contentEditable", "true");
+        setEndOfContenteditable(currentItem);
+    };
+    
+    const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+        const currentItem = event.currentTarget;
+        currentItem.removeAttribute("contentEditable");
+        props.setDragAbility(true);
+    };
 
 
     return (
         <ListItemCard data-ref={props.todo.id} onMouseDown={(event: React.MouseEvent) => props.handleMouseDown(event, props.todo.id)} className={props.className}>   
-            {props.todo.value}
+            <div style={{display: "inline-block"}} >{props.todo.value}</div>
             <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation}/>
             <Popover
                 anchorEl={anchorEl}
@@ -68,11 +94,6 @@ const ListPaper = (props: CustomCardProps) => {
                         </RadioGroup>
                     </CustomFormControl>
                 </CustomList>
-                
-                {/* <InnerPaper>
-                    <div>Created by: Me</div>
-                    <div>Date: 2002.11.25</div>
-                </InnerPaper> */}
             </Popover>
         </ListItemCard>);
 };

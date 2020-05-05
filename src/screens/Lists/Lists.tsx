@@ -7,10 +7,10 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import cloneDeep from "clone-deep";
 import produce from "immer";
+import throttle from "lodash.throttle";
 import React from "react";
 import styled from "styled-components";
-import {ListPaper } from "../../components";
-
+import { ListPaper } from "../../components";
 export interface Todo {id: number; value: string}
 
 const Lists = () => {
@@ -41,7 +41,6 @@ const Lists = () => {
         if(event.button === 2 || !dragAbility) return;
 
         const card = document.querySelector(`[data-ref="${currentCardId}"]`) as HTMLDivElement;
-        const cards = document.querySelectorAll("[data-ref]") as NodeListOf<Element>;
 
         if(!card) return;     
         
@@ -68,7 +67,7 @@ const Lists = () => {
         // set temp vars
         let tempTodos = cloneDeep(todos);
         let cardBelow: HTMLDivElement | null | undefined = undefined;
-
+        const throttledTodoAction = throttle((data: Todo[])=> setTodos(data), 100);
         const onMouseMove = (event: MouseEvent) =>  {
             // mooving dragging card            
             draggingCard.style.left = event.clientX - shiftX + "px";
@@ -80,7 +79,6 @@ const Lists = () => {
             draggingCard.hidden = false;
             
             if(cardBelow && card?.dataset.ref !== cardBelow?.dataset.ref) {
-                
                 const cardBelowId = Number(cardBelow?.dataset.ref);
 
                 const nextTodos = produce(tempTodos, draft => {
@@ -91,7 +89,7 @@ const Lists = () => {
                     [draft[currentCardIndex], draft[cardBelowIndex]] = [draft[cardBelowIndex], draft[currentCardIndex]];
                 });
                 tempTodos = nextTodos;
-                setTodos(() => nextTodos);               
+                throttledTodoAction(nextTodos);               
             }   
         };
     
@@ -106,18 +104,22 @@ const Lists = () => {
             
             draggingCard.remove();
             
-            if(!cardBelow) {
-                card.style.visibility = "";
-            }
+            // if(!cardBelow) {
+            card.style.visibility = "";
+            // }
             
-            for(const card of cards) {
-                (card as HTMLDivElement).style.visibility = "";
-            }
+            // for(const card of cards) {
+            //     if(card.style.visibility === "hidden") {
+            //         card.style.visibility = "";
+            //     }
+            // }
             
             card.onmouseup = null;
         };
+    };
 
-        return false;
+    const handleTitleSave = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+        setTitle(event.currentTarget.innerText);        
     };
 
     return( 
@@ -125,7 +127,7 @@ const Lists = () => {
             <PageSubHeader maxWidth="xl">
                 <Grid item xs={12}>
                     <Box>
-                        <Title suppressContentEditableWarning={true} contentEditable="true" size="large">Title</Title>
+                        <Title suppressContentEditableWarning={true} onKeyPress={handleTitleSave} contentEditable="true" size="large">Title</Title>
                     </Box> 
                 </Grid>
             </PageSubHeader>
@@ -138,7 +140,7 @@ const Lists = () => {
                         </Box>
                         <ScrollingCardContent>
                             {todos.map((todo) => 
-                                <ListPaper  setDragAbility={setDragAbility} key={todo.id} todo={todo} className="card" handleMouseDown={handleMouseDown}/>
+                                <ListPaper setDragAbility={setDragAbility} key={todo.id} todo={todo} className="card" handleMouseDown={handleMouseDown}/>
                             )}
                         </ScrollingCardContent>
                     </CustomCardContent>
