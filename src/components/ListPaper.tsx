@@ -10,7 +10,7 @@ import MoreVert from "@material-ui/icons/MoreVert";
 import React from "react";
 import styled from "styled-components";
 import { Popover } from ".";
-import { Todo } from "../screens/Lists/Lists";
+import { Todo } from "../screens/Lists/List";
 import { stopPropagation } from "../utils";
 
 interface CustomCardProps {
