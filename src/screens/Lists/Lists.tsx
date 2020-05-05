@@ -37,9 +37,13 @@ const Lists = () => {
         }
     };
 
+    let counter = 1;
+
     const handleMouseDown = (event: React.MouseEvent, currentCardId: number)=> {
         if(event.button === 2 || !dragAbility) return;
-
+        if(counter >= 2) {           
+            return;
+        }
         const card = document.querySelector(`[data-ref="${currentCardId}"]`) as HTMLDivElement;
 
         if(!card) return;     
@@ -62,6 +66,8 @@ const Lists = () => {
         draggingCard.style.transform = "scale(1.015)";
         draggingCard.style.cursor = "grabbing";
         
+        draggingCard.addEventListener("mouseup", ()=> console.log("mouseup"));
+        draggingCard.addEventListener("mousedown", ()=> console.log("mousedown"));
         document.body.append(draggingCard);
 
         // set temp vars
@@ -69,6 +75,7 @@ const Lists = () => {
         let cardBelow: HTMLDivElement | null | undefined = undefined;
         const throttledTodoAction = throttle((data: Todo[])=> setTodos(data), 100);
         const onMouseMove = (event: MouseEvent) =>  {
+
             // mooving dragging card            
             draggingCard.style.left = event.clientX - shiftX + "px";
             draggingCard.style.top = event.clientY - shiftY + "px";
@@ -96,6 +103,12 @@ const Lists = () => {
         document.addEventListener("mousemove", onMouseMove);
     
         draggingCard.onmouseup = () =>  {
+            counter += 1;
+
+            setTimeout(() => {
+                counter=1;
+            }, 300);
+
             document.removeEventListener("mousemove", onMouseMove);
 
             
@@ -104,15 +117,7 @@ const Lists = () => {
             
             draggingCard.remove();
             
-            // if(!cardBelow) {
             card.style.visibility = "";
-            // }
-            
-            // for(const card of cards) {
-            //     if(card.style.visibility === "hidden") {
-            //         card.style.visibility = "";
-            //     }
-            // }
             
             card.onmouseup = null;
         };

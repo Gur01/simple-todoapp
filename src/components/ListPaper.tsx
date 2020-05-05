@@ -29,6 +29,8 @@ const ListPaper = (props: CustomCardProps) => {
     };
 
     const handleMenuClick = (event: React.MouseEvent<any>) => {
+        event.stopPropagation();
+        event.stopPropagation();
         setAnchorEl(event.currentTarget);
         props.setDragAbility(false);
     };
@@ -55,6 +57,8 @@ const ListPaper = (props: CustomCardProps) => {
 
     const editListItem = (event: any, id: number) => {
         event.persist();
+        console.log("click");
+        
         const currentItem = event.currentTarget;
         currentItem.setAttribute("contentEditable", "true");
         setEndOfContenteditable(currentItem);
@@ -68,9 +72,11 @@ const ListPaper = (props: CustomCardProps) => {
 
 
     return (
-        <ListItemCard data-ref={props.todo.id} onMouseDown={(event: React.MouseEvent) => props.handleMouseDown(event, props.todo.id)} className={props.className}>   
-            <div style={{display: "inline-block"}} >{props.todo.value}</div>
-            <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation}/>
+        <>
+            <ListItemCard onBlur={handleBlur} data-ref={props.todo.id} onClick={(event) => editListItem(event, props.todo.id)} onMouseDown={(event: React.MouseEvent) => props.handleMouseDown(event, props.todo.id)} className={props.className}>   
+                <div style={{display: "inline-block"}} >{props.todo.value}</div>
+                <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation}/>
+            </ListItemCard>
             <Popover
                 anchorEl={anchorEl}
                 keepMounted
@@ -95,7 +101,7 @@ const ListPaper = (props: CustomCardProps) => {
                     </CustomFormControl>
                 </CustomList>
             </Popover>
-        </ListItemCard>);
+        </>);
 };
 
 const CustomList = styled(List)`
