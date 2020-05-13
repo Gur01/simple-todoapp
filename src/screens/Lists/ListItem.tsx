@@ -22,13 +22,12 @@ interface CustomCardProps {
     handleListItemChange: (value: string, id: number) => void;
 }
 
-const ListPaper = (props: CustomCardProps) => {
+const ListPaper = (props: any) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [value, setValue] = React.useState("no");
     const [canDrag, setCanDrag] = React.useState(true);
-
+    
     const handleSelectPriority = (event: React.ChangeEvent<HTMLInputElement>) => {
-
         setValue((event.target as HTMLInputElement).value);
     };
 

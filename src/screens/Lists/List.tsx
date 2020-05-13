@@ -12,20 +12,24 @@ import React from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import styled from "styled-components";
 import ListItem from "./ListItem";
+import lists, {TodoList}  from "../../mockdata/lists";
 
 export interface Todo {id: number; value: string}
 
-const Lists = () => {
-    const [title, setTitle] = React.useState("New list");
+
+const List = (props: {list: TodoList | undefined; updateList: any} ) => {
+
     const [value, setValue] = React.useState<string>("");
-    const [todos, setTodos] = React.useState<Todo[]>(
-        [{id: 0, value: "помыться"}, {id: 1, value: "побриться"}, {id: 2, value: "почесать зв ухом"},
-            {id: 3, value: "сесть на стул"}, {id: 4, value: "хохохо"}, {id:5, value: "весело"},
-            {id: 6, value: "ничего не скажешь"}, {id: 7, value: "купить пива"}, {id:8, value: "купить 2 пива"},
-            {id: 9, value: "купить 3 пива"}, {id: 10, value: "купить 4 пива"}, {id:11, value: "купить 5 пива"},
-            {id: 12, value: "купить 6 пива"}, {id: 13, value: "купить 7 пива"}, {id:14, value: "купить 8 пива"},
-        ]); 
-    const [dragAbility, setDragAbility] = React.useState(true);
+
+    // const [todos, setTodos] = React.useState<Todo[]>(
+    //     [{id: 0, value: "помыться0"}, {id: 1, value: "побриться1"}, {id: 2, value: "почесать зв ухом2"},
+    //         {id: 3, value: "сесть на стул3"}, {id: 4, value: "хохохо4"}, {id:5, value: "весело5"},
+    //         {id: 6, value: "ничего не скажешь6"}, {id: 7, value: "купить пива7"}, {id:8, value: "купить 2 пива8"},
+    //         {id: 9, value: "купить 3 пива"}, {id: 10, value: "купить 4 пива"}, {id:11, value: "купить 5 пива"},
+    //         {id: 12, value: "купить 6 пива"}, {id: 13, value: "купить 7 пива"}, {id:14, value: "купить 8 пива"},
+    //     ]); 
+
+    // const [dragAbility, setDragAbility] = React.useState(true);
     
     const handleInput = (event: React.ChangeEvent  <HTMLInputElement | HTMLTextAreaElement>)=> {
         setValue(event.target.value);
@@ -34,10 +38,20 @@ const Lists = () => {
     const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if(event.key === "Enter"){
 
-            setTodos(todos => [{id: todos.length, value}, ...todos, ]);
+            const newList = produce(props.list, draft => {
+                draft?.data.unshift({id: draft.data.length + 100, value, date: Date.now(), updateDate: Date.now()});
+            });
+
+            props.updateList(newList);
             setValue("");
         }
     };
+
+
+    const handleTitleChange = (event: ContentEditableEvent) => {
+        props.updateList({...props.list, title: event.target.value});        
+    };
+
 
     let counter = 1;
 
@@ -125,10 +139,6 @@ const Lists = () => {
         };
     };
 
-    const handleTitleChange = (event: ContentEditableEvent) => {
-        setTitle(event.target.value);        
-    };
-
     const handleListItemChange = (value: string, id: number) => {
         console.log(value);
         const nextTodos = produce(todos, draft => {
@@ -146,7 +156,7 @@ const Lists = () => {
                 <Grid item xs={12}>
                     <Box>
                         <Title>
-                            <ContentEditable html={title} onChange={handleTitleChange} />
+                            <ContentEditable html={props.list ? props.list.title : "New title"} onChange={handleTitleChange} />
                         </Title>
                     </Box> 
                 </Grid>
@@ -159,8 +169,8 @@ const Lists = () => {
                             <TextField label="Add to list" variant="outlined" fullWidth value={value} onKeyPress={handleEnter} onChange={handleInput}/>
                         </Box>
                         <ScrollingCardContent>
-                            {todos.map((todo) => 
-                                <ListItem setDragAbility={setDragAbility} key={todo.id} todo={todo} className="card" handleMouseDown={handleMouseDown} handleListItemChange={handleListItemChange}/>
+                            {props.list && props.list.data.map((todo) => 
+                                <ListItem key={todo.id} todo={todo} className="card"/>
                             )}
                         </ScrollingCardContent>
                     </CustomCardContent>
@@ -222,4 +232,4 @@ const PageContent = styled(Container)`
     margin-bottom: 8px;
 `;
 
-export default Lists;
+export default List;
