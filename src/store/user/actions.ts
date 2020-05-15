@@ -5,7 +5,8 @@ export const login = (userData: UserData): UserActions => {
         type: LOGIN,
         payload: {
             isAuthorized: true,
-            userData: userData }
+            userData: userData,
+        },
     };
 };
 
@@ -14,7 +15,7 @@ export const logout = (): UserActions => {
         type: LOGOUT,
         payload: {
             isAuthorized: false,
-            userData: null 
-        }
+            userData: null,
+        },
     };
 };

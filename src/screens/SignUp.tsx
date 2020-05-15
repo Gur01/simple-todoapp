@@ -16,7 +16,7 @@ function Copyright() {
         <Typography variant="body2" color="textSecondary" align="center">
             {"Copyright © "}
             <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+                Your Website
             </Link>{" "}
             {new Date().getFullYear()}
             {"."}
@@ -24,16 +24,15 @@ function Copyright() {
     );
 }
 
-
-const SignUp = () =>  {
+const SignUp = () => {
     return (
         <Container component="main" maxWidth="xs">
             <Box mt={8}>
-                <Avatar >
+                <Avatar>
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-          Sign up
+                    Sign up
                 </Typography>
                 <form noValidate>
                     <Grid container spacing={2}>
@@ -90,18 +89,13 @@ const SignUp = () =>  {
                             />
                         </Grid>
                     </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                    >
-            Sign Up
+                    <Button type="submit" fullWidth variant="contained" color="primary">
+                        Sign Up
                     </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
                             <Link href="#" variant="body2">
-                Already have an account? Sign in
+                                Already have an account? Sign in
                             </Link>
                         </Grid>
                     </Grid>

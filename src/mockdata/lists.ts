@@ -1,5 +1,5 @@
 export interface TodoListItem {
-    id: number; 
+    id: number;
     value: string;
     date: number;
     updateDate: number;
@@ -22,24 +22,24 @@ const todoList: TodoList[] = [
         updateDate: 2345566,
         data: [
             {
-                id: 0, 
+                id: 0,
                 value: "помыться",
                 date: 2454234,
-                updateDate: 564564
+                updateDate: 564564,
             },
             {
-                id: 1, 
+                id: 1,
                 value: "побриться",
                 date: 2454234,
-                updateDate: 564564
+                updateDate: 564564,
             },
             {
-                id: 2, 
+                id: 2,
                 value: "gjxtcfnmcz",
                 date: 2454234,
-                updateDate: 564564
+                updateDate: 564564,
             },
-        ]
+        ],
     },
     {
         id: 1,
@@ -48,24 +48,24 @@ const todoList: TodoList[] = [
         updateDate: 2345566,
         data: [
             {
-                id: 3, 
+                id: 3,
                 value: "почесать что что",
                 date: 2454234,
-                updateDate: 564564
+                updateDate: 564564,
             },
             {
-                id: 4, 
+                id: 4,
                 value: "туда",
                 date: 2454234,
-                updateDate: 564564
+                updateDate: 564564,
             },
             {
-                id: 5, 
+                id: 5,
                 value: "сюда как то так",
                 date: 2454234,
-                updateDate: 564564
+                updateDate: 564564,
             },
-        ]
+        ],
     },
 ];
 

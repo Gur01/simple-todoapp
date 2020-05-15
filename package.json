@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config ./webpack.config.js",
-    "dev": "webpack-dev-server --config ./webpack.config.js"
+    "dev": "webpack-dev-server --config ./webpack.config.js",
+    "lint": "eslint --fix src/**/*.tsx src/**/*.ts "
   },
   "keywords": [],
   "author": "",

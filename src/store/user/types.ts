@@ -3,7 +3,7 @@ export const LOGOUT = "LOGOUT";
 
 export interface UserData {
     id: number;
-    name: string; 
+    name: string;
     surname: string;
 }
 

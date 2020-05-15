@@ -20,49 +20,53 @@ interface MenuSidebarProps {
 }
 
 const menuItems = [
-    {text: "Dashboard", icon: DesktopWindows, link: "/" }, 
-    {text: "Profile", icon: Person, link: "/profile" }, 
-    {text: "Calendar", icon: InsertInvitation, link: "/calendar"}, 
-    {text:"Boards", icon: Dashboard, link: "/boards"}, 
-    {text: "Lists", icon: ViewList, link: "/lists"}
+    { text: "Dashboard", icon: DesktopWindows, link: "/" },
+    { text: "Profile", icon: Person, link: "/profile" },
+    { text: "Calendar", icon: InsertInvitation, link: "/calendar" },
+    { text: "Boards", icon: Dashboard, link: "/boards" },
+    { text: "Lists", icon: ViewList, link: "/lists" },
 ];
 
-const MenuSidebar = ({openedMenu, handleOpenMenu}: MenuSidebarProps) => {
+const MenuSidebar = ({ openedMenu, handleOpenMenu }: MenuSidebarProps) => {
     const history = useHistory();
     const userData = useTypedSelector((store) => store.user.userData);
-    
+
     const openLink = (link: string) => {
         history.push(link);
         handleOpenMenu();
     };
 
-    return <CustomDrawer
-        variant="persistent"
-        anchor="left"
-        open={openedMenu}
-        PaperProps={{style: {width: "300px"}}}
-    >
-        <UserInfo>
-            <CustomAvatar alt='Name' src="../public/1.jpg" />
-            {userData && <UserName>{userData.name} {userData.surname}</UserName>}
+    return (
+        <CustomDrawer
+            variant="persistent"
+            anchor="left"
+            open={openedMenu}
+            PaperProps={{ style: { width: "300px" } }}
+        >
+            <UserInfo>
+                <CustomAvatar alt="Name" src="../public/1.jpg" />
+                {userData && (
+                    <UserName>
+                        {userData.name} {userData.surname}
+                    </UserName>
+                )}
 
-
-            {menuItems.map(item => {
-                const Icon = item.icon;
-                return (
-                    <List style={{width: "100%"}} component="nav" key={item.text}>
-                        <ListItem button onClick={()=> openLink(item.link)}>
-                            <ListItemIcon>
-                                <Icon />
-                            </ListItemIcon>
-                            <ListItemText primary={item.text} />
-                        </ListItem>
-                    </List>);
-            }          
-            )}
-        </UserInfo>
-        
-    </CustomDrawer>;
+                {menuItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                        <List style={{ width: "100%" }} component="nav" key={item.text}>
+                            <ListItem button onClick={() => openLink(item.link)}>
+                                <ListItemIcon>
+                                    <Icon />
+                                </ListItemIcon>
+                                <ListItemText primary={item.text} />
+                            </ListItem>
+                        </List>
+                    );
+                })}
+            </UserInfo>
+        </CustomDrawer>
+    );
 };
 
 const CustomDrawer = styled(Drawer)`
@@ -90,7 +94,4 @@ const UserName = styled.h3`
     marfin-top: 20px;
 `;
 
-
-
 export default MenuSidebar;
-

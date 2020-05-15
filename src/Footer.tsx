@@ -3,16 +3,15 @@ import React from "react";
 import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
 
-const AppFooter = () =>  
-    <Footer>            
-        <CustomToolbar >
+const AppFooter = () => (
+    <Footer>
+        <CustomToolbar>
             <Typography variant="h6" component="h1">
                 Simple TODO app
             </Typography>
-
         </CustomToolbar>
-    </Footer>;
-
+    </Footer>
+);
 
 const CustomToolbar = styled(Toolbar)`
     min-height: auto !important;
@@ -22,9 +21,9 @@ const CustomToolbar = styled(Toolbar)`
     }
 `;
 
-const Footer  = styled.footer`
+const Footer = styled.footer`
     background-color: #eee;
-    z-index: 100
+    z-index: 100;
 `;
 
 export default AppFooter;

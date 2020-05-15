@@ -16,14 +16,13 @@ function Copyright() {
         <Typography variant="body2" color="textSecondary" align="center">
             {"Copyright © "}
             <Link color="inherit" href="https://material-ui.com/">
-        Simple TODO
+                Simple TODO
             </Link>{" "}
             {new Date().getFullYear()}
             {"."}
         </Typography>
     );
 }
-
 
 const SignIn = () => {
     return (
@@ -33,7 +32,7 @@ const SignIn = () => {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-          Sign in
+                    Sign in
                 </Typography>
                 <form noValidate>
                     <TextField
@@ -62,18 +61,13 @@ const SignIn = () => {
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
                     />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                    >
-            Sign In
+                    <Button type="submit" fullWidth variant="contained" color="primary">
+                        Sign In
                     </Button>
                     <Grid container>
                         <Grid item xs>
                             <Link href="#" variant="body2">
-                Forgot password?
+                                Forgot password?
                             </Link>
                         </Grid>
                         <Grid item>
