@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const createStyledComponentsTransformer = require("typescript-plugin-styled-components")
-    .default;
+const createStyledComponentsTransformer = require("typescript-plugin-styled-components").default;
 const styledComponentsTransformer = createStyledComponentsTransformer();
 console.log(path.resolve(__dirname, "public"));
 module.exports = {
