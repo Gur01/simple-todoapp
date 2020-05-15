@@ -60,9 +60,7 @@ const List = () => {
             currentCardCopy.style.top = event.pageY - shiftY + "px";
 
             currentCardCopy.hidden = true;
-            cardBelow = document
-                .elementFromPoint(event.clientX, event.clientY)
-                ?.closest(".card") as HTMLDivElement;
+            cardBelow = document.elementFromPoint(event.clientX, event.clientY)?.closest(".card") as HTMLDivElement;
             currentCardCopy.hidden = false;
 
             if (cardBelow && String(id) !== cardBelow?.dataset.ref) {
@@ -72,10 +70,7 @@ const List = () => {
                     const currentCardIndex = draft.findIndex((todo) => todo.id === id);
                     const cardBelowIndex = draft.findIndex((todo) => todo.id === cardBelowId);
 
-                    [draft[currentCardIndex], draft[cardBelowIndex]] = [
-                        draft[cardBelowIndex],
-                        draft[currentCardIndex],
-                    ];
+                    [draft[currentCardIndex], draft[cardBelowIndex]] = [draft[cardBelowIndex], draft[currentCardIndex]];
                 });
                 tempLists = nextLists;
                 setLists(nextLists);
@@ -111,9 +106,7 @@ const List = () => {
                         className="card"
                         data-ref={list.id}
                         key={list.id}
-                        onMouseDown={(event: React.MouseEvent<HTMLDivElement>) =>
-                            handleDragAndDrop(event, list.id)
-                        }
+                        onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => handleDragAndDrop(event, list.id)}
                     >
                         <CardContent>{list.title}</CardContent>
                     </CustomCard>

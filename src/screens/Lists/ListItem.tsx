@@ -55,11 +55,7 @@ const ListPaper = (props: CustomCardProps) => {
 
     return (
         <>
-            <ListItemCard
-                data-ref={props.todo.id}
-                onMouseDown={handleDragging}
-                className={props.className}
-            >
+            <ListItemCard data-ref={props.todo.id} onMouseDown={handleDragging} className={props.className}>
                 {/* <ContentEditable style={{padding: "10px"}} html={props.todo.value} onKeyPress={handleEsc} onBlur={()=> setCanDrag(true)} onClick={()=> setCanDrag(false)} onChange={(event: ContentEditableEvent) => {setCanDrag(false); handleValueChange(event);}} /> */}
                 {/* <ContentEditable style={{padding: "10px"}} html={props.todo.value} onKeyPress={handleEsc}  onChange={(event: ContentEditableEvent) => {handleValueChange(event);}} /> */}
                 {/* <div> {props.todo.value}</div> */}
@@ -72,12 +68,7 @@ const ListPaper = (props: CustomCardProps) => {
                 />
                 <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation} />
             </ListItemCard>
-            <Popover
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleCloseMenu}
-            >
+            <Popover anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleCloseMenu}>
                 <CustomList>
                     <ListItem>Created by: Me</ListItem>
                     <ListItem>Date: 2002.11.25</ListItem>
@@ -90,11 +81,7 @@ const ListPaper = (props: CustomCardProps) => {
 
                         <RadioGroup value={value} onChange={handleSelectPriority}>
                             <FormControlLabel value="no" control={<Radio />} label="No" />
-                            <FormControlLabel
-                                value="important"
-                                control={<Radio />}
-                                label="Important"
-                            />
+                            <FormControlLabel value="important" control={<Radio />} label="Important" />
                             <FormControlLabel value="urgent" control={<Radio />} label="Urgent" />
                         </RadioGroup>
                     </CustomFormControl>

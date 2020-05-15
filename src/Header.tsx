@@ -43,12 +43,7 @@ const AppHeader = ({ handleOpenMenu, openedMenu }: HeaderProps) => {
     return (
         <CustomAppBar position="relative" openedmenu={openedMenu ? 1 : 0}>
             <Toolbar>
-                <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={handleOpenMenu}
-                    edge="start"
-                >
+                <IconButton color="inherit" aria-label="open drawer" onClick={handleOpenMenu} edge="start">
                     <MenuIcon />
                 </IconButton>
                 <Spacer />
@@ -56,12 +51,7 @@ const AppHeader = ({ handleOpenMenu, openedMenu }: HeaderProps) => {
                     Add new
                 </Button>
 
-                <Menu
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                >
+                <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
                     <MenuItem onClick={handleClose}>NEW BOARD</MenuItem>
                     <MenuItem onClick={handleClose}>NEW LIST</MenuItem>
                 </Menu>

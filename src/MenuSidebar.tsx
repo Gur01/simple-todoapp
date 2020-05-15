@@ -37,12 +37,7 @@ const MenuSidebar = ({ openedMenu, handleOpenMenu }: MenuSidebarProps) => {
     };
 
     return (
-        <CustomDrawer
-            variant="persistent"
-            anchor="left"
-            open={openedMenu}
-            PaperProps={{ style: { width: "300px" } }}
-        >
+        <CustomDrawer variant="persistent" anchor="left" open={openedMenu} PaperProps={{ style: { width: "300px" } }}>
             <UserInfo>
                 <CustomAvatar alt="Name" src="../public/1.jpg" />
                 {userData && (

@@ -98,9 +98,7 @@ const List = (props: { list: TodoList | undefined; updateList: any }) => {
             currentCardCopy.style.top = event.clientY - shiftY + "px";
 
             currentCardCopy.hidden = true;
-            cardBelow = document
-                .elementFromPoint(event.clientX, event.clientY)
-                ?.closest(".card") as HTMLDivElement;
+            cardBelow = document.elementFromPoint(event.clientX, event.clientY)?.closest(".card") as HTMLDivElement;
             currentCardCopy.hidden = false;
 
             if (cardBelow && String(id) !== cardBelow?.dataset.ref) {
@@ -110,10 +108,7 @@ const List = (props: { list: TodoList | undefined; updateList: any }) => {
                     const currentCardIndex = draft.findIndex((todo) => todo.id === id);
                     const cardBelowIndex = draft.findIndex((todo) => todo.id === cardBelowId);
 
-                    [draft[currentCardIndex], draft[cardBelowIndex]] = [
-                        draft[cardBelowIndex],
-                        draft[currentCardIndex],
-                    ];
+                    [draft[currentCardIndex], draft[cardBelowIndex]] = [draft[cardBelowIndex], draft[currentCardIndex]];
                 });
 
                 tempTodos = nextTodos;
