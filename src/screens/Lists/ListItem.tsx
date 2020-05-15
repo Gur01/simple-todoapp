@@ -15,12 +15,11 @@ import { stopPropagation } from "../../utils";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 
 interface CustomCardProps {
-  todo: Todo;
-  className: string;
-  editableId?: number;
-  handleDragAndDrop: (event: React.MouseEvent, currentCardId: number) => void;
-
-  handleListItemChange: (value: string, id: number) => void;
+    todo: Todo;
+    className: string;
+    editableId?: number;
+    handleDragAndDrop: (event: React.MouseEvent, currentCardId: number) => void;
+    handleListItemChange: (value: string, id: number) => void;
 }
 
 const ListPaper = (props: CustomCardProps) => {
@@ -96,11 +95,7 @@ const ListPaper = (props: CustomCardProps) => {
                                 control={<Radio />}
                                 label="Important"
                             />
-                            <FormControlLabel
-                                value="urgent"
-                                control={<Radio />}
-                                label="Urgent"
-                            />
+                            <FormControlLabel value="urgent" control={<Radio />} label="Urgent" />
                         </RadioGroup>
                     </CustomFormControl>
                 </CustomList>
@@ -110,32 +105,32 @@ const ListPaper = (props: CustomCardProps) => {
 };
 
 const CustomList = styled(List)`
-  min-width: 200px;
+    min-width: 200px;
 `;
 
 const CustomFormControl = styled(FormControl)<any>`
-  padding-left: 16px !important;
-  padding-right: 16px !important;
-  margin-top: 10px !important;
-  width: 100%;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    margin-top: 10px !important;
+    width: 100%;
 `;
 
 const ListItemCard = styled(Paper)`
-  min-height: 50px;
-  margin: 15px 0;
-  width: 100%;
-  height: auto;
-  padding: 8px 50px 8px 24px;
-  position: relative;
-  user-select: none;
+    min-height: 50px;
+    margin: 15px 0;
+    width: 100%;
+    height: auto;
+    padding: 8px 50px 8px 24px;
+    position: relative;
+    user-select: none;
 `;
 
 const MenuIcon = styled(MoreVert)`
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
 `;
 
 export default ListPaper;

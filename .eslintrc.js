@@ -1,45 +1,50 @@
 module.exports = {
-  parser: "@typescript-eslint/parser",
-  extends: [
-    "plugin:prettier/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:react/recommended",
-  ],
-
-  parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
-    ecmaVersion: 2018,
-    sourceType: "module",
-  },
-  rules: {
-    indent: ["error", 2],
-    quotes: ["error", "double"],
-    semi: ["error", "always"],
-    "@typescript-eslint/explicit-function-return-type": "off",
-
-    //end of line fix
-    "prettier/prettier": [
-      "error",
-      {
-        endOfLine: "auto",
-      },
+    parser: "@typescript-eslint/parser",
+    extends: [
+        "plugin:prettier/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier/@typescript-eslint",
+        "plugin:react/recommended",
     ],
-  },
-  settings: {
-    react: {
-      version: "detect",
+
+    parserOptions: {
+        ecmaFeatures: {
+            jsx: true,
+        },
+        ecmaVersion: 2018,
+        sourceType: "module",
     },
-  },
-  overrides: [
-    {
-      // enable the rule specifically for TypeScript files
-      files: ["*.ts"],
-      rules: {
-        "@typescript-eslint/explicit-function-return-type": ["warn"],
-      },
+    rules: {
+        // indent: ["error", 4],
+        // quotes: ["error", "double"],
+        // semi: ["error", "always"],
+        "@typescript-eslint/explicit-function-return-type": "off",
+
+        //prettier rules https://prettier.io/docs/en/integrating-with-linters.html
+        "prettier/prettier": [
+            "error",
+            {
+                endOfLine: "auto",
+                semi: true,
+                trailingComma: "all",
+                singleQuote: false,
+                printWidth: 100,
+                tabWidth: 4,
+            },
+        ],
     },
-  ],
+    settings: {
+        react: {
+            version: "detect",
+        },
+    },
+    overrides: [
+        {
+            // enable the rule specifically for TypeScript files
+            files: ["*.ts"],
+            rules: {
+                "@typescript-eslint/explicit-function-return-type": ["warn"],
+            },
+        },
+    ],
 };
