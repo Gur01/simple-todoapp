@@ -6,7 +6,7 @@ const styledComponentsTransformer = createStyledComponentsTransformer();
 module.exports = {
     mode: "development",
     entry: {
-        app: path.join(__dirname, "src", "index.tsx")
+        app: "./src/index.tsx"
     },
     devtool: "inline-source-map",
     devServer: {
@@ -41,7 +41,7 @@ module.exports = {
                     loader: "file-loader",
                     options: {
                         name: "[path][name].[ext]",
-                      },
+                    },
 
                 }
             },
