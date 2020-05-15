@@ -83,7 +83,6 @@ const List = () => {
         document.addEventListener("mousemove", handleMouseMove);
             
         currentCardCopy.onmouseup = () => {
-
             if(!drag) {
                 history.push(`list/${id}`);
             }
