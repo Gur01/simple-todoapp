@@ -16,42 +16,42 @@ import SignIn from "./screens/SignIn";
 import SignUp from "./screens/SignUp";
 
 const App = () => {
-    const [openedMenu, setOpenedMenu] = React.useState<boolean>(false);
+  const [openedMenu, setOpenedMenu] = React.useState<boolean>(false);
 
-    const handleOpenMenu = () => {
-        setOpenedMenu(!openedMenu);
-    };
+  const handleOpenMenu = () => {
+    setOpenedMenu(!openedMenu);
+  };
 
-    return (
-        <AppWrapper>
-            <CssBaseline />
-            <GlobalStyle />
-            <BrowserRouter>
-                <Header handleOpenMenu={handleOpenMenu} openedMenu={openedMenu} />
-                <Main>
-                    {/* <MainScrollingInner> */}
-                    <Switch>
-                        <Route path="/" exact component={Dashboard}></Route>
-                        <Route path="/profile" exact component={Profile}></Route>
-                        <Route path="/calendar" exact component={Calendar}></Route>
-                        <Route path="/boards" exact component={Boards}></Route>
-                        <Route path="/lists" exact component={Lists}></Route>
-                        <Route path="/list/:id" exact component={ListViewer}></Route>
-                        <Route path="/signin" exact component={SignIn}></Route>
-                        <Route path="/signup" exact component={SignUp}></Route>
+  return (
+    <AppWrapper>
+      <CssBaseline />
+      <GlobalStyle />
+      <BrowserRouter>
+        <Header handleOpenMenu={handleOpenMenu} openedMenu={openedMenu} />
+        <Main>
+          {/* <MainScrollingInner> */}
+          <Switch>
+            <Route path="/" exact component={Dashboard}></Route>
+            <Route path="/profile" exact component={Profile}></Route>
+            <Route path="/calendar" exact component={Calendar}></Route>
+            <Route path="/boards" exact component={Boards}></Route>
+            <Route path="/lists" exact component={Lists}></Route>
+            <Route path="/list/:id" exact component={ListViewer}></Route>
+            <Route path="/signin" exact component={SignIn}></Route>
+            <Route path="/signup" exact component={SignUp}></Route>
 
-                        <Route path="/" render={() => <div>Not found</div>} />
-                    </Switch>
-                    <MenuSidebar
-                        openedMenu={openedMenu}
-                        handleOpenMenu={handleOpenMenu}
-                    />
-                    {/* </MainScrollingInner> */}
-                </Main>
-            </BrowserRouter>
-            <Footer />
-        </AppWrapper>
-    );
+            <Route path="/" render={() => <div>Not found</div>} />
+          </Switch>
+          <MenuSidebar
+            openedMenu={openedMenu}
+            handleOpenMenu={handleOpenMenu}
+          />
+          {/* </MainScrollingInner> */}
+        </Main>
+      </BrowserRouter>
+      <Footer />
+    </AppWrapper>
+  );
 };
 
 const Main = styled.div`

@@ -6,10 +6,7 @@ module.exports = {
     "prettier/@typescript-eslint",
     "plugin:react/recommended",
   ],
-  // globals: {
-  //   Atomics: "readonly",
-  //   SharedArrayBuffer: "readonly",
-  // },
+
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -17,17 +14,19 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
   },
-  // "plugins": [
-  //     "react",
-  //     "@typescript-eslint",
-  // ],
   rules: {
-    indent: ["error", 4],
-    endOfline: "auto",
-    "linebreak-style": 0,
+    indent: ["error", 2],
     quotes: ["error", "double"],
     semi: ["error", "always"],
     "@typescript-eslint/explicit-function-return-type": "off",
+
+    //end of line fix
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+      },
+    ],
   },
   settings: {
     react: {

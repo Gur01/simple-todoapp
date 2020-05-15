@@ -15,11 +15,12 @@ import { stopPropagation } from "../../utils";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 
 interface CustomCardProps {
-    todo: Todo; 
-    className: string;
-    editableId?: number; 
-    handleDragAndDrop: (event: React.MouseEvent, currentCardId: number) => void; 
-    handleListItemChange: (value: string, id: number) => void;
+  todo: Todo;
+  className: string;
+  editableId?: number;
+  handleDragAndDrop: (event: React.MouseEvent, currentCardId: number) => void;
+
+  handleListItemChange: (value: string, id: number) => void;
 }
 
 const ListPaper = (props: CustomCardProps) => {
@@ -35,36 +36,42 @@ const ListPaper = (props: CustomCardProps) => {
         event.stopPropagation();
         setAnchorEl(event.currentTarget);
     };
-    
+
     const handleCloseMenu = () => {
         setAnchorEl(null);
     };
 
     const handleValueChange = (event: ContentEditableEvent) => {
-        
         props.handleListItemChange(event.target.value, props.todo.id);
     };
-    
+
     const handleDragging = (event: React.MouseEvent) => {
-        if(props.editableId !== props.todo.id && canDrag) {
+        if (props.editableId !== props.todo.id && canDrag) {
             props.handleDragAndDrop(event, props.todo.id);
         }
-        
-            
     };
-    
+
     // TODO prevent rightclick
     // handle esc
 
-    
     return (
         <>
-            <ListItemCard data-ref={props.todo.id} onMouseDown={handleDragging} className={props.className}>   
+            <ListItemCard
+                data-ref={props.todo.id}
+                onMouseDown={handleDragging}
+                className={props.className}
+            >
                 {/* <ContentEditable style={{padding: "10px"}} html={props.todo.value} onKeyPress={handleEsc} onBlur={()=> setCanDrag(true)} onClick={()=> setCanDrag(false)} onChange={(event: ContentEditableEvent) => {setCanDrag(false); handleValueChange(event);}} /> */}
                 {/* <ContentEditable style={{padding: "10px"}} html={props.todo.value} onKeyPress={handleEsc}  onChange={(event: ContentEditableEvent) => {handleValueChange(event);}} /> */}
                 {/* <div> {props.todo.value}</div> */}
-                <ContentEditable style={{padding: "10px"}} onClick={()=> setCanDrag(false)} onBlur={()=> setCanDrag(true)} html={props.todo.value} onChange={handleValueChange}/>
-                <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation}/>
+                <ContentEditable
+                    style={{ padding: "10px" }}
+                    onClick={() => setCanDrag(false)}
+                    onBlur={() => setCanDrag(true)}
+                    html={props.todo.value}
+                    onChange={handleValueChange}
+                />
+                <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation} />
             </ListItemCard>
             <Popover
                 anchorEl={anchorEl}
@@ -84,43 +91,51 @@ const ListPaper = (props: CustomCardProps) => {
 
                         <RadioGroup value={value} onChange={handleSelectPriority}>
                             <FormControlLabel value="no" control={<Radio />} label="No" />
-                            <FormControlLabel value="important" control={<Radio />} label="Important" />
-                            <FormControlLabel value="urgent" control={<Radio />} label="Urgent" />
+                            <FormControlLabel
+                                value="important"
+                                control={<Radio />}
+                                label="Important"
+                            />
+                            <FormControlLabel
+                                value="urgent"
+                                control={<Radio />}
+                                label="Urgent"
+                            />
                         </RadioGroup>
                     </CustomFormControl>
                 </CustomList>
             </Popover>
-        </>);
+        </>
+    );
 };
 
 const CustomList = styled(List)`
-    min-width: 200px;
+  min-width: 200px;
 `;
 
 const CustomFormControl = styled(FormControl)<any>`
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-    margin-top: 10px !important;
-    width: 100%;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+  margin-top: 10px !important;
+  width: 100%;
 `;
 
 const ListItemCard = styled(Paper)`
-    min-height: 50px;
-    margin: 15px 0;
-    width: 100%;
-    height: auto;
-    padding: 8px 50px 8px 24px;
-    position: relative;
-    user-select: none;
+  min-height: 50px;
+  margin: 15px 0;
+  width: 100%;
+  height: auto;
+  padding: 8px 50px 8px 24px;
+  position: relative;
+  user-select: none;
 `;
-    
 
 const MenuIcon = styled(MoreVert)`
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
 `;
 
 export default ListPaper;
