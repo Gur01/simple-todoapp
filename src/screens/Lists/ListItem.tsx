@@ -16,17 +16,17 @@ import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 
 interface CustomCardProps {
     todo: Todo; 
-    handleMouseDown: (event: React.MouseEvent, currentCardId: number) => void; 
     className: string;
-    setDragAbility: React.Dispatch<React.SetStateAction<boolean>>;
+    editableId?: number; 
+    handleDragAndDrop: (event: React.MouseEvent, currentCardId: number) => void; 
     handleListItemChange: (value: string, id: number) => void;
 }
 
-const ListPaper = (props: any) => {
+const ListPaper = (props: CustomCardProps) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [value, setValue] = React.useState("no");
     const [canDrag, setCanDrag] = React.useState(true);
-    
+
     const handleSelectPriority = (event: React.ChangeEvent<HTMLInputElement>) => {
         setValue((event.target as HTMLInputElement).value);
     };
@@ -34,32 +34,36 @@ const ListPaper = (props: any) => {
     const handleMenuClick = (event: React.MouseEvent<any>) => {
         event.stopPropagation();
         setAnchorEl(event.currentTarget);
-        props.setDragAbility(false);
     };
     
     const handleCloseMenu = () => {
         setAnchorEl(null);
-        props.setDragAbility(true);
     };
 
-    const handleValueChange = (event: any) => {
+    const handleValueChange = (event: ContentEditableEvent) => {
+        
         props.handleListItemChange(event.target.value, props.todo.id);
     };
-
+    
     const handleDragging = (event: React.MouseEvent) => {
-        if(!canDrag) return;
+        if(props.editableId !== props.todo.id && canDrag) {
+            props.handleDragAndDrop(event, props.todo.id);
+        }
         
-        props.handleMouseDown(event, props.todo.id);
+            
     };
+    
+    // TODO prevent rightclick
+    // handle esc
 
-    const handleEsc = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        console.log(event.key);
-    };
-
+    
     return (
         <>
-            <ListItemCard data-ref={props.todo.id} onMouseDown={(event: React.MouseEvent) => handleDragging(event)} className={props.className}>   
-                <ContentEditable style={{padding: "10px"}} html={props.todo.value} onKeyPress={handleEsc} onBlur={()=> setCanDrag(true)} onClick={()=> setCanDrag(false)} onChange={(event: ContentEditableEvent) => {setCanDrag(false); handleValueChange(event);}} />
+            <ListItemCard data-ref={props.todo.id} onMouseDown={handleDragging} className={props.className}>   
+                {/* <ContentEditable style={{padding: "10px"}} html={props.todo.value} onKeyPress={handleEsc} onBlur={()=> setCanDrag(true)} onClick={()=> setCanDrag(false)} onChange={(event: ContentEditableEvent) => {setCanDrag(false); handleValueChange(event);}} /> */}
+                {/* <ContentEditable style={{padding: "10px"}} html={props.todo.value} onKeyPress={handleEsc}  onChange={(event: ContentEditableEvent) => {handleValueChange(event);}} /> */}
+                {/* <div> {props.todo.value}</div> */}
+                <ContentEditable style={{padding: "10px"}} onClick={()=> setCanDrag(false)} onBlur={()=> setCanDrag(true)} html={props.todo.value} onChange={handleValueChange}/>
                 <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation}/>
             </ListItemCard>
             <Popover

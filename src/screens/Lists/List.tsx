@@ -7,43 +7,33 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import cloneDeep from "clone-deep";
 import produce from "immer";
-import throttle from "lodash.throttle";
 import React from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import styled from "styled-components";
+import { TodoList } from "../../mockdata/lists";
 import ListItem from "./ListItem";
-import lists, {TodoList}  from "../../mockdata/lists";
 
 export interface Todo {id: number; value: string}
 
 
 const List = (props: {list: TodoList | undefined; updateList: any} ) => {
 
-    const [value, setValue] = React.useState<string>("");
-
-    // const [todos, setTodos] = React.useState<Todo[]>(
-    //     [{id: 0, value: "помыться0"}, {id: 1, value: "побриться1"}, {id: 2, value: "почесать зв ухом2"},
-    //         {id: 3, value: "сесть на стул3"}, {id: 4, value: "хохохо4"}, {id:5, value: "весело5"},
-    //         {id: 6, value: "ничего не скажешь6"}, {id: 7, value: "купить пива7"}, {id:8, value: "купить 2 пива8"},
-    //         {id: 9, value: "купить 3 пива"}, {id: 10, value: "купить 4 пива"}, {id:11, value: "купить 5 пива"},
-    //         {id: 12, value: "купить 6 пива"}, {id: 13, value: "купить 7 пива"}, {id:14, value: "купить 8 пива"},
-    //     ]); 
-
-    // const [dragAbility, setDragAbility] = React.useState(true);
-    
+    const [newTodo, setNewTodo] = React.useState<string>("");
+    const [editableId, setEditableId] = React.useState<number>();
+  
     const handleInput = (event: React.ChangeEvent  <HTMLInputElement | HTMLTextAreaElement>)=> {
-        setValue(event.target.value);
+        setNewTodo(event.target.value);
     };
     
     const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if(event.key === "Enter"){
 
             const newList = produce(props.list, draft => {
-                draft?.data.unshift({id: draft.data.length + 100, value, date: Date.now(), updateDate: Date.now()});
+                draft?.data.unshift({id: draft.data.length + 100, value: newTodo, date: Date.now(), updateDate: Date.now()});
             });
 
             props.updateList(newList);
-            setValue("");
+            setNewTodo("");
         }
     };
 
@@ -52,102 +42,110 @@ const List = (props: {list: TodoList | undefined; updateList: any} ) => {
         props.updateList({...props.list, title: event.target.value});        
     };
 
+    let drag= false;
 
-    let counter = 1;
+    const handleDragAndDrop = (event: React.MouseEvent, id: number)=> {
+        if(event.button === 2) return;
+        if(!props.list) return;
 
-    const handleMouseDown = (event: React.MouseEvent, currentCardId: number)=> {
-        if(event.button === 2 || !dragAbility) return;
-        if(counter >= 2) {           
-            return;
-        }
-        const card = document.querySelector(`[data-ref="${currentCardId}"]`) as HTMLDivElement;
+        setTimeout(()=> {
+            setEditableId(undefined);
+        }, 400);
 
-        if(!card) return;     
+        drag = false;
+        const currentCard = event.currentTarget as HTMLDivElement;
+
+        if(!currentCard) return;     
         
-        // creating dragging card - copy
-        const draggingCard = card.cloneNode(true) as HTMLDivElement;
-        card.style.visibility = "hidden";
+        const currentCardCopy = currentCard.cloneNode(true) as HTMLDivElement;
         
-        const shiftX = event.clientX - card.getBoundingClientRect().left;
-        const shiftY = event.clientY - card.getBoundingClientRect().top + 15; // margins TODO remove
+        const shiftX = event.clientX - currentCard.getBoundingClientRect().left;
+        const shiftY = event.clientY - currentCard.getBoundingClientRect().top + 15; // margins TODO remove
         
         const positionX = event.pageX - shiftX;
         const positionY = event.pageY - shiftY;
         
-        draggingCard.style.left = positionX + "px";
-        draggingCard.style.top = positionY + "px";
-        draggingCard.style.position = "absolute";
-        draggingCard.style.zIndex = "1000";
-        draggingCard.style.width = card.offsetWidth + "px";
-        draggingCard.style.transform = "scale(1.015)";
-        draggingCard.style.cursor = "grabbing";
+        currentCard.style.visibility = "hidden";
+
+        currentCardCopy.style.position = "absolute";
+        currentCardCopy.style.left = positionX + "px";
+        currentCardCopy.style.top = positionY + "px";
+        currentCardCopy.style.zIndex = "100";
+        currentCardCopy.style.userSelect = "none";
+
+        // currentCardCopy.style.transform = "scale(1.015)";
+        currentCardCopy.style.width = currentCard.offsetWidth + "px";
         
-        draggingCard.addEventListener("mouseup", ()=> console.log("mouseup"));
-        draggingCard.addEventListener("mousedown", ()=> console.log("mousedown"));
-        document.body.append(draggingCard);
+        document.body.append(currentCardCopy);
 
         // set temp vars
-        let tempTodos = cloneDeep(todos);
-        let cardBelow: HTMLDivElement | null | undefined = undefined;
-        const throttledTodoAction = throttle((data: Todo[])=> setTodos(data), 100);
-        const onMouseMove = (event: MouseEvent) =>  {
+        let tempTodos = cloneDeep(props.list.data);
 
-            // mooving dragging card            
-            draggingCard.style.left = event.clientX - shiftX + "px";
-            draggingCard.style.top = event.clientY - shiftY + "px";
+        let cardBelow: HTMLDivElement | null | undefined = undefined;
+        // const throttledTodoAction = throttle((data: Todo[])=> setTodos(data), 100);
+        const onMouseMove = (event: MouseEvent) =>  {
+            drag = true;
+
+            if(currentCardCopy.style.cursor !== "grabbing") {
+                currentCardCopy.style.cursor = "grabbing";
+            }
+
+            currentCardCopy.style.left = event.clientX - shiftX + "px";
+            currentCardCopy.style.top = event.clientY - shiftY + "px";
             
-            // search for underliying element
-            draggingCard.hidden = true;
+            currentCardCopy.hidden = true;
             cardBelow = document.elementFromPoint(event.clientX, event.clientY)?.closest(".card") as HTMLDivElement;
-            draggingCard.hidden = false;
+            currentCardCopy.hidden = false;
             
-            if(cardBelow && card?.dataset.ref !== cardBelow?.dataset.ref) {
+            if(cardBelow &&  String(id) !== cardBelow?.dataset.ref) {
                 const cardBelowId = Number(cardBelow?.dataset.ref);
 
                 const nextTodos = produce(tempTodos, draft => {
 
-                    const currentCardIndex = draft.findIndex(todo => todo.id === currentCardId);
+                    const currentCardIndex = draft.findIndex(todo => todo.id === id);
                     const cardBelowIndex = draft.findIndex(todo => todo.id === cardBelowId);
-                    
+                        
                     [draft[currentCardIndex], draft[cardBelowIndex]] = [draft[cardBelowIndex], draft[currentCardIndex]];
                 });
+
                 tempTodos = nextTodos;
-                throttledTodoAction(nextTodos);               
+                props.updateList({...props.list, data: nextTodos});
             }   
         };
     
         document.addEventListener("mousemove", onMouseMove);
     
-        draggingCard.onmouseup = () =>  {
-            counter += 1;
+        currentCardCopy.onmouseup = () =>  {
 
-            setTimeout(() => {
-                counter=1;
-            }, 300);
+            if(!drag) {
+                setEditableId(id);
+            }
 
             document.removeEventListener("mousemove", onMouseMove);
 
+            currentCardCopy.style.left = positionX + "px";
+            currentCardCopy.style.top = positionY + "px";
             
-            draggingCard.style.left = positionX + "px";
-            draggingCard.style.top = positionY + "px";
+            currentCardCopy.remove();
             
-            draggingCard.remove();
+            currentCard.style.visibility = "";
             
-            card.style.visibility = "";
-            
-            card.onmouseup = null;
+            currentCard.onmouseup = null;
         };
     };
 
     const handleListItemChange = (value: string, id: number) => {
         console.log(value);
-        const nextTodos = produce(todos, draft => {
-            const index = draft.findIndex(todo => todo.id === id);
-            if(typeof index !== undefined) {
-                draft[index].value = value;
-            }
-        });
-        setTodos(nextTodos);
+        if(props.list) {
+            const nextTodos = produce(props.list.data, draft => {
+                const index = draft.findIndex(todo => todo.id === id);
+                if(typeof index !== undefined) {
+                    draft[index].value = value;
+                }
+            });
+            props.updateList({...props.list, data: nextTodos});
+
+        }
     };
 
     return( 
@@ -166,11 +164,11 @@ const List = (props: {list: TodoList | undefined; updateList: any} ) => {
                 <CustomCard>
                     <CustomCardContent>
                         <Box mb={2}>
-                            <TextField label="Add to list" variant="outlined" fullWidth value={value} onKeyPress={handleEnter} onChange={handleInput}/>
+                            <TextField label="Add to list" variant="outlined" fullWidth value={newTodo} onKeyPress={handleEnter} onChange={handleInput}/>
                         </Box>
                         <ScrollingCardContent>
                             {props.list && props.list.data.map((todo) => 
-                                <ListItem key={todo.id} todo={todo} className="card"/>
+                                <ListItem key={todo.id} editableId={editableId} todo={todo} className="card" handleDragAndDrop={handleDragAndDrop} handleListItemChange={handleListItemChange}/>
                             )}
                         </ScrollingCardContent>
                     </CustomCardContent>
