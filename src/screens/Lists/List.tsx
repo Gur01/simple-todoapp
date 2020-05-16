@@ -12,13 +12,19 @@ import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import styled from "styled-components";
 import { TodoList } from "../../mockdata/lists";
 import ListItem from "./ListItem";
+import server from "server";
 
 export interface Todo {
     id: number;
     value: string;
 }
 
-const List = (props: { list: TodoList | undefined; updateList: any }) => {
+interface ListProps {
+    list: TodoList | undefined;
+    updateList: any;
+}
+
+const List = (props: ListProps) => {
     const [newTodo, setNewTodo] = React.useState<string>("");
     const [editableId, setEditableId] = React.useState<number>();
 
@@ -113,6 +119,9 @@ const List = (props: { list: TodoList | undefined; updateList: any }) => {
 
                 tempTodos = nextTodos;
                 props.updateList({ ...props.list, data: nextTodos });
+                if (props.list) {
+                    server.saveList(props.list.id, nextTodos);
+                }
             }
         };
 
@@ -137,7 +146,6 @@ const List = (props: { list: TodoList | undefined; updateList: any }) => {
     };
 
     const handleListItemChange = (value: string, id: number) => {
-        console.log(value);
         if (props.list) {
             const nextTodos = produce(props.list.data, (draft) => {
                 const index = draft.findIndex((todo) => todo.id === id);

@@ -7,6 +7,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Add from "@material-ui/icons/Add";
 import MenuIcon from "@material-ui/icons/Menu";
 import PersonAdd from "@material-ui/icons/PersonAdd";
+import Ava from "assets/1.jpg";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -56,7 +57,7 @@ const AppHeader = ({ handleOpenMenu, openedMenu }: HeaderProps) => {
                     <MenuItem onClick={handleClose}>NEW LIST</MenuItem>
                 </Menu>
 
-                <CustomAvatar alt="Name" src="../public/1.jpg" />
+                <CustomAvatar alt="Name" src={Ava} />
                 {/* John Smith */}
                 <Login type={isAuthorized ? "logout" : "login"} />
                 {/* Registration button */}

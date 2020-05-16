@@ -15,9 +15,6 @@ module.exports = {
         sourceType: "module",
     },
     rules: {
-        // indent: ["error", 4],
-        // quotes: ["error", "double"],
-        // semi: ["error", "always"],
         "@typescript-eslint/explicit-function-return-type": "off",
 
         //prettier rules https://prettier.io/docs/en/integrating-with-linters.html
@@ -33,6 +30,7 @@ module.exports = {
             },
         ],
     },
+    // ??
     settings: {
         react: {
             version: "detect",

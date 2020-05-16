@@ -1,7 +1,8 @@
 import React from "react";
-import lists, { TodoList } from "../../mockdata/lists";
-import List from "./List";
 import { RouteComponentProps } from "react-router-dom";
+import server from "server";
+import { TodoList } from "../../mockdata/lists";
+import List from "./List";
 
 export interface Todo {
     id: number;
@@ -17,10 +18,13 @@ const ListViewer = (props: RouteComponentProps<Params>) => {
     const [list, updateList] = React.useState<TodoList>();
 
     React.useEffect(() => {
-        const list = lists.find((list) => list.id == parseInt(id, 10));
+        const listFromServer = server.loadLists();
+
+        const list = listFromServer.find((list) => list.id == parseInt(id, 10));
         if (list) {
             updateList(list);
         }
+        console.log(id);
     }, [id]);
 
     return <List list={list} updateList={updateList} />;

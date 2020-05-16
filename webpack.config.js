@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const createStyledComponentsTransformer = require("typescript-plugin-styled-components").default;
 const styledComponentsTransformer = createStyledComponentsTransformer();
 console.log(path.resolve(__dirname, "public"));
+
 module.exports = {
     mode: "development",
     entry: {
@@ -12,17 +13,22 @@ module.exports = {
     output: {
         filename: "[name].js",
         path: path.resolve(__dirname, "dist"),
-        // publicPath: path.resolve(__dirname, "public"),
+        publicPath: "/",
     },
     devtool: "inline-source-map",
     devServer: {
         contentBase: path.join(__dirname, "dist"),
-        compress: true,
+        // compress: true,
         port: 9000,
         historyApiFallback: true,
     },
     resolve: {
         extensions: [".ts", ".tsx", ".js"],
+        alias: {
+            "@": path.join(__dirname, "src"),
+            server: path.join(__dirname, "src", "server"),
+            assets: path.join(__dirname, "src", "assets"),
+        },
     },
     module: {
         rules: [

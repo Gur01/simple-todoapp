@@ -9,6 +9,7 @@ import DesktopWindows from "@material-ui/icons/DesktopWindows";
 import InsertInvitation from "@material-ui/icons/InsertInvitation";
 import Person from "@material-ui/icons/Person";
 import ViewList from "@material-ui/icons/ViewList";
+import Ava from "assets/1.jpg";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -39,7 +40,7 @@ const MenuSidebar = ({ openedMenu, handleOpenMenu }: MenuSidebarProps) => {
     return (
         <CustomDrawer variant="persistent" anchor="left" open={openedMenu} PaperProps={{ style: { width: "300px" } }}>
             <UserInfo>
-                <CustomAvatar alt="Name" src="../public/1.jpg" />
+                <CustomAvatar alt="Name" src={Ava} />
                 {userData && (
                     <UserName>
                         {userData.name} {userData.surname}

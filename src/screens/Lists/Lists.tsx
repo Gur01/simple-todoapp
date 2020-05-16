@@ -1,11 +1,12 @@
-import React, { MouseEvent } from "react";
-import mockLists, { TodoList } from "../../mockdata/lists";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import styled from "styled-components";
-import { useHistory } from "react-router-dom";
-import produce from "immer";
 import cloneDeep from "clone-deep";
+import produce from "immer";
+import React from "react";
+import { useHistory } from "react-router-dom";
+import server from "server";
+import styled from "styled-components";
+import { TodoList } from "../../mockdata/lists";
 
 const List = () => {
     const history = useHistory();
@@ -14,7 +15,8 @@ const List = () => {
     const [lists, setLists] = React.useState<TodoList[]>([]);
 
     React.useEffect(() => {
-        setLists(mockLists);
+        const lists = server.loadLists();
+        setLists(lists);
     }, []);
 
     const handleDragAndDrop = (event: React.MouseEvent<HTMLDivElement>, id: number) => {
@@ -74,6 +76,7 @@ const List = () => {
                 });
                 tempLists = nextLists;
                 setLists(nextLists);
+                server.saveLists(nextLists);
             }
         };
 
@@ -118,7 +121,6 @@ const List = () => {
 
 const CustomCard = styled(Card)`
     max-width: 300px;
-    // display: inline-block;
     margin: 24px;
     padding: 100px;
     cursor: pointer;

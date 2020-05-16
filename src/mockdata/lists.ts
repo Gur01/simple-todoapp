@@ -23,19 +23,19 @@ const todoList: TodoList[] = [
         data: [
             {
                 id: 0,
-                value: "помыться",
+                value: "0помыться",
                 date: 2454234,
                 updateDate: 564564,
             },
             {
                 id: 1,
-                value: "побриться",
+                value: "1побриться",
                 date: 2454234,
                 updateDate: 564564,
             },
             {
                 id: 2,
-                value: "gjxtcfnmcz",
+                value: "2gjxtcfnmcz",
                 date: 2454234,
                 updateDate: 564564,
             },
@@ -49,19 +49,19 @@ const todoList: TodoList[] = [
         data: [
             {
                 id: 3,
-                value: "почесать что что",
+                value: "0почесать что что",
                 date: 2454234,
                 updateDate: 564564,
             },
             {
                 id: 4,
-                value: "туда",
+                value: "1туда",
                 date: 2454234,
                 updateDate: 564564,
             },
             {
                 id: 5,
-                value: "сюда как то так",
+                value: "2сюда как то так",
                 date: 2454234,
                 updateDate: 564564,
             },
