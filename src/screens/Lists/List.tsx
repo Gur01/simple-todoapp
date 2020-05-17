@@ -44,6 +44,10 @@ const List = (props: ListProps) => {
             });
 
             props.updateList(newList);
+
+            if (newList) {
+                server.saveList(newList);
+            }
             setNewTodo("");
         }
     };
