@@ -1,20 +1,24 @@
-import mockLists, { TodoList, TodoListItem } from "../mockdata/lists";
+import mockLists, { TodoList } from "../mockdata/lists";
 
 let listsFromServer: TodoList[] = mockLists;
 
 export default {
-    saveLists: (lists: TodoList[]): void => {
-        listsFromServer = lists;
-    },
-
     loadLists: (): TodoList[] => {
+        console.info("loadLists", listsFromServer);
         return listsFromServer;
     },
 
-    saveList: (id: number, data: TodoListItem[]): void => {
-        const listIndex = listsFromServer.findIndex((list) => list.id === id);
-        console.log(data);
+    //save all lists
+    saveLists: (lists: TodoList[]): void => {
+        listsFromServer = lists;
+        console.info("saveLists", lists);
+    },
 
-        listsFromServer[listIndex].data = data;
+    //save list (data, title, everything));
+    saveList: (list: TodoList): void => {
+        const listIndex = listsFromServer.findIndex((listFromServer) => listFromServer.id === list.id);
+
+        listsFromServer[listIndex] = list;
+        console.info("saveList", list);
     },
 };

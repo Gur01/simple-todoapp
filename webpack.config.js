@@ -28,6 +28,7 @@ module.exports = {
             "@": path.join(__dirname, "src"),
             server: path.join(__dirname, "src", "server"),
             assets: path.join(__dirname, "src", "assets"),
+            components: path.join(__dirname, "src", "components"),
         },
     },
     module: {

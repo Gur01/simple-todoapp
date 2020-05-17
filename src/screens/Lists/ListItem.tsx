@@ -8,11 +8,12 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import MoreVert from "@material-ui/icons/MoreVert";
 import React from "react";
+import { ContentEditable } from "components";
+
 import styled from "styled-components";
 import { Popover } from "../../components";
-import { Todo } from "./List";
 import { stopPropagation } from "../../utils";
-import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
+import { Todo } from "./List";
 
 interface CustomCardProps {
     todo: Todo;
@@ -20,6 +21,7 @@ interface CustomCardProps {
     editableId?: number;
     handleDragAndDrop: (event: React.MouseEvent, currentCardId: number) => void;
     handleListItemChange: (value: string, id: number) => void;
+    handleSaveListItem: (todoId: number, todoData: string) => void;
 }
 
 const ListPaper = (props: CustomCardProps) => {
@@ -40,14 +42,19 @@ const ListPaper = (props: CustomCardProps) => {
         setAnchorEl(null);
     };
 
-    const handleValueChange = (event: ContentEditableEvent) => {
-        props.handleListItemChange(event.target.value, props.todo.id);
+    const handleListValueChange = (value: string) => {
+        props.handleListItemChange(value, props.todo.id);
     };
 
     const handleDragging = (event: React.MouseEvent) => {
         if (props.editableId !== props.todo.id && canDrag) {
             props.handleDragAndDrop(event, props.todo.id);
         }
+    };
+
+    const handleListItemBlur = (target: string) => {
+        setCanDrag(true);
+        props.handleSaveListItem(props.todo.id, target);
     };
 
     // TODO prevent rightclick
@@ -61,11 +68,11 @@ const ListPaper = (props: CustomCardProps) => {
                 {/* <div> {props.todo.value}</div> */}
                 <ContentEditable
                     style={{ padding: "10px" }}
-                    onClick={() => setCanDrag(false)}
-                    onBlur={() => setCanDrag(true)}
-                    html={props.todo.value}
-                    onChange={handleValueChange}
+                    text={props.todo.value}
+                    onChange={handleListValueChange}
+                    onBlur={handleListItemBlur}
                 />
+
                 <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation} />
             </ListItemCard>
             <Popover anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleCloseMenu}>

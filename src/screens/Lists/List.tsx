@@ -8,11 +8,11 @@ import TextField from "@material-ui/core/TextField";
 import cloneDeep from "clone-deep";
 import produce from "immer";
 import React from "react";
-import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
+import { ContentEditable } from "components";
+import server from "server";
 import styled from "styled-components";
 import { TodoList } from "../../mockdata/lists";
 import ListItem from "./ListItem";
-import server from "server";
 
 export interface Todo {
     id: number;
@@ -20,7 +20,7 @@ export interface Todo {
 }
 
 interface ListProps {
-    list: TodoList | undefined;
+    list?: TodoList;
     updateList: any;
 }
 
@@ -28,11 +28,11 @@ const List = (props: ListProps) => {
     const [newTodo, setNewTodo] = React.useState<string>("");
     const [editableId, setEditableId] = React.useState<number>();
 
-    const handleInput = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleSetTodo = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setNewTodo(event.target.value);
     };
 
-    const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleAddTodo = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
             const newList = produce(props.list, (draft) => {
                 draft?.data.unshift({
@@ -48,8 +48,50 @@ const List = (props: ListProps) => {
         }
     };
 
-    const handleTitleChange = (event: ContentEditableEvent) => {
-        props.updateList({ ...props.list, title: event.target.value });
+    const handleTitleChange = (value: string) => {
+        props.updateList({ ...props.list, title: value });
+    };
+
+    const handleTitleBlur = (value: string) => {
+        const newList = { ...props.list, title: value } as TodoList;
+
+        // props.updateList(newList);
+        server.saveList(newList);
+    };
+
+    const handleSaveListItem = (todoId: number, todoValue: string) => {
+        if (props.list) {
+            const newList = {
+                ...props.list,
+                data: props.list.data.map((todo) => {
+                    if (todo.id === todoId) {
+                        return {
+                            ...todo,
+                            updateDate: Date.now(),
+                            value: todoValue,
+                        };
+                    } else {
+                        return todo;
+                    }
+                }),
+            } as TodoList;
+
+            // props.updateList(newList);
+            server.saveList(newList);
+        }
+    };
+
+    const handleListItemChange = (value: string, id: number) => {
+        if (props.list) {
+            const nextTodos = produce(props.list.data, (draft) => {
+                const index = draft.findIndex((todo) => todo.id === id);
+                if (typeof index !== undefined) {
+                    draft[index].value = value;
+                }
+            });
+            const newList = { ...props.list, data: nextTodos };
+            props.updateList(newList);
+        }
     };
 
     let drag = false;
@@ -92,6 +134,7 @@ const List = (props: ListProps) => {
         let tempTodos = cloneDeep(props.list.data);
 
         let cardBelow: HTMLDivElement | null | undefined = undefined;
+        let newList: TodoList;
         // const throttledTodoAction = throttle((data: Todo[])=> setTodos(data), 100);
         const onMouseMove = (event: MouseEvent) => {
             drag = true;
@@ -118,9 +161,10 @@ const List = (props: ListProps) => {
                 });
 
                 tempTodos = nextTodos;
-                props.updateList({ ...props.list, data: nextTodos });
+
                 if (props.list) {
-                    server.saveList(props.list.id, nextTodos);
+                    newList = { ...props.list, data: nextTodos };
+                    props.updateList(newList);
                 }
             }
         };
@@ -142,19 +186,11 @@ const List = (props: ListProps) => {
             currentCard.style.visibility = "";
 
             currentCard.onmouseup = null;
-        };
-    };
 
-    const handleListItemChange = (value: string, id: number) => {
-        if (props.list) {
-            const nextTodos = produce(props.list.data, (draft) => {
-                const index = draft.findIndex((todo) => todo.id === id);
-                if (typeof index !== undefined) {
-                    draft[index].value = value;
-                }
-            });
-            props.updateList({ ...props.list, data: nextTodos });
-        }
+            if (newList) {
+                server.saveList(newList);
+            }
+        };
     };
 
     return (
@@ -162,12 +198,15 @@ const List = (props: ListProps) => {
             <PageSubHeader maxWidth="xl">
                 <Grid item xs={12}>
                     <Box>
-                        <Title>
-                            <ContentEditable
-                                html={props.list ? props.list.title : "New title"}
-                                onChange={handleTitleChange}
-                            />
-                        </Title>
+                        {props.list && (
+                            <Title>
+                                <ContentEditable
+                                    text={props.list?.title ?? "New title"}
+                                    onChange={handleTitleChange}
+                                    onBlur={handleTitleBlur}
+                                />
+                            </Title>
+                        )}
                     </Box>
                 </Grid>
             </PageSubHeader>
@@ -181,8 +220,8 @@ const List = (props: ListProps) => {
                                 variant="outlined"
                                 fullWidth
                                 value={newTodo}
-                                onKeyPress={handleEnter}
-                                onChange={handleInput}
+                                onKeyPress={handleAddTodo}
+                                onChange={handleSetTodo}
                             />
                         </Box>
                         <ScrollingCardContent>
@@ -195,6 +234,7 @@ const List = (props: ListProps) => {
                                         className="card"
                                         handleDragAndDrop={handleDragAndDrop}
                                         handleListItemChange={handleListItemChange}
+                                        handleSaveListItem={handleSaveListItem}
                                     />
                                 ))}
                         </ScrollingCardContent>
