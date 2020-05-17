@@ -71,6 +71,7 @@ const ListPaper = (props: CustomCardProps) => {
                     text={props.todo.value}
                     onChange={handleListValueChange}
                     onBlur={handleListItemBlur}
+                    onClick={() => setCanDrag(false)}
                 />
 
                 <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation} />
@@ -82,6 +83,7 @@ const ListPaper = (props: CustomCardProps) => {
                     <Divider />
                     <ListItem button>Edit</ListItem>
                     <ListItem button>Delete</ListItem>
+                    <ListItem button>Mark as done</ListItem>
                     <Divider />
                     <CustomFormControl component="fieldset">
                         {/* <FormLabel>Priority</FormLabel> */}

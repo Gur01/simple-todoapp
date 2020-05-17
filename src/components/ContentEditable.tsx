@@ -5,6 +5,7 @@ interface ContentEditableProps {
     style?: Record<string, string>;
     onChange: (value: string) => void;
     onBlur: (target: string) => void;
+    onClick?: () => void;
 }
 
 const ContentEditable = (props: ContentEditableProps) => {
@@ -34,6 +35,7 @@ const ContentEditable = (props: ContentEditableProps) => {
             onBlur={handleBlur}
             style={props.style}
             onKeyDown={handleKeyDown}
+            onClick={props.onClick}
         ></div>
     );
 };
