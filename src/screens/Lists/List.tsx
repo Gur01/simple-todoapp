@@ -21,6 +21,7 @@ interface ListProps {
 
 const List = (props: ListProps) => {
     const [newTodo, setNewTodo] = React.useState<string>("");
+    const [editableId, setEditableId] = React.useState<number>();
 
     const handleSetTodo = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setNewTodo(event.target.value);
@@ -94,14 +95,11 @@ const List = (props: ListProps) => {
     };
 
     let drag = false;
+    let editTimer: number;
 
     const handleDragAndDrop = (event: React.MouseEvent, id: number) => {
         if (event.button === 2) return;
         if (!props.list) return;
-
-        // setTimeout(() => {
-        //     setEditableId(undefined);
-        // }, 400);
 
         drag = false;
         const currentCard = event.currentTarget as HTMLDivElement;
@@ -136,6 +134,9 @@ const List = (props: ListProps) => {
         let newList: TodoList;
         // const throttledTodoAction = throttle((data: Todo[])=> setTodos(data), 100);
         const onMouseMove = (event: MouseEvent) => {
+            if (editTimer) {
+                clearInterval(editTimer);
+            }
             drag = true;
 
             if (currentCardCopy.style.cursor !== "grabbing") {
@@ -168,20 +169,39 @@ const List = (props: ListProps) => {
             }
         };
 
+        //TODO add statuses to commot types
+        editTimer = setTimeout(() => {
+            setEditableId(id);
+
+            currentCardCopy.remove();
+
+            currentCard.style.visibility = "";
+
+            currentCard.onmouseup = null;
+            document.removeEventListener("mousemove", onMouseMove);
+        }, 300);
+
+        setTimeout(() => {
+            setEditableId(undefined);
+        }, 400);
+
         document.addEventListener("mousemove", onMouseMove);
 
         currentCardCopy.onmouseup = () => {
+            if (editTimer) {
+                clearInterval(editTimer);
+            }
+
             if (!drag) {
-                // if(currentCard.classList.contains("done")) {
-                //     currentCard.classList.remove("done")
-                // }
                 if (props.list) {
                     const nextTodos = produce(props.list, (draft) => {
                         const data = draft.data;
                         const currentCardIndex = data.findIndex((todo) => todo.id === id);
                         data[currentCardIndex].status = data[currentCardIndex].status === "active" ? "done" : "active";
                     });
-
+                    // TODO save status
+                    // TODO load list by ID, method
+                    // TODO close all
                     props.updateList(nextTodos);
                 }
             }
@@ -241,6 +261,7 @@ const List = (props: ListProps) => {
                                         key={todo.id}
                                         todo={todo}
                                         className="card"
+                                        editableId={editableId}
                                         handleDragAndDrop={handleDragAndDrop}
                                         handleListItemChange={handleListItemChange}
                                         handleSaveListItem={handleSaveListItem}

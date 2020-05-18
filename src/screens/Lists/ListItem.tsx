@@ -18,6 +18,7 @@ import { stopPropagation } from "../../utils";
 interface CustomCardProps {
     todo: TodoListItem;
     className: string;
+    editableId?: number;
     handleDragAndDrop: (event: React.MouseEvent, currentCardId: number) => void;
     handleListItemChange: (value: string, id: number) => void;
     handleSaveListItem: (todoId: number, todoData: string) => void;
@@ -30,13 +31,22 @@ const ListPaper = (props: CustomCardProps) => {
 
     const editable = React.useRef(null);
 
+    const focusEditable = () => {
+        (editable.current as any)?.focus();
+    };
+
+    React.useEffect(() => {
+        if (props.editableId === props.todo.id && props.todo.status === "active") {
+            (editable.current as any)?.focus();
+            setEditing(true);
+        }
+    }, [props.editableId]);
+
     const handleSelectPriority = (event: React.ChangeEvent<HTMLInputElement>) => {
         setValue((event.target as HTMLInputElement).value);
     };
 
     const handleMenuClick = (event: React.MouseEvent<SVGSVGElement | HTMLDivElement>) => {
-        event.preventDefault();
-        event.stopPropagation();
         setAnchorEl(event.currentTarget as HTMLDivElement);
     };
 
@@ -49,8 +59,10 @@ const ListPaper = (props: CustomCardProps) => {
     };
 
     const handleDragging = (event: React.MouseEvent) => {
-        console.log(handleDragging);
-
+        if (event.button === 2) {
+            event.preventDefault();
+            return;
+        }
         if (editing) return;
         props.handleDragAndDrop(event, props.todo.id);
     };
@@ -63,7 +75,7 @@ const ListPaper = (props: CustomCardProps) => {
     const handleEditListItem = () => {
         handleCloseMenu();
         setEditing(true);
-        (editable.current as any)?.focus();
+        focusEditable();
     };
 
     // TODO prevent rightclick
