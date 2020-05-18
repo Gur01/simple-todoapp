@@ -4,6 +4,7 @@ import styled from "styled-components";
 interface ContentEditableProps {
     text: string;
     style?: Record<string, string>;
+    propsRef?: any;
     onChange: (value: string) => void;
     onBlur: (target: string) => void;
     onClick?: () => void;
@@ -37,6 +38,7 @@ const ContentEditable = (props: ContentEditableProps) => {
             style={props.style}
             onKeyDown={handleKeyDown}
             onClick={props.onClick}
+            ref={props.propsRef}
         ></StyledContentEditable>
     );
 };

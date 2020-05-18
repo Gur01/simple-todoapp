@@ -26,14 +26,18 @@ interface CustomCardProps {
 const ListPaper = (props: CustomCardProps) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [value, setValue] = React.useState("no");
+    const [editing, setEditing] = React.useState(false);
+
+    const editable = React.useRef(null);
 
     const handleSelectPriority = (event: React.ChangeEvent<HTMLInputElement>) => {
         setValue((event.target as HTMLInputElement).value);
     };
 
-    const handleMenuClick = (event: React.MouseEvent<any>) => {
+    const handleMenuClick = (event: React.MouseEvent<SVGSVGElement | HTMLDivElement>) => {
+        event.preventDefault();
         event.stopPropagation();
-        setAnchorEl(event.currentTarget);
+        setAnchorEl(event.currentTarget as HTMLDivElement);
     };
 
     const handleCloseMenu = () => {
@@ -45,13 +49,21 @@ const ListPaper = (props: CustomCardProps) => {
     };
 
     const handleDragging = (event: React.MouseEvent) => {
+        console.log(handleDragging);
+
+        if (editing) return;
         props.handleDragAndDrop(event, props.todo.id);
     };
 
     const handleListItemBlur = (target: string) => {
-        console.log("blur");
-
+        setEditing(false);
         props.handleSaveListItem(props.todo.id, target);
+    };
+
+    const handleEditListItem = () => {
+        handleCloseMenu();
+        setEditing(true);
+        (editable.current as any)?.focus();
     };
 
     // TODO prevent rightclick
@@ -59,6 +71,7 @@ const ListPaper = (props: CustomCardProps) => {
 
     return (
         <>
+            {/* <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation} /> */}
             <ListItemCard
                 status={props.todo.status}
                 data-ref={props.todo.id}
@@ -73,31 +86,34 @@ const ListPaper = (props: CustomCardProps) => {
                     text={props.todo.value}
                     onChange={handleListValueChange}
                     onBlur={handleListItemBlur}
+                    propsRef={editable}
                     // onClick={() => setCanDrag(false)}
                 />
                 {props.todo.status === "done" && <CheckIcon />}
                 <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation} />
-                <Popover anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleCloseMenu}>
-                    <CustomList>
-                        <ListItem>Created by: Me</ListItem>
-                        <ListItem>Date: 2002.11.25</ListItem>
-                        <Divider />
-                        <ListItem button>Edit</ListItem>
-                        <ListItem button>Delete</ListItem>
-                        <ListItem button>Mark as done</ListItem>
-                        <Divider />
-                        <CustomFormControl component="fieldset">
-                            {/* <FormLabel>Priority</FormLabel> */}
-
-                            <RadioGroup value={value} onChange={handleSelectPriority}>
-                                <FormControlLabel value="no" control={<Radio />} label="No" />
-                                <FormControlLabel value="important" control={<Radio />} label="Important" />
-                                <FormControlLabel value="urgent" control={<Radio />} label="Urgent" />
-                            </RadioGroup>
-                        </CustomFormControl>
-                    </CustomList>
-                </Popover>
             </ListItemCard>
+            <Popover anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu} disableEnforceFocus>
+                <CustomList>
+                    <ListItem>Created by: Me</ListItem>
+                    <ListItem>Date: 2002.11.25</ListItem>
+                    <Divider />
+                    <ListItem button onClick={handleEditListItem}>
+                        Edit
+                    </ListItem>
+                    <ListItem button>Delete</ListItem>
+                    <ListItem button>Mark as done</ListItem>
+                    <Divider />
+                    <CustomFormControl component="fieldset">
+                        {/* <FormLabel>Priority</FormLabel> */}
+
+                        <RadioGroup value={value} onChange={handleSelectPriority}>
+                            <FormControlLabel value="no" control={<Radio />} label="No" />
+                            <FormControlLabel value="important" control={<Radio />} label="Important" />
+                            <FormControlLabel value="urgent" control={<Radio />} label="Urgent" />
+                        </RadioGroup>
+                    </CustomFormControl>
+                </CustomList>
+            </Popover>
         </>
     );
 };
