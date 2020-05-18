@@ -6,18 +6,13 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import cloneDeep from "clone-deep";
+import { ContentEditable } from "components";
 import produce from "immer";
 import React from "react";
-import { ContentEditable } from "components";
 import server from "server";
 import styled from "styled-components";
 import { TodoList } from "../../mockdata/lists";
 import ListItem from "./ListItem";
-
-export interface Todo {
-    id: number;
-    value: string;
-}
 
 interface ListProps {
     list?: TodoList;
@@ -26,7 +21,6 @@ interface ListProps {
 
 const List = (props: ListProps) => {
     const [newTodo, setNewTodo] = React.useState<string>("");
-    const [editableId, setEditableId] = React.useState<number>();
 
     const handleSetTodo = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setNewTodo(event.target.value);
@@ -40,6 +34,7 @@ const List = (props: ListProps) => {
                     value: newTodo,
                     date: Date.now(),
                     updateDate: Date.now(),
+                    status: "active",
                 });
             });
 
@@ -104,9 +99,9 @@ const List = (props: ListProps) => {
         if (event.button === 2) return;
         if (!props.list) return;
 
-        setTimeout(() => {
-            setEditableId(undefined);
-        }, 400);
+        // setTimeout(() => {
+        //     setEditableId(undefined);
+        // }, 400);
 
         drag = false;
         const currentCard = event.currentTarget as HTMLDivElement;
@@ -177,7 +172,18 @@ const List = (props: ListProps) => {
 
         currentCardCopy.onmouseup = () => {
             if (!drag) {
-                setEditableId(id);
+                // if(currentCard.classList.contains("done")) {
+                //     currentCard.classList.remove("done")
+                // }
+                if (props.list) {
+                    const nextTodos = produce(props.list, (draft) => {
+                        const data = draft.data;
+                        const currentCardIndex = data.findIndex((todo) => todo.id === id);
+                        data[currentCardIndex].status = data[currentCardIndex].status === "active" ? "done" : "active";
+                    });
+
+                    props.updateList(nextTodos);
+                }
             }
 
             document.removeEventListener("mousemove", onMouseMove);
@@ -233,7 +239,6 @@ const List = (props: ListProps) => {
                                 props.list.data.map((todo) => (
                                     <ListItem
                                         key={todo.id}
-                                        editableId={editableId}
                                         todo={todo}
                                         className="card"
                                         handleDragAndDrop={handleDragAndDrop}

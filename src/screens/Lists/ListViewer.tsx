@@ -24,7 +24,6 @@ const ListViewer = (props: RouteComponentProps<Params>) => {
         if (list) {
             updateList(list);
         }
-        console.log(id);
     }, [id]);
 
     return <List list={list} updateList={updateList} />;

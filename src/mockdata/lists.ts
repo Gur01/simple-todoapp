@@ -3,6 +3,7 @@ export interface TodoListItem {
     value: string;
     date: number;
     updateDate: number;
+    status: "active" | "done";
 }
 
 export interface TodoList {
@@ -26,18 +27,21 @@ const todoList: TodoList[] = [
                 value: "0помыться",
                 date: 2454234,
                 updateDate: 564564,
+                status: "done",
             },
             {
                 id: 1,
                 value: "1побриться",
                 date: 2454234,
                 updateDate: 564564,
+                status: "active",
             },
             {
                 id: 2,
                 value: "2gjxtcfnmcz",
                 date: 2454234,
                 updateDate: 564564,
+                status: "active",
             },
         ],
     },
@@ -52,18 +56,21 @@ const todoList: TodoList[] = [
                 value: "0почесать что что",
                 date: 2454234,
                 updateDate: 564564,
+                status: "active",
             },
             {
                 id: 4,
                 value: "1туда",
                 date: 2454234,
                 updateDate: 564564,
+                status: "active",
             },
             {
                 id: 5,
                 value: "2сюда как то так",
                 date: 2454234,
                 updateDate: 564564,
+                status: "active",
             },
         ],
     },

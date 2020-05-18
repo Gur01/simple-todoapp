@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 
 interface ContentEditableProps {
     text: string;
@@ -28,7 +29,7 @@ const ContentEditable = (props: ContentEditableProps) => {
     };
 
     return (
-        <div
+        <StyledContentEditable
             contentEditable="true"
             dangerouslySetInnerHTML={{ __html: value }}
             onInput={handleChange}
@@ -36,8 +37,20 @@ const ContentEditable = (props: ContentEditableProps) => {
             style={props.style}
             onKeyDown={handleKeyDown}
             onClick={props.onClick}
-        ></div>
+        ></StyledContentEditable>
     );
 };
 
+const StyledContentEditable = styled.div`
+    padding: 10px;
+    padding-left: 20px;
+    height: 100% !important;
+    text-decoration: inherit;
+    line-height: 1.5;
+
+    > div {
+        padding-right: 80px;
+        height: 100%;
+    }
+`;
 export default ContentEditable;
