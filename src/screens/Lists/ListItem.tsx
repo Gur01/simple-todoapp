@@ -78,9 +78,6 @@ const ListPaper = (props: CustomCardProps) => {
         focusEditable();
     };
 
-    // TODO prevent rightclick
-    // handle esc
-
     return (
         <>
             {/* <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation} /> */}

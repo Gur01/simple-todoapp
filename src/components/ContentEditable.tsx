@@ -5,6 +5,7 @@ interface ContentEditableProps {
     text: string;
     style?: Record<string, string>;
     propsRef?: any;
+    disabled?: boolean;
     onChange: (value: string) => void;
     onBlur: (target: string) => void;
     onClick?: () => void;
@@ -31,7 +32,7 @@ const ContentEditable = (props: ContentEditableProps) => {
 
     return (
         <StyledContentEditable
-            contentEditable="true"
+            contentEditable={props.disabled !== undefined ? !props.disabled : true}
             dangerouslySetInnerHTML={{ __html: value }}
             onInput={handleChange}
             onBlur={handleBlur}

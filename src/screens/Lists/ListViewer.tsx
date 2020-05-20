@@ -18,9 +18,8 @@ const ListViewer = (props: RouteComponentProps<Params>) => {
     const [list, updateList] = React.useState<TodoList>();
 
     React.useEffect(() => {
-        const listFromServer = server.loadLists();
+        const list = server.loadList(id);
 
-        const list = listFromServer.find((list) => list.id == parseInt(id, 10));
         if (list) {
             updateList(list);
         }

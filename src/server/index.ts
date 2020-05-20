@@ -8,6 +8,20 @@ export default {
         return listsFromServer;
     },
 
+    loadList: (id: number | string): TodoList | undefined => {
+        if (typeof id === "string") id = parseInt(id, 10);
+
+        const list = listsFromServer.find((list) => list.id == id);
+
+        if (list) {
+            console.info("loadList ", id, list);
+        } else {
+            console.error("no list with id ", id);
+        }
+
+        return list;
+    },
+
     //save all lists
     saveLists: (lists: TodoList[]): void => {
         listsFromServer = lists;

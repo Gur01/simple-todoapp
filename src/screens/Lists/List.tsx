@@ -23,6 +23,17 @@ const List = (props: ListProps) => {
     const [newTodo, setNewTodo] = React.useState<string>("");
     const [editableId, setEditableId] = React.useState<number>();
 
+    const isDone = React.useMemo(() => {
+        if (!props.list) return false;
+
+        for (const todo of props.list.data) {
+            if (todo.status === "active") {
+                return false;
+            }
+        }
+        return true;
+    }, [props.list]);
+
     const handleSetTodo = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setNewTodo(event.target.value);
     };
@@ -191,7 +202,7 @@ const List = (props: ListProps) => {
             if (editTimer) {
                 clearInterval(editTimer);
             }
-
+            // mouse click
             if (!drag) {
                 if (props.list) {
                     const nextTodos = produce(props.list, (draft) => {
@@ -199,10 +210,11 @@ const List = (props: ListProps) => {
                         const currentCardIndex = data.findIndex((todo) => todo.id === id);
                         data[currentCardIndex].status = data[currentCardIndex].status === "active" ? "done" : "active";
                     });
-                    // TODO save status
-                    // TODO load list by ID, method
-                    // TODO close all
+
+                    // TODO wrong actions by click away todolist
+                    // TODO selection of list
                     props.updateList(nextTodos);
+                    server.saveList(nextTodos);
                 }
             }
 
@@ -229,11 +241,12 @@ const List = (props: ListProps) => {
                 <Grid item xs={12}>
                     <Box>
                         {props.list && (
-                            <Title>
+                            <Title done={isDone ? 1 : 0}>
                                 <ContentEditable
                                     text={props.list?.title ?? "New title"}
                                     onChange={handleTitleChange}
                                     onBlur={handleTitleBlur}
+                                    disabled={isDone}
                                 />
                             </Title>
                         )}
@@ -293,13 +306,15 @@ const CustomCard = styled(Card)`
     height: 100%;
 `;
 
-const Title = styled(Button)`
+const Title = styled(Button)<{ done: number }>`
+    color: ${(props) => (props.done === 1 ? "rgba(0, 0, 0, 0.4) !important" : "inherit")};
     display: inline-block;
-    width: auto;
-    padding: 5px 10px;
-    text-transform: none !important;
     font-size: 1.25rem !important;
+    padding: 5px 10px;
+    text-decoration: ${(props) => (props.done === 1 ? "line-through !important" : "none")};
+    text-transform: none !important;
     white-space: none;
+    width: auto;
 
     .MuiTouchRipple-root {
         display: none;
