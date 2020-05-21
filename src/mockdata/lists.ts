@@ -18,27 +18,27 @@ const todoList: TodoList[] = [
     //list
     {
         id: 0,
-        title: "list title1111",
+        title: "Список покупок",
         date: 123455,
         updateDate: 2345566,
         data: [
             {
                 id: 0,
-                value: "0помыться",
+                value: "яблоки",
                 date: 2454234,
                 updateDate: 564564,
                 status: "done",
             },
             {
                 id: 1,
-                value: "1побриться",
+                value: "картошка",
                 date: 2454234,
                 updateDate: 564564,
                 status: "active",
             },
             {
                 id: 2,
-                value: "2gjxtcfnmcz",
+                value: "шпроты",
                 date: 2454234,
                 updateDate: 564564,
                 status: "active",
@@ -47,27 +47,27 @@ const todoList: TodoList[] = [
     },
     {
         id: 1,
-        title: "list title22222",
+        title: "Посмотреть фильмы",
         date: 123455,
         updateDate: 2345566,
         data: [
             {
                 id: 3,
-                value: "0почесать что что",
+                value: "Матрица",
                 date: 2454234,
                 updateDate: 564564,
                 status: "active",
             },
             {
                 id: 4,
-                value: "1туда",
+                value: "Бегущий по лезвию",
                 date: 2454234,
                 updateDate: 564564,
                 status: "active",
             },
             {
                 id: 5,
-                value: "2сюда как то так",
+                value: "Не грози южному централу",
                 date: 2454234,
                 updateDate: 564564,
                 status: "active",
