@@ -35,4 +35,15 @@ export default {
         listsFromServer[listIndex] = list;
         console.info("saveList", list);
     },
+
+    deleteList: (listId: number, todoId: number): void => {
+        const listIndex = listsFromServer.findIndex((listFromServer) => listFromServer.id === listId);
+
+        listsFromServer[listIndex] = {
+            ...listsFromServer[listIndex],
+            data: listsFromServer[listIndex].data.filter((todo) => todo.id !== todoId),
+        };
+
+        console.info("deleteListItem: ", listId);
+    },
 };

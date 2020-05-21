@@ -22,6 +22,7 @@ interface CustomCardProps {
     handleDragAndDrop: (event: React.MouseEvent, currentCardId: number) => void;
     handleListItemChange: (value: string, id: number) => void;
     handleSaveListItem: (todoId: number, todoData: string) => void;
+    handleDeleteListItem: (todoId: number) => void;
 }
 
 const ListPaper = (props: CustomCardProps) => {
@@ -98,7 +99,7 @@ const ListPaper = (props: CustomCardProps) => {
                     propsRef={editable}
                     // onClick={() => setCanDrag(false)}
                 />
-                {props.todo.status === "done" && <CheckIcon />}
+                {/* {props.todo.status === "done" && <CheckIcon />} */}
                 <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation} />
             </ListItemCard>
             <Popover anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu} disableEnforceFocus>
@@ -109,7 +110,9 @@ const ListPaper = (props: CustomCardProps) => {
                     <ListItem button onClick={handleEditListItem}>
                         Edit
                     </ListItem>
-                    <ListItem button>Delete</ListItem>
+                    <ListItem button onClick={() => props.handleDeleteListItem(props.todo.id)}>
+                        Delete
+                    </ListItem>
                     <ListItem button>Mark as done</ListItem>
                     <Divider />
                     <CustomFormControl component="fieldset">

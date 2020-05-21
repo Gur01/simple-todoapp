@@ -92,6 +92,18 @@ const List = (props: ListProps) => {
         }
     };
 
+    const handleDeleteListItem = (todoId: number) => {
+        const newList = produce(props.list, (draft) => ({
+            ...draft,
+            data: draft?.data.filter((todo) => todo.id !== todoId),
+        }));
+
+        props.updateList(newList);
+        if (props.list) {
+            server.deleteList(props.list.id, todoId);
+        }
+    };
+
     const handleListItemChange = (value: string, id: number) => {
         if (props.list) {
             const nextTodos = produce(props.list.data, (draft) => {
@@ -278,6 +290,7 @@ const List = (props: ListProps) => {
                                         handleDragAndDrop={handleDragAndDrop}
                                         handleListItemChange={handleListItemChange}
                                         handleSaveListItem={handleSaveListItem}
+                                        handleDeleteListItem={handleDeleteListItem}
                                     />
                                 ))}
                         </ScrollingCardContent>
