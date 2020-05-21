@@ -117,6 +117,21 @@ const List = (props: ListProps) => {
         }
     };
 
+    const handleDone = (todoId: number) => {
+        if (props.list) {
+            const nextTodos = produce(props.list, (draft) => {
+                const data = draft.data;
+                const currentCardIndex = data.findIndex((todo) => todo.id === todoId);
+                data[currentCardIndex].status = data[currentCardIndex].status === "active" ? "done" : "active";
+            });
+
+            // TODO wrong actions by click away todolist
+            // TODO selection of list
+            props.updateList(nextTodos);
+            server.saveList(nextTodos);
+        }
+    };
+
     let drag = false;
     let editTimer: number;
 
@@ -216,18 +231,7 @@ const List = (props: ListProps) => {
             }
             // mouse click
             if (!drag) {
-                if (props.list) {
-                    const nextTodos = produce(props.list, (draft) => {
-                        const data = draft.data;
-                        const currentCardIndex = data.findIndex((todo) => todo.id === id);
-                        data[currentCardIndex].status = data[currentCardIndex].status === "active" ? "done" : "active";
-                    });
-
-                    // TODO wrong actions by click away todolist
-                    // TODO selection of list
-                    props.updateList(nextTodos);
-                    server.saveList(nextTodos);
-                }
+                handleDone(id);
             }
 
             document.removeEventListener("mousemove", onMouseMove);
@@ -291,6 +295,7 @@ const List = (props: ListProps) => {
                                         handleListItemChange={handleListItemChange}
                                         handleSaveListItem={handleSaveListItem}
                                         handleDeleteListItem={handleDeleteListItem}
+                                        handleDone={handleDone}
                                     />
                                 ))}
                         </ScrollingCardContent>

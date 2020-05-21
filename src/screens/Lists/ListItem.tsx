@@ -23,6 +23,7 @@ interface CustomCardProps {
     handleListItemChange: (value: string, id: number) => void;
     handleSaveListItem: (todoId: number, todoData: string) => void;
     handleDeleteListItem: (todoId: number) => void;
+    handleDone: (todoId: number) => void;
 }
 
 const ListPaper = (props: CustomCardProps) => {
@@ -79,6 +80,11 @@ const ListPaper = (props: CustomCardProps) => {
         focusEditable();
     };
 
+    const handleDoneListItem = (todoId: number) => {
+        handleCloseMenu();
+        props.handleDone(todoId);
+    };
+
     return (
         <>
             {/* <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation} /> */}
@@ -105,7 +111,7 @@ const ListPaper = (props: CustomCardProps) => {
             <Popover anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu} disableEnforceFocus>
                 <CustomList>
                     <ListItem>Created by: Me</ListItem>
-                    <ListItem>Date: 2002.11.25</ListItem>
+                    <ListItem>Date: {props.todo.date}</ListItem>
                     <Divider />
                     <ListItem button onClick={handleEditListItem}>
                         Edit
@@ -113,7 +119,9 @@ const ListPaper = (props: CustomCardProps) => {
                     <ListItem button onClick={() => props.handleDeleteListItem(props.todo.id)}>
                         Delete
                     </ListItem>
-                    <ListItem button>Mark as done</ListItem>
+                    <ListItem button onClick={() => handleDoneListItem(props.todo.id)}>
+                        {props.todo.status === "done" ? "Mark as active" : "Mark as done"}
+                    </ListItem>
                     <Divider />
                     <CustomFormControl component="fieldset">
                         {/* <FormLabel>Priority</FormLabel> */}
