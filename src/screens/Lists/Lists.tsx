@@ -7,7 +7,6 @@ import { useHistory } from "react-router-dom";
 import server from "server";
 import styled from "styled-components";
 import { TodoList } from "../../mockdata/lists";
-import CardActions from "@material-ui/core/CardActions";
 
 const List = () => {
     const history = useHistory();
@@ -104,7 +103,7 @@ const List = () => {
     return (
         <CardsWrapper>
             <CustomAddCard>
-                <CardContent>Add +</CardContent>
+                <CardContent onClick={() => history.push("list/0")}>Add +</CardContent>
             </CustomAddCard>
             {lists.map((list) => {
                 return (
@@ -116,7 +115,6 @@ const List = () => {
                         onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => handleDragAndDrop(event, list.id)}
                     >
                         <CardContent>{list.title}</CardContent>
-                        <CardActions>hello</CardActions>
                     </CustomCard>
                 );
             })}

@@ -17,7 +17,7 @@ export interface TodoList {
 const todoList: TodoList[] = [
     //list
     {
-        id: 0,
+        id: 200,
         title: "1",
         date: 123455,
         updateDate: 2345566,

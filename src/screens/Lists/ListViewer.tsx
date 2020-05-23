@@ -14,11 +14,16 @@ interface Params {
 }
 
 const ListViewer = (props: RouteComponentProps<Params>) => {
-    const id = props.match.params.id;
+    const id = parseInt(props.match.params.id, 10);
     const [list, updateList] = React.useState<TodoList>();
 
     React.useEffect(() => {
-        const list = server.loadList(id);
+        let list;
+        if (id === 0) {
+            list = server.createList();
+        } else {
+            list = server.loadList(id);
+        }
 
         if (list) {
             updateList(list);

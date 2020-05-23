@@ -46,4 +46,15 @@ export default {
 
         console.info("deleteListItem: ", listId);
     },
+
+    createList: (): TodoList => {
+        listsFromServer.unshift({
+            id: Date.now(),
+            title: "New title",
+            date: Date.now(),
+            updateDate: Date.now(),
+            data: [],
+        });
+        return listsFromServer[0];
+    },
 };

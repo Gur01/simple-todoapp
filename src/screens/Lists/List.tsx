@@ -25,6 +25,7 @@ const List = (props: ListProps) => {
 
     const isDone = React.useMemo(() => {
         if (!props.list) return false;
+        if (!props.list.data.length) return false;
 
         for (const todo of props.list.data) {
             if (todo.status === "active") {
