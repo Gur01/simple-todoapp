@@ -94,19 +94,21 @@ const ListPaper = (props: CustomCardProps) => {
                 onMouseDown={handleDragging}
                 className={props.className}
             >
-                {/* <ContentEditable style={{padding: "10px"}} html={props.todo.value} onKeyPress={handleEsc} onBlur={()=> setCanDrag(true)} onClick={()=> setCanDrag(false)} onChange={(event: ContentEditableEvent) => {setCanDrag(false); handleValueChange(event);}} /> */}
-                {/* <ContentEditable style={{padding: "10px"}} html={props.todo.value} onKeyPress={handleEsc}  onChange={(event: ContentEditableEvent) => {handleValueChange(event);}} /> */}
-                {/* <div> {props.todo.value}</div> */}
+                <div>
+                    {/* <ContentEditable style={{padding: "10px"}} html={props.todo.value} onKeyPress={handleEsc} onBlur={()=> setCanDrag(true)} onClick={()=> setCanDrag(false)} onChange={(event: ContentEditableEvent) => {setCanDrag(false); handleValueChange(event);}} /> */}
+                    {/* <ContentEditable style={{padding: "10px"}} html={props.todo.value} onKeyPress={handleEsc}  onChange={(event: ContentEditableEvent) => {handleValueChange(event);}} /> */}
+                    {/* <div> {props.todo.value}</div> */}
 
-                <ContentEditable
-                    text={props.todo.value}
-                    onChange={handleListValueChange}
-                    onBlur={handleListItemBlur}
-                    propsRef={editable}
-                    // onClick={() => setCanDrag(false)}
-                />
-                {/* {props.todo.status === "done" && <CheckIcon />} */}
-                <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation} />
+                    <ContentEditable
+                        text={props.todo.value}
+                        onChange={handleListValueChange}
+                        onBlur={handleListItemBlur}
+                        propsRef={editable}
+                        // onClick={() => setCanDrag(false)}
+                    />
+                    {/* {props.todo.status === "done" && <CheckIcon />} */}
+                    <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation} />
+                </div>
             </ListItemCard>
             <Popover anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu} disableEnforceFocus>
                 <CustomList>

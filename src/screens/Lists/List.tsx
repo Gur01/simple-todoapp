@@ -152,7 +152,11 @@ const List = (props: ListProps) => {
         const positionX = event.pageX - shiftX;
         const positionY = event.pageY - shiftY;
 
-        currentCard.style.visibility = "hidden";
+        currentCard.style.border = "1px solid grey";
+        const currentCardContent = currentCard.children[0] as HTMLDivElement;
+        console.log(currentCardContent);
+
+        currentCardContent.style.visibility = "hidden";
 
         currentCardCopy.style.position = "absolute";
         currentCardCopy.style.left = positionX + "px";
@@ -194,8 +198,8 @@ const List = (props: ListProps) => {
                 const nextTodos = produce(tempTodos, (draft) => {
                     const currentCardIndex = draft.findIndex((todo) => todo.id === id);
                     const cardBelowIndex = draft.findIndex((todo) => todo.id === cardBelowId);
-
-                    [draft[currentCardIndex], draft[cardBelowIndex]] = [draft[cardBelowIndex], draft[currentCardIndex]];
+                    const moovingItem = draft.splice(currentCardIndex, 1);
+                    draft.splice(cardBelowIndex, 0, ...moovingItem);
                 });
 
                 tempTodos = nextTodos;
@@ -213,8 +217,8 @@ const List = (props: ListProps) => {
 
             currentCardCopy.remove();
 
-            currentCard.style.visibility = "";
-
+            currentCardContent.style.visibility = "";
+            currentCard.style.border = "";
             currentCard.onmouseup = null;
             document.removeEventListener("mousemove", onMouseMove);
         }, 300);
@@ -241,7 +245,8 @@ const List = (props: ListProps) => {
 
             currentCardCopy.remove();
 
-            currentCard.style.visibility = "";
+            currentCardContent.style.visibility = "";
+            currentCard.style.border = "";
 
             currentCard.onmouseup = null;
 
@@ -254,23 +259,25 @@ const List = (props: ListProps) => {
     return (
         <ListsWrapper>
             <PageSubHeader maxWidth="xl">
-                <Grid item xs={12}>
-                    <Box>
-                        {props.list && (
-                            <Title done={isDone ? 1 : 0}>
-                                <ContentEditable
-                                    text={props.list?.title ?? "New title"}
-                                    onChange={handleTitleChange}
-                                    onBlur={handleTitleBlur}
-                                    disabled={isDone}
-                                />
-                            </Title>
-                        )}
-                    </Box>
-                </Grid>
+                <PageContent maxWidth="lg">
+                    <Grid item xs={12}>
+                        <Box>
+                            {props.list && (
+                                <Title done={isDone ? 1 : 0}>
+                                    <ContentEditable
+                                        text={props.list?.title ?? "New title"}
+                                        onChange={handleTitleChange}
+                                        onBlur={handleTitleBlur}
+                                        disabled={isDone}
+                                    />
+                                </Title>
+                            )}
+                        </Box>
+                    </Grid>
+                </PageContent>
             </PageSubHeader>
 
-            <PageContent maxWidth="xl">
+            <PageContent maxWidth="lg">
                 <CustomCard>
                     <CustomCardContent>
                         <Box mb={2}>

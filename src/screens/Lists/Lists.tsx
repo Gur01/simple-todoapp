@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import server from "server";
 import styled from "styled-components";
 import { TodoList } from "../../mockdata/lists";
+import CardActions from "@material-ui/core/CardActions";
 
 const List = () => {
     const history = useHistory();
@@ -29,8 +30,8 @@ const List = () => {
 
         const currentCardCopy = currentCard.cloneNode(true) as HTMLDivElement;
 
-        const shiftX = event.pageX - currentCard.offsetLeft + 24;
-        const shiftY = event.pageY - currentCard.offsetTop + 24;
+        const shiftX = event.pageX - currentCard.offsetLeft + 16;
+        const shiftY = event.pageY - currentCard.offsetTop + 16;
 
         const positionX = event.pageX - shiftX;
         const positionY = event.pageY - shiftY;
@@ -71,8 +72,8 @@ const List = () => {
                 const nextLists = produce(tempLists, (draft) => {
                     const currentCardIndex = draft.findIndex((todo) => todo.id === id);
                     const cardBelowIndex = draft.findIndex((todo) => todo.id === cardBelowId);
-
-                    [draft[currentCardIndex], draft[cardBelowIndex]] = [draft[cardBelowIndex], draft[currentCardIndex]];
+                    const moovingItem = draft.splice(currentCardIndex, 1);
+                    draft.splice(cardBelowIndex, 0, ...moovingItem);
                 });
                 tempLists = nextLists;
                 setLists(nextLists);
@@ -101,7 +102,10 @@ const List = () => {
     };
 
     return (
-        <>
+        <CardsWrapper>
+            <CustomAddCard>
+                <CardContent>Add +</CardContent>
+            </CustomAddCard>
             {lists.map((list) => {
                 return (
                     <CustomCard
@@ -112,19 +116,31 @@ const List = () => {
                         onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => handleDragAndDrop(event, list.id)}
                     >
                         <CardContent>{list.title}</CardContent>
+                        <CardActions>hello</CardActions>
                     </CustomCard>
                 );
             })}
-        </>
+        </CardsWrapper>
     );
 };
 
+const CardsWrapper = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+`;
+
 const CustomCard = styled(Card)`
-    max-width: 300px;
-    margin: 24px;
-    padding: 100px;
+    width: 250px;
+    height: 150px;
+    margin: 16px;
     cursor: pointer;
     box-sizing: content-box;
+`;
+
+const CustomAddCard = styled(CustomCard)`
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 export default List;
