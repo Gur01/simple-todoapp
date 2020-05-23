@@ -1,4 +1,5 @@
 import mockLists, { TodoList } from "../mockdata/lists";
+import cloneDeep from "clone-deep";
 
 let listsFromServer: TodoList[] = mockLists;
 
@@ -48,13 +49,17 @@ export default {
     },
 
     createList: (): TodoList => {
-        listsFromServer.unshift({
+        const newList = cloneDeep(listsFromServer);
+
+        newList.unshift({
             id: Date.now(),
             title: "New title",
             date: Date.now(),
             updateDate: Date.now(),
             data: [],
         });
+        listsFromServer = newList;
+
         return listsFromServer[0];
     },
 };

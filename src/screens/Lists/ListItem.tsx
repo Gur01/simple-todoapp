@@ -124,16 +124,6 @@ const ListPaper = (props: CustomCardProps) => {
                     <ListItem button onClick={() => handleDoneListItem(props.todo.id)}>
                         {props.todo.status === "done" ? "Mark as active" : "Mark as done"}
                     </ListItem>
-                    <Divider />
-                    <CustomFormControl component="fieldset">
-                        {/* <FormLabel>Priority</FormLabel> */}
-
-                        <RadioGroup value={value} onChange={handleSelectPriority}>
-                            <FormControlLabel value="no" control={<Radio />} label="No" />
-                            <FormControlLabel value="important" control={<Radio />} label="Important" />
-                            <FormControlLabel value="urgent" control={<Radio />} label="Urgent" />
-                        </RadioGroup>
-                    </CustomFormControl>
                 </CustomList>
             </Popover>
         </>
@@ -142,13 +132,6 @@ const ListPaper = (props: CustomCardProps) => {
 
 const CustomList = styled(List)`
     min-width: 200px;
-`;
-
-const CustomFormControl = styled(FormControl)<any>`
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-    margin-top: 10px !important;
-    width: 100%;
 `;
 
 const ListItemCard = styled(Paper)<{ status: "active" | "done" }>`
