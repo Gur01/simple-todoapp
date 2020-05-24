@@ -1,11 +1,7 @@
 import Divider from "@material-ui/core/Divider";
-import FormControl from "@material-ui/core/FormControl";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Paper from "@material-ui/core/Paper";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
 import CheckCircleOutline from "@material-ui/icons/CheckCircleOutline";
 import MoreVert from "@material-ui/icons/MoreVert";
 import { ContentEditable } from "components";
@@ -28,7 +24,6 @@ interface CustomCardProps {
 
 const ListPaper = (props: CustomCardProps) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const [value, setValue] = React.useState("no");
     const [editing, setEditing] = React.useState(false);
 
     const editable = React.useRef(null);
@@ -43,10 +38,6 @@ const ListPaper = (props: CustomCardProps) => {
             setEditing(true);
         }
     }, [props.editableId]);
-
-    const handleSelectPriority = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue((event.target as HTMLInputElement).value);
-    };
 
     const handleMenuClick = (event: React.MouseEvent<SVGSVGElement | HTMLDivElement>) => {
         setAnchorEl(event.currentTarget as HTMLDivElement);
@@ -147,14 +138,6 @@ const ListItemCard = styled(Paper)<{ status: "active" | "done" }>`
 const MenuIcon = styled(MoreVert)`
     position: absolute;
     right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-`;
-
-const CheckIcon = styled(CheckCircleOutline)`
-    position: absolute;
-    right: 50px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;

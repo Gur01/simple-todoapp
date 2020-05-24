@@ -3,10 +3,9 @@ import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import cloneDeep from "clone-deep";
-import { ContentEditable } from "components";
+import { ContentEditable, PageSubheader } from "components";
 import produce from "immer";
 import React from "react";
 import server from "server";
@@ -257,26 +256,36 @@ const List = (props: ListProps) => {
         };
     };
 
+    const links = [
+        {
+            href: "/",
+            text: "Main",
+        },
+        {
+            href: "/lists",
+            text: "Lists",
+        },
+    ];
+
     return (
         <ListsWrapper>
-            <PageSubHeader maxWidth="xl">
-                <PageContent maxWidth="lg">
-                    <Grid item xs={12}>
-                        <Box>
-                            {props.list && (
-                                <Title done={isDone ? 1 : 0}>
-                                    <ContentEditable
-                                        text={props.list?.title ?? "New title"}
-                                        onChange={handleTitleChange}
-                                        onBlur={handleTitleBlur}
-                                        disabled={isDone}
-                                    />
-                                </Title>
-                            )}
-                        </Box>
-                    </Grid>
-                </PageContent>
-            </PageSubHeader>
+            <PageSubheader
+                links={links}
+                title={() => {
+                    return (
+                        props.list && (
+                            <Title done={isDone ? 1 : 0}>
+                                <ContentEditable
+                                    text={props.list?.title ?? "New title"}
+                                    onChange={handleTitleChange}
+                                    onBlur={handleTitleBlur}
+                                    disabled={isDone}
+                                />
+                            </Title>
+                        )
+                    );
+                }}
+            />
 
             <PageContent maxWidth="lg">
                 <CustomCard>
@@ -336,11 +345,16 @@ const Title = styled(Button)<{ done: number }>`
     color: ${(props) => (props.done === 1 ? "rgba(0, 0, 0, 0.4) !important" : "inherit")};
     display: inline-block;
     font-size: 1.25rem !important;
-    padding: 5px 10px;
+    // padding: 0 !important;
     text-decoration: ${(props) => (props.done === 1 ? "line-through !important" : "none")};
     text-transform: none !important;
     white-space: none;
     width: auto;
+    min-width: 50px !important;
+
+    div[class^="StyledContentEditable"] {
+        padding: 0;
+    }
 
     .MuiTouchRipple-root {
         display: none;
@@ -353,16 +367,10 @@ const ListsWrapper = styled.div`
     height: 100%;
 `;
 
-const PageSubHeader = styled(Container)`
-    background-color: #eee;
-    z-index: 100;
-`;
-
 const PageContent = styled(Container)`
     position: relative;
     flex-grow: 1;
     overflow: hidden;
-    margin-bottom: 8px;
 `;
 
 export default List;
