@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import server from "server";
 import styled from "styled-components";
 import { TodoList } from "../../mockdata/lists";
+import Container from "@material-ui/core/Container";
 
 const List = () => {
     const history = useHistory();
@@ -102,22 +103,23 @@ const List = () => {
 
     return (
         <CardsWrapper>
-            <CustomAddCard>
-                <CardContent onClick={() => history.push("list/0")}>Add +</CardContent>
-            </CustomAddCard>
-            {lists.map((list) => {
-                return (
-                    <CustomCard
-                        style={{ display: "inline-block" }}
-                        className="card"
-                        data-ref={list.id}
-                        key={list.id}
-                        onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => handleDragAndDrop(event, list.id)}
-                    >
-                        <CardContent>{list.title}</CardContent>
-                    </CustomCard>
-                );
-            })}
+            <PageContent maxWidth="lg">
+                <CustomAddCard>
+                    <CardContent onClick={() => history.push("list/0")}>Add +</CardContent>
+                </CustomAddCard>
+                {lists.map((list) => {
+                    return (
+                        <CustomCard
+                            className="card"
+                            data-ref={list.id}
+                            key={list.id}
+                            onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => handleDragAndDrop(event, list.id)}
+                        >
+                            <CardContent>{list.title}</CardContent>
+                        </CustomCard>
+                    );
+                })}
+            </PageContent>
         </CardsWrapper>
     );
 };
@@ -139,6 +141,12 @@ const CustomAddCard = styled(CustomCard)`
     display: flex;
     justify-content: center;
     align-items: center;
+`;
+
+const PageContent = styled(Container)`
+    flex-grow: 1;
+    display: flex !important;
+    flex-wrap: wrap;
 `;
 
 export default List;
