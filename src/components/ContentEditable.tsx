@@ -6,20 +6,23 @@ interface ContentEditableProps {
     style?: Record<string, string>;
     propsRef?: any;
     disabled?: boolean;
-    onChange: (value: string) => void;
-    onBlur: (target: string) => void;
+    onChange?: (value: string) => void;
+    onBlur?: (target: string) => void;
     onClick?: () => void;
 }
 
 const ContentEditable = (props: ContentEditableProps) => {
-    const value = React.useMemo(() => props.text, []);
+    const value = React.useMemo(() => props.text, [props.text]);
 
     const handleChange = (event: React.FormEvent<HTMLDivElement>) => {
+        if (!props.onChange) return;
         const text = event.currentTarget.innerHTML;
         props.onChange(text);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (!props.onBlur) return;
+
         if (event.keyCode === 27) {
             event.currentTarget.blur();
             props.onBlur(event.currentTarget.innerHTML);
@@ -27,6 +30,8 @@ const ContentEditable = (props: ContentEditableProps) => {
     };
 
     const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+        if (!props.onBlur) return;
+
         props.onBlur(event.target.innerHTML);
     };
 

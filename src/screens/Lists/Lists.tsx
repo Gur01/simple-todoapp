@@ -8,6 +8,7 @@ import server from "server";
 import styled from "styled-components";
 import { TodoList } from "../../mockdata/lists";
 import Container from "@material-ui/core/Container";
+import { PageSubheader } from "components";
 
 const List = () => {
     const history = useHistory();
@@ -101,8 +102,16 @@ const List = () => {
         };
     };
 
+    const links = [
+        {
+            href: "/",
+            text: "Main",
+        },
+    ];
+
     return (
         <CardsWrapper>
+            <PageSubheader titleText="Lists" titleDisabled links={links} />
             <PageContent maxWidth="lg">
                 <CustomAddCard>
                     <CardContent onClick={() => history.push("list/0")}>Add +</CardContent>

@@ -5,23 +5,30 @@ import Link from "@material-ui/core/Link";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { ContentEditable } from "components";
+import Button from "@material-ui/core/Button";
 
-interface Subheader {
+interface SubheaderProps {
     links: LinksProps[];
-    title: any;
+    isDoneListItem?: boolean;
+    titleDisabled: boolean;
+    titleText?: string;
+    onTileChange?: any;
+    onTitleBlur?: any;
 }
 export interface LinksProps {
     href: string;
     text: string;
 }
 
-const PageSubheader = (props: Subheader) => {
+const PageSubheader = (props: SubheaderProps) => {
     const history = useHistory();
 
     const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, href: string) => {
         event.preventDefault();
         history.push(href);
     };
+    console.log(props.titleText, "hello");
 
     return (
         <SubHeader maxWidth="xl">
@@ -41,7 +48,14 @@ const PageSubheader = (props: Subheader) => {
                             </Link>
                         ))}
 
-                        {props.title()}
+                        <Title done={props.isDoneListItem ? 1 : 0} titledisabled={props.titleDisabled ? 1 : 0}>
+                            <ContentEditable
+                                text={props.titleText ?? "New title"}
+                                onChange={props.onTileChange ? props.onTileChange : undefined}
+                                onBlur={props.onTitleBlur ? props.onTitleBlur : undefined}
+                                disabled={props.isDoneListItem ? props.isDoneListItem : props.titleDisabled}
+                            />
+                        </Title>
                     </Breadcrumbs>
                 </Grid>
             </PageContent>
@@ -55,9 +69,33 @@ const SubHeader = styled(Container)`
 `;
 
 const PageContent = styled(Container)`
-    position: relative;
     flex-grow: 1;
     overflow: hidden;
+    position: relative;
 `;
 
+interface TitleProps {
+    done: number;
+    titledisabled: number;
+}
+
+const Title = styled(Button)<TitleProps>`
+    color: ${(props) => (props.done === 1 ? "rgba(0, 0, 0, 0.4) !important" : "inherit")};
+    display: inline-block;
+    font-size: 1.25rem !important;
+    min-width: 50px !important;
+    pointer-events: ${(props) => (props.titledisabled === 1 ? "none" : "all")};
+    text-decoration: ${(props) => (props.done === 1 ? "line-through !important" : "none")};
+    text-transform: none !important;
+    white-space: none;
+    width: auto;
+
+    div[class^="StyledContentEditable"] {
+        padding: 0;
+    }
+
+    .MuiTouchRipple-root {
+        display: none;
+    }
+`;
 export default PageSubheader;

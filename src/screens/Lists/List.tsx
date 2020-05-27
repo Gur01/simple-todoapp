@@ -1,11 +1,10 @@
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
 import cloneDeep from "clone-deep";
-import { ContentEditable, PageSubheader } from "components";
+import { PageSubheader } from "components";
 import produce from "immer";
 import React from "react";
 import server from "server";
@@ -271,20 +270,11 @@ const List = (props: ListProps) => {
         <ListsWrapper>
             <PageSubheader
                 links={links}
-                title={() => {
-                    return (
-                        props.list && (
-                            <Title done={isDone ? 1 : 0}>
-                                <ContentEditable
-                                    text={props.list?.title ?? "New title"}
-                                    onChange={handleTitleChange}
-                                    onBlur={handleTitleBlur}
-                                    disabled={isDone}
-                                />
-                            </Title>
-                        )
-                    );
-                }}
+                titleText={props.list?.title}
+                isDoneListItem={isDone}
+                onTitleBlur={handleTitleBlur}
+                onTileChange={handleTitleChange}
+                titleDisabled={isDone}
             />
 
             <PageContent maxWidth="lg">
@@ -339,26 +329,6 @@ const CustomCard = styled(Card)`
     margin-top: 8px;
     overflow: hidden;
     height: 100%;
-`;
-
-const Title = styled(Button)<{ done: number }>`
-    color: ${(props) => (props.done === 1 ? "rgba(0, 0, 0, 0.4) !important" : "inherit")};
-    display: inline-block;
-    font-size: 1.25rem !important;
-    // padding: 0 !important;
-    text-decoration: ${(props) => (props.done === 1 ? "line-through !important" : "none")};
-    text-transform: none !important;
-    white-space: none;
-    width: auto;
-    min-width: 50px !important;
-
-    div[class^="StyledContentEditable"] {
-        padding: 0;
-    }
-
-    .MuiTouchRipple-root {
-        display: none;
-    }
 `;
 
 const ListsWrapper = styled.div`
