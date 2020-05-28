@@ -59,6 +59,20 @@ const BoardList: Board[] = [
                         updateDate: 564564,
                         status: "active",
                     },
+                    {
+                        id: 3,
+                        value: "что то еще",
+                        date: 2454234,
+                        updateDate: 564564,
+                        status: "active",
+                    },
+                    {
+                        id: 4,
+                        value: "хелло",
+                        date: 2454234,
+                        updateDate: 564564,
+                        status: "active",
+                    },
                 ],
             },
             {
@@ -69,21 +83,21 @@ const BoardList: Board[] = [
                 // cardList
                 data: [
                     {
-                        id: 0,
+                        id: 5,
                         value: "яблоки",
                         date: 2454234,
                         updateDate: 564564,
                         status: "done",
                     },
                     {
-                        id: 1,
+                        id: 6,
                         value: "картошка",
                         date: 2454234,
                         updateDate: 564564,
                         status: "active",
                     },
                     {
-                        id: 2,
+                        id: 7,
                         value: "шпроты",
                         date: 2454234,
                         updateDate: 564564,
@@ -99,21 +113,21 @@ const BoardList: Board[] = [
                 // cardList
                 data: [
                     {
-                        id: 0,
+                        id: 8,
                         value: "яблоки",
                         date: 2454234,
                         updateDate: 564564,
                         status: "done",
                     },
                     {
-                        id: 1,
+                        id: 9,
                         value: "картошка",
                         date: 2454234,
                         updateDate: 564564,
                         status: "active",
                     },
                     {
-                        id: 2,
+                        id: 10,
                         value: "шпроты",
                         date: 2454234,
                         updateDate: 564564,

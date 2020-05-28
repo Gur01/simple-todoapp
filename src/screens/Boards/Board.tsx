@@ -4,6 +4,9 @@ import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
 import { PageSubheader } from "components";
 import { Board } from "../../mockdata/boards";
+import CardHeader from "@material-ui/core/CardHeader";
+import CardContent from "@material-ui/core/CardContent";
+import Paper from "@material-ui/core/Paper";
 
 const links = [
     {
@@ -28,12 +31,33 @@ const Boards = (props: BoardProps) => {
             <PageContent>
                 {props.board &&
                     props.board.data.map((card) => (
-                        <BoardCard key={card.id}>{card.title}</BoardCard>
+                        <BoardCard key={card.id} className="boardCard">
+                            <CardHeader title={card.title} />
+                            <CardContent>
+                                {card.data.map((cardList) => (
+                                    <BoardListItemCard
+                                        key={cardList.id}
+                                        className="boardListItemCard"
+                                    >
+                                        {cardList.value}
+                                    </BoardListItemCard>
+                                ))}
+                            </CardContent>
+                        </BoardCard>
                     ))}
             </PageContent>
         </BoardsWrapper>
     );
 };
+
+const BoardListItemCard = styled(Paper)`
+    cursor: pointer;
+    margin: 6px 0;
+    position: relative;
+    user-select: none;
+    width: 100%;
+    padding: 6px;
+`;
 
 const BoardsWrapper = styled.div`
     display: flex;
