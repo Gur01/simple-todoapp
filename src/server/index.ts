@@ -1,9 +1,12 @@
 import mockLists, { TodoList } from "../mockdata/lists";
+import mockBoards, { Board } from "../mockdata/boards";
 import cloneDeep from "clone-deep";
 
 let listsFromServer: TodoList[] = mockLists;
+let boardsFromServer: Board[] = mockBoards;
 
 export default {
+    // lists
     loadLists: (): TodoList[] => {
         console.info("loadLists", listsFromServer);
         return listsFromServer;
@@ -61,5 +64,43 @@ export default {
         listsFromServer = newList;
 
         return listsFromServer[0];
+    },
+
+    // boards
+    loadBoards: (): Board[] => {
+        console.info("loadLists", boardsFromServer);
+        return boardsFromServer;
+    },
+
+    loadBoard: (id: number): Board | undefined => {
+        const boardById = boardsFromServer.find((board) => board.id === id);
+
+        if (boardById) {
+            console.info("loadBoard ", id, boardById);
+        } else {
+            console.error("no board with id ", id);
+        }
+
+        return boardById;
+    },
+
+    saveBoards: (boards: Board[]): void => {
+        boardsFromServer = boards;
+        console.info("saveBoards", boards);
+    },
+
+    createBoard: (): Board => {
+        const newBoards = cloneDeep(boardsFromServer);
+
+        newBoards.unshift({
+            id: Date.now(),
+            title: "New title",
+            date: Date.now(),
+            updateDate: Date.now(),
+            data: [],
+        });
+        boardsFromServer = newBoards;
+
+        return boardsFromServer[0];
     },
 };

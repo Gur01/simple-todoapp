@@ -1,17 +1,17 @@
-export interface TodoListItem {
-    id: number;
-    value: string;
-    date: number;
-    updateDate: number;
-    status: "active" | "done";
-}
-
 export interface TodoList {
     id: number;
     title: string;
     date: number;
     updateDate: number;
     data: TodoListItem[];
+}
+
+export interface TodoListItem {
+    id: number;
+    value: string;
+    date: number;
+    updateDate: number;
+    status: "active" | "done";
 }
 
 const todoList: TodoList[] = [

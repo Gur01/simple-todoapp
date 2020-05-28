@@ -6,7 +6,8 @@ import GlobalStyle from "./common/GlobalStyle";
 import Footer from "./Footer";
 import Header from "./Header";
 import MenuSidebar from "./MenuSidebar";
-import Boards from "./screens/Boards";
+import Boards from "./screens/Boards/Boards";
+import BoardViewer from "./screens/Boards/BoardViewer";
 import Calendar from "./screens/Calendar";
 import Dashboard from "./screens/Dashboard";
 import Lists from "./screens/Lists/Lists";
@@ -35,6 +36,7 @@ const App = () => {
                         <Route path="/profile" exact component={Profile}></Route>
                         <Route path="/calendar" exact component={Calendar}></Route>
                         <Route path="/boards" exact component={Boards}></Route>
+                        <Route path="/board/:id" exact component={BoardViewer}></Route>
                         <Route path="/lists" exact component={Lists}></Route>
                         <Route path="/list/:id" exact component={ListViewer}></Route>
                         <Route path="/signin" exact component={SignIn}></Route>
