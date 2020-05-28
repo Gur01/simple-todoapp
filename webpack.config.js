@@ -29,6 +29,7 @@ module.exports = {
             server: path.join(__dirname, "src", "server"),
             assets: path.join(__dirname, "src", "assets"),
             components: path.join(__dirname, "src", "components"),
+            utils: path.join(__dirname, "src", "utils"),
         },
     },
     module: {
