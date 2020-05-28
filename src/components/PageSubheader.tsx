@@ -24,7 +24,10 @@ export interface LinksProps {
 const PageSubheader = (props: SubheaderProps) => {
     const history = useHistory();
 
-    const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, href: string) => {
+    const handleLinkClick = (
+        event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+        href: string,
+    ) => {
         event.preventDefault();
         history.push(href);
     };
@@ -48,12 +51,19 @@ const PageSubheader = (props: SubheaderProps) => {
                             </Link>
                         ))}
 
-                        <Title done={props.isDoneListItem ? 1 : 0} titledisabled={props.titleDisabled ? 1 : 0}>
+                        <Title
+                            done={props.isDoneListItem ? 1 : 0}
+                            titledisabled={props.titleDisabled ? 1 : 0}
+                        >
                             <ContentEditable
                                 text={props.titleText ?? "New title"}
                                 onChange={props.onTileChange ? props.onTileChange : undefined}
                                 onBlur={props.onTitleBlur ? props.onTitleBlur : undefined}
-                                disabled={props.isDoneListItem ? props.isDoneListItem : props.titleDisabled}
+                                disabled={
+                                    props.isDoneListItem
+                                        ? props.isDoneListItem
+                                        : props.titleDisabled
+                                }
                             />
                         </Title>
                     </Breadcrumbs>

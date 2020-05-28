@@ -101,7 +101,12 @@ const ListPaper = (props: CustomCardProps) => {
                     <MenuIcon onClick={handleMenuClick} onMouseDown={stopPropagation} />
                 </div>
             </ListItemCard>
-            <Popover anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu} disableEnforceFocus>
+            <Popover
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleCloseMenu}
+                disableEnforceFocus
+            >
                 <CustomList>
                     <ListItem>Created by: Me</ListItem>
                     <ListItem>Date: {props.todo.date}</ListItem>

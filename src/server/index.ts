@@ -34,14 +34,18 @@ export default {
 
     //save list (data, title, everything));
     saveList: (list: TodoList): void => {
-        const listIndex = listsFromServer.findIndex((listFromServer) => listFromServer.id === list.id);
+        const listIndex = listsFromServer.findIndex(
+            (listFromServer) => listFromServer.id === list.id,
+        );
 
         listsFromServer[listIndex] = list;
         console.info("saveList", list);
     },
 
     deleteList: (listId: number, todoId: number): void => {
-        const listIndex = listsFromServer.findIndex((listFromServer) => listFromServer.id === listId);
+        const listIndex = listsFromServer.findIndex(
+            (listFromServer) => listFromServer.id === listId,
+        );
 
         listsFromServer[listIndex] = {
             ...listsFromServer[listIndex],

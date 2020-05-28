@@ -121,7 +121,8 @@ const List = (props: ListProps) => {
             const nextTodos = produce(props.list, (draft) => {
                 const data = draft.data;
                 const currentCardIndex = data.findIndex((todo) => todo.id === todoId);
-                data[currentCardIndex].status = data[currentCardIndex].status === "active" ? "done" : "active";
+                data[currentCardIndex].status =
+                    data[currentCardIndex].status === "active" ? "done" : "active";
             });
 
             // TODO wrong actions by click away todolist
@@ -188,7 +189,9 @@ const List = (props: ListProps) => {
             currentCardCopy.style.top = event.clientY - shiftY + "px";
 
             currentCardCopy.hidden = true;
-            cardBelow = document.elementFromPoint(event.clientX, event.clientY)?.closest(".card") as HTMLDivElement;
+            cardBelow = document
+                .elementFromPoint(event.clientX, event.clientY)
+                ?.closest(".card") as HTMLDivElement;
             currentCardCopy.hidden = false;
 
             if (cardBelow && String(id) !== cardBelow?.dataset.ref) {
