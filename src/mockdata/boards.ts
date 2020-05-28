@@ -137,6 +137,120 @@ const BoardList: Board[] = [
             },
         ],
     },
+
+    {
+        id: 2,
+        title: "2",
+        date: 123455,
+        updateDate: 123455,
+        // cards
+        data: [
+            {
+                id: 4,
+                title: "4",
+                date: 123455,
+                updateDate: 2345566,
+                // cardList
+                data: [
+                    {
+                        id: 11,
+                        value: "яблоки",
+                        date: 2454234,
+                        updateDate: 564564,
+                        status: "done",
+                    },
+                    {
+                        id: 12,
+                        value: "картошка",
+                        date: 2454234,
+                        updateDate: 564564,
+                        status: "active",
+                    },
+                    {
+                        id: 13,
+                        value: "шпроты",
+                        date: 2454234,
+                        updateDate: 564564,
+                        status: "active",
+                    },
+                    {
+                        id: 14,
+                        value: "что то еще",
+                        date: 2454234,
+                        updateDate: 564564,
+                        status: "active",
+                    },
+                    {
+                        id: 15,
+                        value: "хелло",
+                        date: 2454234,
+                        updateDate: 564564,
+                        status: "active",
+                    },
+                ],
+            },
+            {
+                id: 5,
+                title: "5",
+                date: 123455,
+                updateDate: 2345566,
+                // cardList
+                data: [
+                    {
+                        id: 16,
+                        value: "яблоки",
+                        date: 2454234,
+                        updateDate: 564564,
+                        status: "done",
+                    },
+                    {
+                        id: 17,
+                        value: "картошка",
+                        date: 2454234,
+                        updateDate: 564564,
+                        status: "active",
+                    },
+                    {
+                        id: 18,
+                        value: "шпроты",
+                        date: 2454234,
+                        updateDate: 564564,
+                        status: "active",
+                    },
+                ],
+            },
+            {
+                id: 6,
+                title: "6",
+                date: 123455,
+                updateDate: 2345566,
+                // cardList
+                data: [
+                    {
+                        id: 19,
+                        value: "яблоки",
+                        date: 2454234,
+                        updateDate: 564564,
+                        status: "done",
+                    },
+                    {
+                        id: 20,
+                        value: "картошка",
+                        date: 2454234,
+                        updateDate: 564564,
+                        status: "active",
+                    },
+                    {
+                        id: 21,
+                        value: "шпроты",
+                        date: 2454234,
+                        updateDate: 564564,
+                        status: "active",
+                    },
+                ],
+            },
+        ],
+    },
 ];
 
 export default BoardList;
