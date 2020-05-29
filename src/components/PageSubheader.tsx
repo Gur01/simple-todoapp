@@ -31,7 +31,6 @@ const PageSubheader = (props: SubheaderProps) => {
         event.preventDefault();
         history.push(href);
     };
-    console.log(props.titleText, "hello");
 
     return (
         <SubHeader maxWidth="xl">

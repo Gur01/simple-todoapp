@@ -29,22 +29,25 @@ const Boards = (props: BoardProps) => {
         <BoardsWrapper>
             <PageSubheader links={links} titleText={props.board?.title} titleDisabled={true} />
             <PageContent>
-                {props.board &&
-                    props.board.data.map((card) => (
-                        <BoardCard key={card.id} className="boardCard">
-                            <CardHeader title={card.title} />
-                            <CardContent>
-                                {card.data.map((cardList) => (
-                                    <BoardListItemCard
-                                        key={cardList.id}
-                                        className="boardListItemCard"
-                                    >
-                                        {cardList.value}
-                                    </BoardListItemCard>
-                                ))}
-                            </CardContent>
-                        </BoardCard>
-                    ))}
+                <>
+                    {props.board &&
+                        props.board.data.map((card) => (
+                            <BoardCard key={card.id} className="boardCard">
+                                <CardHeader title={card.title} />
+                                <CardContent>
+                                    {card.data &&
+                                        card.data.map((cardList) => (
+                                            <BoardListItemCard
+                                                key={cardList.id}
+                                                className="boardListItemCard"
+                                            >
+                                                {cardList.value}
+                                            </BoardListItemCard>
+                                        ))}
+                                </CardContent>
+                            </BoardCard>
+                        ))}
+                </>
             </PageContent>
         </BoardsWrapper>
     );
