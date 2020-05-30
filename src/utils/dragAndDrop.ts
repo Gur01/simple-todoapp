@@ -1,9 +1,11 @@
 import cloneDeep from "clone-deep";
 import produce from "immer";
 
+// click functional
 const handleDragAndDrop = (): any => {
     let drag = false;
 
+    // only updateFn and saveFn props
     return (
         event: React.MouseEvent<HTMLDivElement>,
         id: number,
@@ -68,9 +70,9 @@ const handleDragAndDrop = (): any => {
                     const moovingItem = draft.splice(currentCardIndex, 1);
                     draft.splice(cardBelowIndex, 0, ...moovingItem);
                 });
-                tempItems = nextLists;
                 updateFunction(nextLists);
-                saveFunction(nextLists);
+                saveFunction(nextLists); //TODO remove to mouseUp like in list
+                tempItems = nextLists;
             }
         };
 
