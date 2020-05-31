@@ -89,7 +89,6 @@ const handleDragAndDrop = (className: string, type?: "click" | "press"): any => 
                 const itemBelowId = Number(itemBelow.dataset.ref);
 
                 const nextItems = onUpdate(tempItems, id, itemBelowId);
-                console.log({ tempItems });
 
                 tempItems = nextItems;
             }

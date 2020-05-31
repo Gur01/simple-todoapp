@@ -272,8 +272,6 @@ const List = (props: ListProps) => {
     const handleDragAndDrop = dragAndDrop("card", "press");
 
     const onUpdateList = (list: any, listId: number, listBelowId: number) => {
-        console.log(list);
-
         const nextTodos = produce(list.data, (draft: any) => {
             const currentCardIndex = draft.findIndex((todo: any) => todo.id === listId);
             const cardBelowIndex = draft.findIndex((todo: any) => todo.id === listBelowId);
