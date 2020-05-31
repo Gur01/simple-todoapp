@@ -1,8 +1,8 @@
 import cloneDeep from "clone-deep";
-import produce from "immer";
+import deepEqual from "deep-equal";
 
 // click functional
-const handleDragAndDrop = (): any => {
+const handleDragAndDrop = (click?: "click"): any => {
     let drag = false;
 
     // only updateFn and saveFn props
@@ -10,9 +10,9 @@ const handleDragAndDrop = (): any => {
         event: React.MouseEvent<HTMLDivElement>,
         id: number,
         items: any,
-        updateFunction: React.Dispatch<React.SetStateAction<any>>,
-        saveFunction: any,
-        linkFunction: () => void,
+        onUpdate: any,
+        onSave: any,
+        onClick?: () => void,
     ): void => {
         if (event.button === 2) return;
 
@@ -64,23 +64,17 @@ const handleDragAndDrop = (): any => {
             if (itemBelow && String(id) !== itemBelow?.dataset.ref) {
                 const itemBelowId = Number(itemBelow.dataset.ref);
 
-                const nextLists = produce(tempItems, (draft: any) => {
-                    const currentCardIndex = draft.findIndex((todo: any) => todo.id === id);
-                    const cardBelowIndex = draft.findIndex((todo: any) => todo.id === itemBelowId);
-                    const moovingItem = draft.splice(currentCardIndex, 1);
-                    draft.splice(cardBelowIndex, 0, ...moovingItem);
-                });
-                updateFunction(nextLists);
-                saveFunction(nextLists); //TODO remove to mouseUp like in list
-                tempItems = nextLists;
+                const nextItems = onUpdate(tempItems, id, itemBelowId);
+
+                tempItems = nextItems;
             }
         };
 
         document.addEventListener("mousemove", handleMouseMove);
 
         currentItemCopy.onmouseup = (): void => {
-            if (!drag) {
-                linkFunction();
+            if (!drag && click && onClick) {
+                onClick();
             }
 
             document.removeEventListener("mousemove", handleMouseMove);
@@ -93,6 +87,10 @@ const handleDragAndDrop = (): any => {
             currentItem.style.visibility = "";
 
             currentItemCopy.onmouseup = null;
+
+            if (!deepEqual(tempItems, items)) {
+                onSave(tempItems);
+            }
         };
     };
 };

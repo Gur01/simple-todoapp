@@ -8,6 +8,7 @@ import server from "server";
 import styled from "styled-components";
 import { dragAndDrop } from "utils";
 import { Board } from "../../mockdata/boards";
+import produce from "immer";
 
 const Boards = () => {
     const history = useHistory();
@@ -26,6 +27,24 @@ const Boards = () => {
         },
     ];
 
+    const onUpdateBoards = (boards: any, itemId: number, itemBelowId: number): any => {
+        const nextBoards = produce(boards, (draft: any) => {
+            const currentCardIndex = draft.findIndex((todo: any) => todo.id === itemId);
+            const cardBelowIndex = draft.findIndex((todo: any) => todo.id === itemBelowId);
+            const moovingItem = draft.splice(currentCardIndex, 1);
+            draft.splice(cardBelowIndex, 0, ...moovingItem);
+        });
+        setBoards(nextBoards as any);
+        // server.saveBoards(nextBoards as any); //TODO remove to mouseUp like in list
+        return nextBoards;
+    };
+    const onSaveBoards = (newBoards: any) => {
+        server.saveBoards(newBoards as any);
+    };
+    const onClickBoards = (id: number) => {
+        history.push(`board/${id}`);
+    };
+
     return (
         <CardsWrapper>
             <PageSubheader titleText="Boards" titleDisabled links={links} />
@@ -34,7 +53,7 @@ const Boards = () => {
                     <CardContent onClick={() => history.push("board/0")}>Add +</CardContent>
                 </CustomAddCard>
                 {boards.map((list) => {
-                    const handleDragAndDrop = dragAndDrop();
+                    const handleDragAndDrop = dragAndDrop("click");
                     return (
                         <CustomCard
                             className="card"
@@ -45,11 +64,9 @@ const Boards = () => {
                                     event,
                                     list.id,
                                     boards,
-                                    setBoards,
-                                    server.saveBoards,
-                                    () => {
-                                        history.push(`board/${list.id}`);
-                                    },
+                                    onUpdateBoards,
+                                    onSaveBoards,
+                                    () => onClickBoards(list.id),
                                 )
                             }
                         >
