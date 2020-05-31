@@ -60,7 +60,7 @@ export default {
 
         newList.unshift({
             id: Date.now(),
-            title: "New title",
+            title: "New list",
             date: Date.now(),
             updateDate: Date.now(),
             data: [],
@@ -93,12 +93,21 @@ export default {
         console.info("saveBoards", boards);
     },
 
+    saveBoard: (board: Board): void => {
+        const listIndex = boardsFromServer.findIndex(
+            (boardFromServer) => boardFromServer.id === board.id,
+        );
+
+        boardsFromServer[listIndex] = board;
+        console.info("saveBoard", board);
+    },
+
     createBoard: (): Board => {
         const newBoards = cloneDeep(boardsFromServer);
 
         newBoards.unshift({
             id: Date.now(),
-            title: "New title",
+            title: "New board",
             date: Date.now(),
             updateDate: Date.now(),
             data: [],

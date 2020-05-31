@@ -1,14 +1,15 @@
-import React from "react";
-import styled from "styled-components";
-import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
-import { PageSubheader } from "components";
-import { Board } from "../../mockdata/boards";
-import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
+import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
-import cloneDeep from "clone-deep";
+import { PageSubheader } from "components";
 import produce from "immer";
+import React from "react";
+import server from "server";
+import styled from "styled-components";
+import { dragAndDrop } from "utils";
+import { Board } from "../../mockdata/boards";
 
 const links = [
     {
@@ -27,111 +28,131 @@ interface BoardProps {
 }
 
 const Boards = (props: BoardProps) => {
-    let drag = true; //!!!
+    const drag = true; //!!!
     let editTimer: number; //!!!
 
-    const handleDragAndDrop = (event: React.MouseEvent, id: number) => {
-        if (event.button === 2) return;
-        if (!props.board) return; //!!!!
+    // const handleDragAndDrop = (event: React.MouseEvent, id: number) => {
+    //     if (event.button === 2) return;
+    //     if (!props.board) return; //!!!!
 
-        drag = false;
-        const currentCard = event.currentTarget.parentNode as HTMLDivElement; //!!!!
+    //     drag = false;
+    //     const currentCard = event.currentTarget.parentNode as HTMLDivElement; //!!!!
 
-        if (!currentCard) return;
+    //     if (!currentCard) return;
 
-        const currentCardCopy = currentCard.cloneNode(true) as HTMLDivElement;
+    //     const currentCardCopy = currentCard.cloneNode(true) as HTMLDivElement;
 
-        const shiftX = event.clientX - currentCard.getBoundingClientRect().left;
-        const shiftY = event.clientY - currentCard.getBoundingClientRect().top + 15; // margins TODO remove
+    //     const shiftX = event.clientX - currentCard.getBoundingClientRect().left;
+    //     const shiftY = event.clientY - currentCard.getBoundingClientRect().top + 15; // margins TODO remove
 
-        const positionX = event.pageX - shiftX;
-        const positionY = event.pageY - shiftY;
+    //     const positionX = event.pageX - shiftX;
+    //     const positionY = event.pageY - shiftY;
 
-        currentCard.style.border = "1px solid grey";
-        const currentCardContent = currentCard as HTMLDivElement; // !!!!
+    //     currentCard.style.border = "1px solid grey";
+    //     const currentCardContent = currentCard as HTMLDivElement; // !!!!
 
-        currentCardContent.style.visibility = "hidden";
+    //     currentCardContent.style.visibility = "hidden";
 
-        currentCardCopy.style.position = "absolute";
-        currentCardCopy.style.left = positionX + "px";
-        currentCardCopy.style.top = positionY + "px";
-        currentCardCopy.style.zIndex = "100";
-        currentCardCopy.style.userSelect = "none";
+    //     currentCardCopy.style.position = "absolute";
+    //     currentCardCopy.style.left = positionX + "px";
+    //     currentCardCopy.style.top = positionY + "px";
+    //     currentCardCopy.style.zIndex = "100";
+    //     currentCardCopy.style.userSelect = "none";
 
-        // currentCardCopy.style.transform = "scale(1.015)";
-        currentCardCopy.style.width = currentCard.offsetWidth + "px";
+    //     // currentCardCopy.style.transform = "scale(1.015)";
+    //     currentCardCopy.style.width = currentCard.offsetWidth + "px";
 
-        document.body.append(currentCardCopy);
+    //     document.body.append(currentCardCopy);
 
-        // set temp vars
-        let tempBoards = cloneDeep(props.board.data); //!!!!
+    //     // set temp vars
+    //     let tempBoards = cloneDeep(props.board.data); //!!!!
 
-        let cardBelow: HTMLDivElement | null | undefined = undefined;
-        let newBoard: Board; //!!!
-        // const throttledTodoAction = throttle((data: Todo[])=> setTodos(data), 100);
-        const onMouseMove = (event: MouseEvent) => {
-            if (editTimer) {
-                clearInterval(editTimer);
-            }
-            drag = true;
+    //     let cardBelow: HTMLDivElement | null | undefined = undefined;
+    //     let newBoard: Board; //!!!
+    //     // const throttledTodoAction = throttle((data: Todo[])=> setTodos(data), 100);
+    //     const onMouseMove = (event: MouseEvent) => {
+    //         if (editTimer) {
+    //             clearInterval(editTimer);
+    //         }
+    //         drag = true;
 
-            if (currentCardCopy.style.cursor !== "grabbing") {
-                currentCardCopy.style.cursor = "grabbing";
-            }
+    //         if (currentCardCopy.style.cursor !== "grabbing") {
+    //             currentCardCopy.style.cursor = "grabbing";
+    //         }
 
-            currentCardCopy.style.left = event.clientX - shiftX + "px";
-            currentCardCopy.style.top = event.clientY - shiftY + "px";
+    //         currentCardCopy.style.left = event.clientX - shiftX + "px";
+    //         currentCardCopy.style.top = event.clientY - shiftY + "px";
 
-            currentCardCopy.hidden = true;
-            cardBelow = document
-                .elementFromPoint(event.clientX, event.clientY)
-                ?.closest(".boardCard") as HTMLDivElement;
-            currentCardCopy.hidden = false;
+    //         currentCardCopy.hidden = true;
+    //         cardBelow = document
+    //             .elementFromPoint(event.clientX, event.clientY)
+    //             ?.closest(".boardCard") as HTMLDivElement;
+    //         currentCardCopy.hidden = false;
 
-            if (cardBelow && String(id) !== cardBelow?.dataset.ref) {
-                const cardBelowId = Number(cardBelow?.dataset.ref);
+    //         if (cardBelow && String(id) !== cardBelow?.dataset.ref) {
+    //             const cardBelowId = Number(cardBelow?.dataset.ref);
 
-                const nextBoards = produce(tempBoards, (draft) => {
-                    const currentCardIndex = draft.findIndex((todo) => todo.id === id);
-                    const cardBelowIndex = draft.findIndex((todo) => todo.id === cardBelowId);
-                    const moovingItem = draft.splice(currentCardIndex, 1);
-                    draft.splice(cardBelowIndex, 0, ...moovingItem);
-                });
+    //             const nextBoards = produce(tempBoards, (draft) => {
+    //                 const currentCardIndex = draft.findIndex((todo) => todo.id === id);
+    //                 const cardBelowIndex = draft.findIndex((todo) => todo.id === cardBelowId);
+    //                 const moovingItem = draft.splice(currentCardIndex, 1);
+    //                 draft.splice(cardBelowIndex, 0, ...moovingItem);
+    //             });
 
-                tempBoards = nextBoards;
+    //             tempBoards = nextBoards;
 
-                if (props.board) {
-                    newBoard = { ...props.board, data: nextBoards };
-                    props.updateBoard(newBoard);
-                }
-            }
-        };
+    //             if (props.board) {
+    //                 newBoard = { ...props.board, data: nextBoards };
+    //                 props.updateBoard(newBoard);
+    //             }
+    //         }
+    //     };
 
-        document.addEventListener("mousemove", onMouseMove);
+    //     document.addEventListener("mousemove", onMouseMove);
 
-        currentCardCopy.onmouseup = () => {
-            // mouse click
-            if (!drag) {
-                // handleDone(id);
-            }
+    //     currentCardCopy.onmouseup = () => {
+    //         // mouse click
+    //         if (!drag) {
+    //             // handleDone(id);
+    //         }
 
-            document.removeEventListener("mousemove", onMouseMove);
+    //         document.removeEventListener("mousemove", onMouseMove);
 
-            currentCardCopy.style.left = positionX + "px";
-            currentCardCopy.style.top = positionY + "px";
+    //         currentCardCopy.style.left = positionX + "px";
+    //         currentCardCopy.style.top = positionY + "px";
 
-            currentCardCopy.remove();
+    //         currentCardCopy.remove();
 
-            currentCardContent.style.visibility = "";
-            currentCard.style.border = "";
+    //         currentCardContent.style.visibility = "";
+    //         currentCard.style.border = "";
 
-            currentCard.onmouseup = null;
+    //         currentCard.onmouseup = null;
 
-            if (newBoard) {
-                // server.save(newBoard);
-            }
-        };
+    //         if (newBoard) {
+    //             // server.save(newBoard);
+    //         }
+    //     };
+    // };
+
+    const onUpdateBoards = (board: any, itemId: number, itemBelowId: number): any => {
+        const nextBoards = produce(board.data, (draft: any) => {
+            const currentCardIndex = draft.findIndex((board: any) => board.id === itemId);
+            const cardBelowIndex = draft.findIndex((board: any) => board.id === itemBelowId);
+            const moovingItem = draft.splice(currentCardIndex, 1);
+            draft.splice(cardBelowIndex, 0, ...moovingItem);
+        });
+
+        //must be ...props.boards or title will lost
+        const newBoard = { ...props.board, data: nextBoards };
+        props.updateBoard(newBoard);
+        return newBoard;
     };
+
+    const onSaveBoards = (newBoards: any) => {
+        server.saveBoard(newBoards as any);
+    };
+
+    const handleDragAndDrop = dragAndDrop("boardCard");
 
     return (
         <BoardsWrapper>
@@ -143,9 +164,16 @@ const Boards = (props: BoardProps) => {
                             <BoardCard key={card.id} className="boardCard" data-ref={card.id}>
                                 <CardHeader
                                     title={card.title}
-                                    onMouseDown={(event: React.MouseEvent) =>
-                                        handleDragAndDrop(event, card.id)
-                                    }
+                                    onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => {
+                                        handleDragAndDrop(
+                                            event,
+                                            event.currentTarget.parentNode,
+                                            card.id,
+                                            props.board,
+                                            onUpdateBoards,
+                                            onSaveBoards,
+                                        );
+                                    }}
                                 />
                                 <CardContent>
                                     {card.data &&

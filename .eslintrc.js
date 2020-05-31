@@ -16,6 +16,7 @@ module.exports = {
     },
     rules: {
         "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-use-before-define": "off", //https://github.com/typescript-eslint/typescript-eslint/blob/v2.33.0/packages/eslint-plugin/docs/rules/no-use-before-define.md
 
         //prettier rules https://prettier.io/docs/en/integrating-with-linters.html
         "prettier/prettier": [

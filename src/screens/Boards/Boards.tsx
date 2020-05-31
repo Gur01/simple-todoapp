@@ -35,13 +35,12 @@ const Boards = () => {
             draft.splice(cardBelowIndex, 0, ...moovingItem);
         });
         setBoards(nextBoards as any);
-        // server.saveBoards(nextBoards as any); //TODO remove to mouseUp like in list
         return nextBoards;
     };
     const onSaveBoards = (newBoards: any) => {
         server.saveBoards(newBoards as any);
     };
-    const onClickBoards = (id: number) => {
+    const onClickBoard = (id: number) => {
         history.push(`board/${id}`);
     };
 
@@ -53,7 +52,7 @@ const Boards = () => {
                     <CardContent onClick={() => history.push("board/0")}>Add +</CardContent>
                 </CustomAddCard>
                 {boards.map((list) => {
-                    const handleDragAndDrop = dragAndDrop("click");
+                    const handleDragAndDrop = dragAndDrop("card", "click");
                     return (
                         <CustomCard
                             className="card"
@@ -62,11 +61,12 @@ const Boards = () => {
                             onMouseDown={(event: React.MouseEvent<HTMLDivElement>) =>
                                 handleDragAndDrop(
                                     event,
+                                    event.currentTarget,
                                     list.id,
                                     boards,
                                     onUpdateBoards,
                                     onSaveBoards,
-                                    () => onClickBoards(list.id),
+                                    () => onClickBoard(list.id),
                                 )
                             }
                         >

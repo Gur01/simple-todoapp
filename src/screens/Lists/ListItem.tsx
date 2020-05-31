@@ -2,7 +2,6 @@ import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Paper from "@material-ui/core/Paper";
-import CheckCircleOutline from "@material-ui/icons/CheckCircleOutline";
 import MoreVert from "@material-ui/icons/MoreVert";
 import { ContentEditable } from "components";
 import React from "react";
@@ -15,7 +14,7 @@ interface CustomCardProps {
     todo: TodoListItem;
     className: string;
     editableId?: number;
-    handleDragAndDrop: (event: React.MouseEvent, currentCardId: number) => void;
+    handleDragAndDrop: (event: React.MouseEvent<HTMLDivElement>) => void;
     handleListItemChange: (value: string, id: number) => void;
     handleSaveListItem: (todoId: number, todoData: string) => void;
     handleDeleteListItem: (todoId: number) => void;
@@ -51,13 +50,13 @@ const ListPaper = (props: CustomCardProps) => {
         props.handleListItemChange(value, props.todo.id);
     };
 
-    const handleDragging = (event: React.MouseEvent) => {
+    const handleDragging = (event: React.MouseEvent<HTMLDivElement>) => {
         if (event.button === 2) {
             event.preventDefault();
             return;
         }
         if (editing) return;
-        props.handleDragAndDrop(event, props.todo.id);
+        props.handleDragAndDrop(event);
     };
 
     const handleListItemBlur = (target: string) => {

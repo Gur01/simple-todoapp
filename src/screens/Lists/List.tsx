@@ -11,6 +11,7 @@ import server from "server";
 import styled from "styled-components";
 import { TodoList } from "../../mockdata/lists";
 import ListItem from "./ListItem";
+import { dragAndDrop } from "utils";
 
 interface ListProps {
     list?: TodoList;
@@ -132,131 +133,130 @@ const List = (props: ListProps) => {
         }
     };
 
-    let drag = false;
-    let editTimer: number;
+    // const drag = false;
+    // let editTimer: number;
 
-    const handleDragAndDrop = (event: React.MouseEvent, id: number) => {
-        if (event.button === 2) return;
-        if (!props.list) return;
+    // const handleDragAndDrop = (event: React.MouseEvent, id: number) => {
+    //     if (event.button === 2) return;
+    //     if (!props.list) return;
 
-        drag = false;
-        const currentCard = event.currentTarget as HTMLDivElement;
+    //     drag = false;
+    //     const currentCard = event.currentTarget as HTMLDivElement;
 
-        if (!currentCard) return;
+    //     if (!currentCard) return;
 
-        const currentCardCopy = currentCard.cloneNode(true) as HTMLDivElement;
+    //     const currentCardCopy = currentCard.cloneNode(true) as HTMLDivElement;
 
-        const shiftX = event.clientX - currentCard.getBoundingClientRect().left;
-        const shiftY = event.clientY - currentCard.getBoundingClientRect().top + 15; // margins TODO remove
+    //     const shiftX = event.clientX - currentCard.getBoundingClientRect().left;
+    //     const shiftY = event.clientY - currentCard.getBoundingClientRect().top + 15; // margins TODO remove
 
-        const positionX = event.pageX - shiftX;
-        const positionY = event.pageY - shiftY;
+    //     const positionX = event.pageX - shiftX;
+    //     const positionY = event.pageY - shiftY;
 
-        currentCard.style.border = "1px solid grey";
-        const currentCardContent = currentCard.children[0] as HTMLDivElement;
-        console.log(currentCardContent);
+    //     currentCard.style.border = "1px solid grey";
+    //     // const currentCardContent = currentCard.children[0] as HTMLDivElement;
 
-        currentCardContent.style.visibility = "hidden";
+    //     currentCard.style.visibility = "hidden";
 
-        currentCardCopy.style.position = "absolute";
-        currentCardCopy.style.left = positionX + "px";
-        currentCardCopy.style.top = positionY + "px";
-        currentCardCopy.style.zIndex = "100";
-        currentCardCopy.style.userSelect = "none";
+    //     currentCardCopy.style.position = "absolute";
+    //     currentCardCopy.style.left = positionX + "px";
+    //     currentCardCopy.style.top = positionY + "px";
+    //     currentCardCopy.style.zIndex = "100";
+    //     currentCardCopy.style.userSelect = "none";
 
-        // currentCardCopy.style.transform = "scale(1.015)";
-        currentCardCopy.style.width = currentCard.offsetWidth + "px";
+    //     // currentCardCopy.style.transform = "scale(1.015)";
+    //     currentCardCopy.style.width = currentCard.offsetWidth + "px";
 
-        document.body.append(currentCardCopy);
+    //     document.body.append(currentCardCopy);
 
-        // set temp vars
-        let tempTodos = cloneDeep(props.list.data);
+    //     // set temp vars
+    //     let tempTodos = cloneDeep(props.list.data);
 
-        let cardBelow: HTMLDivElement | null | undefined = undefined;
-        let newList: TodoList;
-        // const throttledTodoAction = throttle((data: Todo[])=> setTodos(data), 100);
-        const onMouseMove = (event: MouseEvent) => {
-            if (editTimer) {
-                clearInterval(editTimer);
-            }
-            drag = true;
+    //     let cardBelow: HTMLDivElement | null | undefined = undefined;
+    //     let newList: TodoList;
+    //     // const throttledTodoAction = throttle((data: Todo[])=> setTodos(data), 100);
+    //     const onMouseMove = (event: MouseEvent) => {
+    //         if (editTimer) {
+    //             clearInterval(editTimer);
+    //         }
+    //         drag = true;
 
-            if (currentCardCopy.style.cursor !== "grabbing") {
-                currentCardCopy.style.cursor = "grabbing";
-            }
+    //         if (currentCardCopy.style.cursor !== "grabbing") {
+    //             currentCardCopy.style.cursor = "grabbing";
+    //         }
 
-            currentCardCopy.style.left = event.clientX - shiftX + "px";
-            currentCardCopy.style.top = event.clientY - shiftY + "px";
+    //         currentCardCopy.style.left = event.clientX - shiftX + "px";
+    //         currentCardCopy.style.top = event.clientY - shiftY + "px";
 
-            currentCardCopy.hidden = true;
-            cardBelow = document
-                .elementFromPoint(event.clientX, event.clientY)
-                ?.closest(".card") as HTMLDivElement;
-            currentCardCopy.hidden = false;
+    //         currentCardCopy.hidden = true;
+    //         cardBelow = document
+    //             .elementFromPoint(event.clientX, event.clientY)
+    //             ?.closest(".card") as HTMLDivElement;
+    //         currentCardCopy.hidden = false;
 
-            if (cardBelow && String(id) !== cardBelow?.dataset.ref) {
-                const cardBelowId = Number(cardBelow?.dataset.ref);
+    //         if (cardBelow && String(id) !== cardBelow?.dataset.ref) {
+    //             const cardBelowId = Number(cardBelow?.dataset.ref);
 
-                const nextTodos = produce(tempTodos, (draft) => {
-                    const currentCardIndex = draft.findIndex((todo) => todo.id === id);
-                    const cardBelowIndex = draft.findIndex((todo) => todo.id === cardBelowId);
-                    const moovingItem = draft.splice(currentCardIndex, 1);
-                    draft.splice(cardBelowIndex, 0, ...moovingItem);
-                });
+    //             const nextTodos = produce(tempTodos, (draft) => {
+    //                 const currentCardIndex = draft.findIndex((todo) => todo.id === id);
+    //                 const cardBelowIndex = draft.findIndex((todo) => todo.id === cardBelowId);
+    //                 const moovingItem = draft.splice(currentCardIndex, 1);
+    //                 draft.splice(cardBelowIndex, 0, ...moovingItem);
+    //             });
 
-                tempTodos = nextTodos;
+    //             tempTodos = nextTodos;
 
-                if (props.list) {
-                    newList = { ...props.list, data: nextTodos };
-                    props.updateList(newList);
-                }
-            }
-        };
+    //             if (props.list) {
+    //                 newList = { ...props.list, data: nextTodos };
+    //                 props.updateList(newList);
+    //             }
+    //         }
+    //     };
 
-        //TODO add statuses to commot types
-        editTimer = setTimeout(() => {
-            setEditableId(id);
+    //     //TODO add statuses to commot types
+    //     editTimer = setTimeout(() => {
+    //         setEditableId(id);
 
-            currentCardCopy.remove();
+    //         currentCardCopy.remove();
 
-            currentCardContent.style.visibility = "";
-            currentCard.style.border = "";
-            currentCard.onmouseup = null;
-            document.removeEventListener("mousemove", onMouseMove);
-        }, 300);
+    //         // currentCardContent.style.visibility = "";
+    //         currentCard.style.border = "";
+    //         currentCard.onmouseup = null;
+    //         document.removeEventListener("mousemove", onMouseMove);
+    //     }, 300);
 
-        setTimeout(() => {
-            setEditableId(undefined);
-        }, 400);
+    //     setTimeout(() => {
+    //         setEditableId(undefined);
+    //     }, 400);
 
-        document.addEventListener("mousemove", onMouseMove);
+    //     document.addEventListener("mousemove", onMouseMove);
 
-        currentCardCopy.onmouseup = () => {
-            if (editTimer) {
-                clearInterval(editTimer);
-            }
-            // mouse click
-            if (!drag) {
-                handleDone(id);
-            }
+    //     currentCardCopy.onmouseup = () => {
+    //         if (editTimer) {
+    //             clearInterval(editTimer);
+    //         }
+    //         // mouse click
+    //         if (!drag) {
+    //             handleDone(id);
+    //         }
 
-            document.removeEventListener("mousemove", onMouseMove);
+    //         document.removeEventListener("mousemove", onMouseMove);
 
-            currentCardCopy.style.left = positionX + "px";
-            currentCardCopy.style.top = positionY + "px";
+    //         currentCardCopy.style.left = positionX + "px";
+    //         currentCardCopy.style.top = positionY + "px";
 
-            currentCardCopy.remove();
+    //         currentCardCopy.remove();
 
-            currentCardContent.style.visibility = "";
-            currentCard.style.border = "";
+    //         // currentCardContent.style.visibility = "";
+    //         currentCard.style.border = "";
 
-            currentCard.onmouseup = null;
+    //         currentCard.onmouseup = null;
 
-            if (newList) {
-                server.saveList(newList);
-            }
-        };
-    };
+    //         if (newList) {
+    //             server.saveList(newList);
+    //         }
+    //     };
+    // };
 
     const links = [
         {
@@ -268,6 +268,39 @@ const List = (props: ListProps) => {
             text: "Lists",
         },
     ];
+
+    const handleDragAndDrop = dragAndDrop("card", "press");
+
+    const onUpdateList = (list: any, listId: number, listBelowId: number) => {
+        console.log(list);
+
+        const nextTodos = produce(list.data, (draft: any) => {
+            const currentCardIndex = draft.findIndex((todo: any) => todo.id === listId);
+            const cardBelowIndex = draft.findIndex((todo: any) => todo.id === listBelowId);
+            const moovingItem = draft.splice(currentCardIndex, 1);
+            draft.splice(cardBelowIndex, 0, ...moovingItem);
+        });
+
+        //must be ...props.list or title will lost
+        const newList = { ...props.list, data: nextTodos };
+        props.updateList(newList);
+        return newList;
+    };
+
+    const onSaveList = (newList: any) => {
+        server.saveList(newList);
+    };
+
+    const onClickList = (id: number) => {
+        handleDone(id);
+    };
+
+    const onPressList = (id: number) => {
+        setEditableId(id);
+        setTimeout(() => {
+            setEditableId(undefined);
+        }, 400);
+    };
 
     return (
         <ListsWrapper>
@@ -301,7 +334,20 @@ const List = (props: ListProps) => {
                                         todo={todo}
                                         className="card"
                                         editableId={editableId}
-                                        handleDragAndDrop={handleDragAndDrop}
+                                        handleDragAndDrop={(
+                                            event: React.MouseEvent<HTMLDivElement>,
+                                        ) =>
+                                            handleDragAndDrop(
+                                                event,
+                                                event.currentTarget,
+                                                todo.id,
+                                                props.list,
+                                                onUpdateList,
+                                                onSaveList,
+                                                () => onClickList(todo.id),
+                                                () => onPressList(todo.id),
+                                            )
+                                        }
                                         handleListItemChange={handleListItemChange}
                                         handleSaveListItem={handleSaveListItem}
                                         handleDeleteListItem={handleDeleteListItem}

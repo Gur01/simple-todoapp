@@ -9,10 +9,10 @@ import styled from "styled-components";
 import { TodoList } from "../../mockdata/lists";
 import Container from "@material-ui/core/Container";
 import { PageSubheader } from "components";
+import { dragAndDrop } from "utils";
 
 const List = () => {
     const history = useHistory();
-    let drag = false;
 
     const [lists, setLists] = React.useState<TodoList[]>([]);
 
@@ -21,95 +21,34 @@ const List = () => {
         setLists(lists);
     }, []);
 
-    const handleDragAndDrop = (event: React.MouseEvent<HTMLDivElement>, id: number) => {
-        if (event.button === 2) return;
-
-        drag = false;
-        const currentCard = event.currentTarget;
-
-        if (!currentCard) return;
-
-        const currentCardCopy = currentCard.cloneNode(true) as HTMLDivElement;
-
-        const shiftX = event.pageX - currentCard.offsetLeft + 16;
-        const shiftY = event.pageY - currentCard.offsetTop + 16;
-
-        const positionX = event.pageX - shiftX;
-        const positionY = event.pageY - shiftY;
-
-        currentCard.style.visibility = "hidden";
-
-        currentCardCopy.style.position = "absolute";
-        currentCardCopy.style.left = positionX + "px";
-        currentCardCopy.style.top = positionY + "px";
-        currentCardCopy.style.zIndex = "100";
-        currentCardCopy.style.userSelect = "none";
-        currentCardCopy.style.display = "";
-
-        // currentCardCopy.style.transform = "scale(1.05)";
-        document.body.appendChild(currentCardCopy);
-
-        let cardBelow: HTMLDivElement | null | undefined = undefined;
-
-        let tempLists = cloneDeep(lists);
-
-        const handleMouseMove = (event: globalThis.MouseEvent) => {
-            drag = true;
-
-            if (currentCardCopy.style.cursor !== "grabbing") {
-                currentCardCopy.style.cursor = "grabbing";
-            }
-
-            currentCardCopy.style.left = event.pageX - shiftX + "px";
-            currentCardCopy.style.top = event.pageY - shiftY + "px";
-
-            currentCardCopy.hidden = true;
-            cardBelow = document
-                .elementFromPoint(event.clientX, event.clientY)
-                ?.closest(".card") as HTMLDivElement;
-            currentCardCopy.hidden = false;
-
-            if (cardBelow && String(id) !== cardBelow?.dataset.ref) {
-                const cardBelowId = Number(cardBelow.dataset.ref);
-
-                const nextLists = produce(tempLists, (draft) => {
-                    const currentCardIndex = draft.findIndex((todo) => todo.id === id);
-                    const cardBelowIndex = draft.findIndex((todo) => todo.id === cardBelowId);
-                    const moovingItem = draft.splice(currentCardIndex, 1);
-                    draft.splice(cardBelowIndex, 0, ...moovingItem);
-                });
-                tempLists = nextLists;
-                setLists(nextLists);
-                server.saveLists(nextLists);
-            }
-        };
-
-        document.addEventListener("mousemove", handleMouseMove);
-
-        currentCardCopy.onmouseup = () => {
-            if (!drag) {
-                history.push(`list/${id}`);
-            }
-
-            document.removeEventListener("mousemove", handleMouseMove);
-
-            currentCardCopy.style.left = positionX + "px";
-            currentCardCopy.style.top = positionY + "px";
-
-            currentCardCopy.remove();
-
-            currentCard.style.visibility = "";
-
-            currentCardCopy.onmouseup = null;
-        };
-    };
-
     const links = [
         {
             href: "/",
             text: "Main",
         },
     ];
+
+    const handleDragAndDrop = dragAndDrop("card", "click");
+
+    const onUpdateLists = (lists: any, listId: number, listBelowId: number): any => {
+        const nextLists = produce(lists, (draft: any) => {
+            const currentCardIndex = draft.findIndex((todo: any) => todo.id === listId);
+            const cardBelowIndex = draft.findIndex((todo: any) => todo.id === listBelowId);
+            const moovingItem = draft.splice(currentCardIndex, 1);
+            draft.splice(cardBelowIndex, 0, ...moovingItem);
+        });
+
+        setLists(nextLists as any);
+        return nextLists;
+    };
+
+    const onSaveLists = (newBoards: any) => {
+        server.saveLists(newBoards as any);
+    };
+
+    const onClickList = (id: number) => {
+        history.push(`list/${id}`);
+    };
 
     return (
         <CardsWrapper>
@@ -125,7 +64,15 @@ const List = () => {
                             data-ref={list.id}
                             key={list.id}
                             onMouseDown={(event: React.MouseEvent<HTMLDivElement>) =>
-                                handleDragAndDrop(event, list.id)
+                                handleDragAndDrop(
+                                    event,
+                                    event.currentTarget,
+                                    list.id,
+                                    lists,
+                                    onUpdateLists,
+                                    onSaveLists,
+                                    () => onClickList(list.id),
+                                )
                             }
                         >
                             <CardContent>{list.title}</CardContent>
