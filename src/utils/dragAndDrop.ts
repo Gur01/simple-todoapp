@@ -35,11 +35,10 @@ const handleDragAndDrop = (className: string, type?: "click" | "press"): any => 
 
         if (!currentItem) return;
 
-        const shiftX = event.clientX - currentItem.getBoundingClientRect().left;
-        const shiftY = event.clientY - currentItem.getBoundingClientRect().top + 15; // margins TODO remove
-
-        // const shiftX = event.pageX - currentItem.offsetLeft + 16;
-        // const shiftY = event.pageY - currentItem.offsetTop + 16;
+        const marginTop = parseInt(window.getComputedStyle(currentItem, null)?.marginTop) ?? 0;
+        const marginLeft = parseInt(window.getComputedStyle(currentItem, null)?.marginLeft) ?? 0;
+        const shiftX = event.clientX - currentItem.getBoundingClientRect().left + marginLeft;
+        const shiftY = event.clientY - currentItem.getBoundingClientRect().top + marginTop;
 
         const positionX = event.pageX - shiftX;
         const positionY = event.pageY - shiftY;
@@ -134,7 +133,10 @@ const handleDragAndDrop = (className: string, type?: "click" | "press"): any => 
             currentItemCopy.style.top = positionY + "px";
 
             currentItemCopy.remove();
-            currentItem.style.visibility = "";
+            const card = document.querySelector(`[data-ref='${id}']`) as HTMLDivElement;
+            if (card) {
+                card.style.visibility = "";
+            }
         }
     };
 };
