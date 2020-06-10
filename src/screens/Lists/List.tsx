@@ -3,20 +3,32 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
-import cloneDeep from "clone-deep";
 import { PageSubheader } from "components";
 import produce from "immer";
 import React from "react";
 import server from "server";
 import styled from "styled-components";
+import { dragAndDrop } from "utils";
 import { TodoList } from "../../mockdata/lists";
 import ListItem from "./ListItem";
-import { dragAndDrop } from "utils";
 
 interface ListProps {
     list?: TodoList;
     updateList: any;
 }
+
+const links = [
+    {
+        href: "/",
+        text: "Main",
+    },
+    {
+        href: "/lists",
+        text: "Lists",
+    },
+];
+
+const handleDragAndDrop = dragAndDrop("card", "press");
 
 const List = (props: ListProps) => {
     const [newTodo, setNewTodo] = React.useState<string>("");
@@ -132,144 +144,6 @@ const List = (props: ListProps) => {
             server.saveList(nextTodos);
         }
     };
-
-    // const drag = false;
-    // let editTimer: number;
-
-    // const handleDragAndDrop = (event: React.MouseEvent, id: number) => {
-    //     if (event.button === 2) return;
-    //     if (!props.list) return;
-
-    //     drag = false;
-    //     const currentCard = event.currentTarget as HTMLDivElement;
-
-    //     if (!currentCard) return;
-
-    //     const currentCardCopy = currentCard.cloneNode(true) as HTMLDivElement;
-
-    //     const shiftX = event.clientX - currentCard.getBoundingClientRect().left;
-    //     const shiftY = event.clientY - currentCard.getBoundingClientRect().top + 15; // margins TODO remove
-
-    //     const positionX = event.pageX - shiftX;
-    //     const positionY = event.pageY - shiftY;
-
-    //     currentCard.style.border = "1px solid grey";
-    //     // const currentCardContent = currentCard.children[0] as HTMLDivElement;
-
-    //     currentCard.style.visibility = "hidden";
-
-    //     currentCardCopy.style.position = "absolute";
-    //     currentCardCopy.style.left = positionX + "px";
-    //     currentCardCopy.style.top = positionY + "px";
-    //     currentCardCopy.style.zIndex = "100";
-    //     currentCardCopy.style.userSelect = "none";
-
-    //     // currentCardCopy.style.transform = "scale(1.015)";
-    //     currentCardCopy.style.width = currentCard.offsetWidth + "px";
-
-    //     document.body.append(currentCardCopy);
-
-    //     // set temp vars
-    //     let tempTodos = cloneDeep(props.list.data);
-
-    //     let cardBelow: HTMLDivElement | null | undefined = undefined;
-    //     let newList: TodoList;
-    //     // const throttledTodoAction = throttle((data: Todo[])=> setTodos(data), 100);
-    //     const onMouseMove = (event: MouseEvent) => {
-    //         if (editTimer) {
-    //             clearInterval(editTimer);
-    //         }
-    //         drag = true;
-
-    //         if (currentCardCopy.style.cursor !== "grabbing") {
-    //             currentCardCopy.style.cursor = "grabbing";
-    //         }
-
-    //         currentCardCopy.style.left = event.clientX - shiftX + "px";
-    //         currentCardCopy.style.top = event.clientY - shiftY + "px";
-
-    //         currentCardCopy.hidden = true;
-    //         cardBelow = document
-    //             .elementFromPoint(event.clientX, event.clientY)
-    //             ?.closest(".card") as HTMLDivElement;
-    //         currentCardCopy.hidden = false;
-
-    //         if (cardBelow && String(id) !== cardBelow?.dataset.ref) {
-    //             const cardBelowId = Number(cardBelow?.dataset.ref);
-
-    //             const nextTodos = produce(tempTodos, (draft) => {
-    //                 const currentCardIndex = draft.findIndex((todo) => todo.id === id);
-    //                 const cardBelowIndex = draft.findIndex((todo) => todo.id === cardBelowId);
-    //                 const moovingItem = draft.splice(currentCardIndex, 1);
-    //                 draft.splice(cardBelowIndex, 0, ...moovingItem);
-    //             });
-
-    //             tempTodos = nextTodos;
-
-    //             if (props.list) {
-    //                 newList = { ...props.list, data: nextTodos };
-    //                 props.updateList(newList);
-    //             }
-    //         }
-    //     };
-
-    //     //TODO add statuses to commot types
-    //     editTimer = setTimeout(() => {
-    //         setEditableId(id);
-
-    //         currentCardCopy.remove();
-
-    //         // currentCardContent.style.visibility = "";
-    //         currentCard.style.border = "";
-    //         currentCard.onmouseup = null;
-    //         document.removeEventListener("mousemove", onMouseMove);
-    //     }, 300);
-
-    //     setTimeout(() => {
-    //         setEditableId(undefined);
-    //     }, 400);
-
-    //     document.addEventListener("mousemove", onMouseMove);
-
-    //     currentCardCopy.onmouseup = () => {
-    //         if (editTimer) {
-    //             clearInterval(editTimer);
-    //         }
-    //         // mouse click
-    //         if (!drag) {
-    //             handleDone(id);
-    //         }
-
-    //         document.removeEventListener("mousemove", onMouseMove);
-
-    //         currentCardCopy.style.left = positionX + "px";
-    //         currentCardCopy.style.top = positionY + "px";
-
-    //         currentCardCopy.remove();
-
-    //         // currentCardContent.style.visibility = "";
-    //         currentCard.style.border = "";
-
-    //         currentCard.onmouseup = null;
-
-    //         if (newList) {
-    //             server.saveList(newList);
-    //         }
-    //     };
-    // };
-
-    const links = [
-        {
-            href: "/",
-            text: "Main",
-        },
-        {
-            href: "/lists",
-            text: "Lists",
-        },
-    ];
-
-    const handleDragAndDrop = dragAndDrop("card", "press");
 
     const onUpdateList = (list: any, listId: number, listBelowId: number) => {
         const nextTodos = produce(list.data, (draft: any) => {

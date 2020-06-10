@@ -1,8 +1,4 @@
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardHeader from "@material-ui/core/CardHeader";
 import Container from "@material-ui/core/Container";
-import Paper from "@material-ui/core/Paper";
 import { PageSubheader } from "components";
 import produce from "immer";
 import React from "react";
@@ -10,7 +6,7 @@ import server from "server";
 import styled from "styled-components";
 import { dragAndDrop } from "utils";
 import { Board } from "../../mockdata/boards";
-import { ContentEditable } from "components";
+import BoardCard from "./BoardCard";
 
 const links = [
     {
@@ -27,6 +23,9 @@ interface BoardProps {
     board?: Board;
     updateBoard: any;
 }
+
+const handleCardDragAndDrop = dragAndDrop("boardCard");
+const handleCardItemDragAndDrop = dragAndDrop("boardListItemCard", "press");
 
 const Boards = (props: BoardProps) => {
     const onUpdateBoards = (board: any, itemId: number, itemBelowId: number): any => {
@@ -69,13 +68,27 @@ const Boards = (props: BoardProps) => {
         server.saveBoard(newBoards as any);
     };
 
-    const onUpdateListItem = (board: any, listItemId: number, listItemBelowId: number) => {
+    const onUpdateListItem = (
+        board: any,
+        listItemId: number,
+        listItemBelowId: number,
+        inDraggingZone?: boolean, //if there is no data in card
+    ) => {
         const [currentItemIndex, currentCardIndex] = getCurrentParams();
-        const [targetItemIndex, targetCardIndex] = getTargetParams();
+        const [targetItemIndex, targetCardIndex] = inDraggingZone
+            ? getNewTargetParams()
+            : getTargetParams();
 
         const nextCards = produce(board.data, (draft: any) => {
             const moovingItem = draft[currentCardIndex].data.splice(currentItemIndex, 1);
-            draft[targetCardIndex].data.splice(targetItemIndex, 0, ...moovingItem);
+
+            console.log("produce");
+
+            draft[targetCardIndex].data.splice(
+                inDraggingZone ? draft[currentCardIndex].data.length : targetItemIndex,
+                0,
+                ...moovingItem,
+            );
         });
 
         const newBoard = { ...board, data: nextCards };
@@ -85,10 +98,6 @@ const Boards = (props: BoardProps) => {
         if (currentCardIndex !== targetCardIndex) {
             const card = document.querySelector(`[data-ref='${listItemId}']`) as HTMLDivElement;
             card.style.visibility = "hidden";
-
-            // if (!newBoard.data[targetCardIndex].data.length) {
-            //     console.log("empty");
-            // } add dragging zone at the bottom
         }
 
         return newBoard;
@@ -114,9 +123,18 @@ const Boards = (props: BoardProps) => {
 
                 if (targetItemIndex === -1) continue;
 
-                const targetCardIndex = board.data.findIndex((c: any) => c.id === card.id);
+                const targetCardIndex = board.data.findIndex(
+                    (boardCard: any) => boardCard.id === card.id,
+                );
                 return [targetItemIndex, targetCardIndex];
             }
+        }
+
+        function getNewTargetParams() {
+            const targetCardIndex = board.data.findIndex(
+                (boardCard: any) => boardCard.id === listItemBelowId, // listItemBelowId === card.id
+            );
+            return [undefined, targetCardIndex];
         }
     };
 
@@ -128,9 +146,34 @@ const Boards = (props: BoardProps) => {
         console.log(id, "press");
     };
 
-    const handleCardDragAndDrop = dragAndDrop("boardCard");
+    const handleAddTodo = (
+        event: React.KeyboardEvent<HTMLInputElement>,
+        setValue: any,
+        value: string,
+        index: number,
+    ) => {
+        if (!value) return;
+        if (event.key === "Enter") {
+            const newBoards = produce(props.board, (draft) => {
+                if (draft) {
+                    const card = draft.data[index].data;
+                    card.unshift({
+                        id: card.length + 100,
+                        value: value,
+                        date: Date.now(),
+                        updateDate: Date.now(),
+                        status: "active",
+                    });
+                }
+            });
+            props.updateBoard(newBoards);
 
-    const handleCardItemDragAndDrop = dragAndDrop("boardListItemCard", "press");
+            if (newBoards) {
+                server.saveBoard(newBoards);
+            }
+            setValue("");
+        }
+    };
 
     return (
         <BoardsWrapper>
@@ -138,88 +181,29 @@ const Boards = (props: BoardProps) => {
             <PageContent>
                 <>
                     {props.board &&
-                        props.board.data.map((card) => (
-                            <BoardCard key={card.id} className="boardCard" data-ref={card.id}>
-                                <CardHeader
-                                    title={card.title}
-                                    onMouseDown={(event: React.MouseEvent<HTMLDivElement>) => {
-                                        handleCardDragAndDrop(
-                                            event,
-                                            event.currentTarget.parentNode,
-                                            card.id,
-                                            props.board,
-                                            onUpdateBoards,
-                                            onSaveBoards,
-                                        );
-                                    }}
-                                />
-                                <CardContent>
-                                    {card.data &&
-                                        card.data.map((cardList) => (
-                                            <BoardListItemCard
-                                                key={cardList.id}
-                                                className="boardListItemCard"
-                                                data-ref={cardList.id}
-                                                status={cardList.status}
-                                                onMouseDown={(
-                                                    event: React.MouseEvent<HTMLDivElement>,
-                                                ) => {
-                                                    handleCardItemDragAndDrop(
-                                                        event,
-                                                        event.currentTarget,
-                                                        cardList.id,
-                                                        props.board,
-                                                        (
-                                                            board: any,
-                                                            itemId: number,
-                                                            itemBelowId: number,
-                                                        ) =>
-                                                            onUpdateListItem(
-                                                                board,
-                                                                itemId,
-                                                                itemBelowId,
-                                                            ),
-                                                        onSaveBoards,
-                                                        () => onClickListItem(cardList.id, card.id),
-                                                        () => onPressListItem(cardList.id),
-                                                    );
-                                                }}
-                                            >
-                                                <ContentEditable
-                                                    text={cardList.value}
-                                                    // onChange={handleListValueChange}
-                                                    // onBlur={handleListItemBlur}
-                                                    // propsRef={editable}
-                                                />
-                                            </BoardListItemCard>
-                                        ))}
-                                    <DraggingZone className="dragging-zone" data-ref={card.id} />
-                                </CardContent>
-                            </BoardCard>
+                        props.board.data.map((card, index) => (
+                            <BoardCard
+                                index={index}
+                                card={card}
+                                board={props.board}
+                                updateBoard={props.updateBoard}
+                                key={card.id}
+                                handleCardDragAndDrop={handleCardDragAndDrop}
+                                handleCardItemDragAndDrop={handleCardItemDragAndDrop}
+                                onUpdateBoards={onUpdateBoards}
+                                handleDone={handleDone}
+                                onSaveBoards={onSaveBoards}
+                                onUpdateListItem={onUpdateListItem}
+                                onClickListItem={onClickListItem}
+                                onPressListItem={onPressListItem}
+                                handleAddTodo={handleAddTodo}
+                            />
                         ))}
                 </>
             </PageContent>
         </BoardsWrapper>
     );
 };
-
-const DraggingZone = styled.div`
-    min-height: 30px;
-    width: 100%;
-    border: 1px solid grey;
-`;
-
-const BoardListItemCard = styled(Paper)<{ status: "active" | "done" }>`
-    color: ${(props) => (props.status === "done" ? "rgba(0,0,0,0.4) !important" : "inherit")};
-    cursor: pointer;
-    cursor: pointer;
-    margin: 6px 0;
-    padding: 6px;
-    position: relative;
-    text-decoration: ${(props) => (props.status === "done" ? "line-through" : "inherit")};
-    user-select: none;
-    width: 100%;
-`;
 
 const BoardsWrapper = styled.div`
     display: flex;
@@ -233,15 +217,6 @@ const PageContent = styled(Container)`
     flex-wrap: nowrap;
     height: 100%;
     align-items: flex-start;
-`;
-
-const BoardCard = styled(Card)`
-    width: 300px;
-    min-width: 300px;
-    padding: 8px;
-    &:not(.last-child) {
-        margin-right: 16px;
-    }
 `;
 
 export default Boards;

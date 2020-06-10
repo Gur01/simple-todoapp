@@ -78,16 +78,18 @@ const handleDragAndDrop = (className: string, type?: "click" | "press"): any => 
 
             // find the d'n'd item
             currentItemCopy.hidden = true;
-            itemBelow = document
-                .elementFromPoint(event.clientX, event.clientY)
-                ?.closest(`.${className}`) as HTMLDivElement;
+            const element = document.elementFromPoint(event.clientX, event.clientY);
+            itemBelow = element?.closest(`.${className}`) || element?.closest(".dragging-zone");
+
             currentItemCopy.hidden = false;
 
             // update items
             if (itemBelow && String(id) !== itemBelow?.dataset.ref) {
                 const itemBelowId = Number(itemBelow.dataset.ref);
 
-                const nextItems = onUpdate(tempItems, id, itemBelowId);
+                const nextItems = itemBelow.classList.contains("dragging-zone")
+                    ? onUpdate(tempItems, id, itemBelowId, true)
+                    : onUpdate(tempItems, id, itemBelowId);
 
                 tempItems = nextItems;
             }
