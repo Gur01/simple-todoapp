@@ -96,44 +96,44 @@ const BoardList: Board[] = [
                     },
                 ],
             },
-            {
-                id: 8,
-                title: "2",
-                date: 123455,
-                updateDate: 2345566,
-                // cardList
-                data: [],
-            },
-            {
-                id: 12,
-                title: "3",
-                date: 123455,
-                updateDate: 2345566,
-                // cardList
-                data: [
-                    {
-                        id: 13,
-                        value: "яблоки",
-                        date: 2454234,
-                        updateDate: 564564,
-                        status: "done",
-                    },
-                    {
-                        id: 14,
-                        value: "картошка",
-                        date: 2454234,
-                        updateDate: 564564,
-                        status: "active",
-                    },
-                    {
-                        id: 15,
-                        value: "шпроты",
-                        date: 2454234,
-                        updateDate: 564564,
-                        status: "active",
-                    },
-                ],
-            },
+            // {
+            //     id: 8,
+            //     title: "2",
+            //     date: 123455,
+            //     updateDate: 2345566,
+            //     // cardList
+            //     data: [],
+            // },
+            // {
+            //     id: 12,
+            //     title: "3",
+            //     date: 123455,
+            //     updateDate: 2345566,
+            //     // cardList
+            //     data: [
+            //         {
+            //             id: 13,
+            //             value: "яблоки",
+            //             date: 2454234,
+            //             updateDate: 564564,
+            //             status: "done",
+            //         },
+            //         {
+            //             id: 14,
+            //             value: "картошка",
+            //             date: 2454234,
+            //             updateDate: 564564,
+            //             status: "active",
+            //         },
+            //         {
+            //             id: 15,
+            //             value: "шпроты",
+            //             date: 2454234,
+            //             updateDate: 564564,
+            //             status: "active",
+            //         },
+            //     ],
+            // },
         ],
     },
 

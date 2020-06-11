@@ -17,9 +17,9 @@ const BoardViewer = (props: RouteComponentProps<Params>) => {
     const id = parseInt(props.match.params.id, 10);
     const [board, updateBoard] = React.useState<BoardInterface>();
 
-    // React.useEffect(() => {
-    //     console.info("update boards"); // TODO remove
-    // }, [board]);
+    React.useEffect(() => {
+        console.info("update boards"); // TODO remove
+    }, [board]);
     React.useEffect(() => {
         let board;
         if (id === 0) {

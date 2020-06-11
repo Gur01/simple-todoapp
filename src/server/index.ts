@@ -1,5 +1,5 @@
 import mockLists, { TodoList } from "../mockdata/lists";
-import mockBoards, { Board } from "../mockdata/boards";
+import mockBoards, { Board, BoardCard } from "../mockdata/boards";
 import cloneDeep from "clone-deep";
 
 let listsFromServer: TodoList[] = mockLists;
@@ -115,5 +115,23 @@ export default {
         boardsFromServer = newBoards;
 
         return boardsFromServer[0];
+    },
+
+    addBoardCard: (id: number | undefined): Board | undefined => {
+        for (const board of boardsFromServer) {
+            console.log(board.id, id);
+
+            if (board.id === id) {
+                const newBoard = {
+                    id: Math.floor(Math.random() * 100),
+                    title: "New Card",
+                    date: Date.now(),
+                    updateDate: Date.now(),
+                    data: [],
+                };
+                board.data.push(newBoard);
+                return board;
+            }
+        }
     },
 };

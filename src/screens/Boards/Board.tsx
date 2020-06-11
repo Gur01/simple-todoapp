@@ -1,3 +1,4 @@
+import Card from "@material-ui/core/Card";
 import Container from "@material-ui/core/Container";
 import { PageSubheader } from "components";
 import produce from "immer";
@@ -7,6 +8,8 @@ import styled from "styled-components";
 import { dragAndDrop } from "utils";
 import { Board } from "../../mockdata/boards";
 import BoardCard from "./BoardCard";
+import CardHeader from "@material-ui/core/CardHeader";
+import Button from "@material-ui/core/Button";
 
 const links = [
     {
@@ -28,6 +31,8 @@ const handleCardDragAndDrop = dragAndDrop("boardCard");
 const handleCardItemDragAndDrop = dragAndDrop("boardListItemCard", "press");
 
 const Boards = (props: BoardProps) => {
+    console.log(props.board, "dsfsdfdf");
+
     const onUpdateBoards = (board: any, itemId: number, itemBelowId: number): any => {
         const nextBoards = produce(board.data, (draft: any) => {
             const currentCardIndex = draft.findIndex((board: any) => board.id === itemId);
@@ -175,6 +180,13 @@ const Boards = (props: BoardProps) => {
         }
     };
 
+    const handleAddCard = () => {
+        const newBoard = server.addBoardCard(props.board?.id);
+        console.log(newBoard);
+
+        props.updateBoard({ ...newBoard });
+    };
+
     return (
         <BoardsWrapper>
             <PageSubheader links={links} titleText={props.board?.title} titleDisabled={true} />
@@ -199,6 +211,9 @@ const Boards = (props: BoardProps) => {
                                 handleAddTodo={handleAddTodo}
                             />
                         ))}
+                    <Button variant="outlined" onClick={handleAddCard}>
+                        Add card +
+                    </Button>
                 </>
             </PageContent>
         </BoardsWrapper>
@@ -217,6 +232,16 @@ const PageContent = styled(Container)`
     flex-wrap: nowrap;
     height: 100%;
     align-items: flex-start;
+`;
+
+const BoardAddCard = styled(Card)`
+    min-width: 300px;
+    padding: 8px;
+    width: 300px;
+
+    &:not(.last-child) {
+        margin-right: 16px;
+    }
 `;
 
 export default Boards;
